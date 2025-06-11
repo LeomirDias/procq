@@ -47,7 +47,7 @@ export function LoginForm() {
             <Form {...formLogin}>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-xl font-bold">Bem-vindo de volta a WiseFlow</h1>
+                  <h1 className="text-xl font-bold">Bem-vindo de volta</h1>
                   <p className="text-muted-foreground text-balance">
                     Faça login na sua conta
                   </p>

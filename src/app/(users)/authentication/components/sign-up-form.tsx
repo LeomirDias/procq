@@ -47,7 +47,7 @@ export function SignUpForm() {
                         <Form {...formRegister}>
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-col items-center text-center">
-                                    <h1 className="text-xl font-bold">Cadastre-se na WiseFlow</h1>
+                                    <h1 className="text-xl font-bold">Cadastre-se</h1>
                                     <p className="text-muted-foreground text-balance">
                                         Crie sua conta
                                     </p>
