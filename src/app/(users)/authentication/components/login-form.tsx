@@ -2,7 +2,9 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image"
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button"
@@ -16,6 +18,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { authClient } from "@/lib/auth.client";
 
 const loginSchema = z.object({
   email: z.string().trim().email({ message: "Email ou senha inválidos" }),
@@ -24,7 +27,7 @@ const loginSchema = z.object({
 
 
 export function LoginForm() {
-
+  const router = useRouter();
   const formLogin = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -33,8 +36,20 @@ export function LoginForm() {
     },
   })
 
-  function onSubmitLogin(values: z.infer<typeof loginSchema>) {
-    console.log(values)
+  async function onSubmitLogin(values: z.infer<typeof loginSchema>) {
+
+    await authClient.signIn.email({
+      email: values.email,
+      password: values.password,
+    }, {
+      onSuccess: () => {
+        toast.success("Login realizado com sucesso")
+        router.push("/")
+      },
+      onError: () => {
+        toast.error("Email ou senha inválidos")
+      }
+    })
   }
 
 
@@ -79,7 +94,10 @@ export function LoginForm() {
                       </FormItem>
                     )}
                   />
-                  <Button type="submit">Entrar</Button>
+                  <Button type="submit"
+                    disabled={formLogin.formState.isSubmitting}>
+                    {formLogin.formState.isSubmitting ? "Entrando..." : "Entrar"}
+                  </Button>
                 </form>
               </div>
             </Form>
