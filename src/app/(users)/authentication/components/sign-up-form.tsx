@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image"
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -16,7 +17,7 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-
+import { authClient } from "@/lib/auth.client";
 
 const registerSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -25,6 +26,7 @@ const registerSchema = z.object({
 })
 
 export function SignUpForm() {
+    const router = useRouter();
 
     const formRegister = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
@@ -35,8 +37,18 @@ export function SignUpForm() {
         },
     })
 
-    function onSubmitRegister(values: z.infer<typeof registerSchema>) {
-        console.log(values)
+    async function onSubmitRegister(values: z.infer<typeof registerSchema>) {
+
+        await authClient.signUp.email({
+            email: values.email,
+            password: values.password,
+            name: values.name,
+            callbackURL: "/",
+        }, {
+            onSuccess: () => {
+                router.push("/")
+            }
+        })
     }
 
     return (
@@ -92,7 +104,10 @@ export function SignUpForm() {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit">Cadastrar</Button>
+                                    <Button type="submit"
+                                        disabled={formRegister.formState.isSubmitting}>
+                                        {formRegister.formState.isSubmitting ? "Cadastrando..." : "Cadastrar"}
+                                    </Button>
                                 </form>
                             </div>
                         </Form>

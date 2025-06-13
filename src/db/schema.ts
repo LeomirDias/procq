@@ -30,7 +30,7 @@ export const accountsTable = pgTable("accounts", {
     id: text('id').primaryKey(),
     accountId: text('account_id').notNull(),
     providerId: text('provider_id').notNull(),
-    usersTableId: text('user_id').notNull().references(() => usersTable.id, { onDelete: 'cascade' }),
+    userId: text('user_id').notNull().references(() => usersTable.id, { onDelete: 'cascade' }),
     accessToken: text('access_token'),
     refreshToken: text('refresh_token'),
     idToken: text('id_token'),
