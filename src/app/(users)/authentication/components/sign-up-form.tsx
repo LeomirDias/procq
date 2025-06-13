@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button"
@@ -46,7 +47,19 @@ export function SignUpForm() {
             callbackURL: "/",
         }, {
             onSuccess: () => {
+                toast.success("Cadastro realizado com sucesso")
                 router.push("/")
+            },
+            onError: (ctx) => {
+                if (ctx.error.code === "USER_ALREADY_EXISTS" || ctx.error.code === "EMAIL_ALREADY_EXISTS") {
+                    toast.error("Email já cadastrado, por favor faça login")
+                    return;
+                } else {
+                    toast.error("Erro ao cadastrar, por favor tente novamente")
+                }
+                // if (ctx.error.code === "USER_ALREADY_EXISTS") {
+                //     toast.error("Usuário já cadastrado, por favor faça login")
+                // }
             }
         })
     }
