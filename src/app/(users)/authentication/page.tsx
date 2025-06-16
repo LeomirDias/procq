@@ -1,3 +1,4 @@
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -7,7 +8,6 @@ import { auth } from "@/lib/auth";
 import { LoginForm } from "./components/login-form";
 import { SignUpForm } from "./components/sign-up-form";
 
-
 const AuthenticationPage = async () => {
 
   // Busca e verifica se o usuário está autenticado
@@ -15,8 +15,8 @@ const AuthenticationPage = async () => {
     headers: await headers(),
   })
 
-  if (session?.user) {
-    redirect("/")
+  if (!session?.user) {
+    redirect("/authentication")
   }
 
   return (

@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, text, time, timestamp } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, time, timestamp, uuid } from "drizzle-orm/pg-core";
 
 //Usuários
 export const usersTable = pgTable("users", {
@@ -53,10 +53,10 @@ export const verificationsTable = pgTable("verifications", {
 
 //Tabela para armazenar empresas
 export const enterprisesTable = pgTable("enterprises", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     register: text("register").notNull(),
-    unityNumber: text("unity_number").notNull(),
+    unityNumber: text("unity_number"),
     phoneNumber: text("phone_number").notNull(),
     cep: text("cep").notNull(),
     address: text("address").notNull(),
