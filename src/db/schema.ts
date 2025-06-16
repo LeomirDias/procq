@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, integer, pgTable, text, time, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 //Usuários
 export const usersTable = pgTable("users", {
@@ -58,20 +58,6 @@ export const enterprisesTable = pgTable("enterprises", {
     register: text("register").notNull(),
     unityNumber: text("unity_number"),
     phoneNumber: text("phone_number").notNull(),
-    cep: text("cep").notNull(),
-    address: text("address").notNull(),
-    number: text("number").notNull(),
-    neighborhood: text("neighborhood").notNull(),
-    complement: text("complement"),
-    city: text("city").notNull(),
-    state: text("state").notNull(),
-    specialty: text("specialty").notNull(),
-    availableFromWeekDay: integer("available_from_week_day").notNull(),
-    availableToWeekDay: integer("available_to_week_day").notNull(),
-    availableFromTime: time("available_from_time").notNull(),
-    availableToTime: time("available_to_time").notNull(),
-    socialLink: text("social_link"),
-    avatarImageURL: text("avatar_image_url"),
     slug: text("slug").notNull().unique(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
@@ -79,100 +65,78 @@ export const enterprisesTable = pgTable("enterprises", {
 
 //Tabela para armazenar profissionais
 export const professionalsTable = pgTable("professionals", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
-    specialty: text("specialty").notNull(),
+    position: text("position").notNull(),
     phoneNumber: text("phone_number").notNull(),
     acessLevel: text("acess_level").notNull().default("professional"),
-    availableFromWeekDay: integer("available_from_week_day"),
-    availableToWeekDay: integer("available_to_week_day"),
-    availableFromTime: time("available_from_time"),
-    availableToTime: time("available_to_time"),
-    socialLink: text("social_link"),
-    avatarImageURL: text("avatar_image_url"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
     //Relationships
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    sectorId: text("sector_id")
+    sectorId: uuid("sector_id")
         .notNull()
         .references(() => sectorsTable.id, { onDelete: "cascade" }),
 });
 
 //Tabela para armazenar setores
 export const sectorsTable = pgTable("sectors", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
 });
 
 //Tabela para armazenar pontos de serviço
 export const servicePointsTable = pgTable("service_points", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     type: text("type").notNull(),
     isActive: boolean("is_active").notNull().default(true),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
 });
 
 //Tabela para armazenar clientes
 export const clientsTable = pgTable("clients", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     register: text("register").notNull(),
     phoneNumber: text("phone_number").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-});
-
-
-//Tabela para armazenar sessões de clientes
-export const clientSessionsTable = pgTable("client_sessions", {
-    id: text("id").primaryKey().notNull(),
-    token: text("token").notNull(),
-    clientId: text("client_id")
-        .notNull()
-        .references(() => clientsTable.id, { onDelete: "cascade" }),
-    enterpriseId: text("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    expiresAt: timestamp("expires_at").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
 });
 
 
 //Tabela para armazenar tickets
 export const ticketsTable = pgTable("tickets", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     number: integer("number").notNull(),
     status: text("status").notNull().default("pending"),
     priority: text("priority").notNull().default("common"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    sectorId: text("sector_id")
+    sectorId: uuid("sector_id")
         .notNull()
         .references(() => sectorsTable.id, { onDelete: "cascade" }),
-    servicePointId: text("service_point_id")
+    servicePointId: uuid("service_point_id")
         .notNull()
         .references(() => servicePointsTable.id, { onDelete: "cascade" }),
-    clientId: text("client_id")
+    clientId: uuid("client_id")
         .notNull()
         .references(() => clientsTable.id, { onDelete: "cascade" }),
 });
@@ -180,28 +144,28 @@ export const ticketsTable = pgTable("tickets", {
 
 //Tabela para armazenar atendimentos
 export const treatmentsTable = pgTable("treatments", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     status: text("status").notNull().default("pending"),
     durationInMinutes: integer("duration_in_minutes").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    ticketId: text("ticket_id")
+    ticketId: uuid("ticket_id")
         .notNull()
         .references(() => ticketsTable.id, { onDelete: "cascade" }),
-    professionalId: text("professional_id")
+    professionalId: uuid("professional_id")
         .notNull()
         .references(() => professionalsTable.id, { onDelete: "cascade" }),
-    clientId: text("client_id")
+    clientId: uuid("client_id")
         .notNull()
         .references(() => clientsTable.id, { onDelete: "cascade" }),
 })
 
 //Tabela para armazenar planos
 export const plansTable = pgTable("plans", {
-    id: text("id").primaryKey().notNull(),
+    id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
     maxEnterprises: integer("max_enterprises").notNull().default(1),
     maxProfessionals: integer("max_professionals").notNull().default(1),
@@ -210,7 +174,7 @@ export const plansTable = pgTable("plans", {
     priceInCents: integer("price_in_cents").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
 });
@@ -228,7 +192,7 @@ export const usersToEnterprisesTable = pgTable("users_to_enterprises", {
     userId: text("user_id")
         .notNull()
         .references(() => usersTable.id, { onDelete: "cascade" }),
-    enterpriseId: text("enterprise_id")
+    enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
     createdAT: timestamp("created_at").defaultNow().notNull(),
@@ -290,17 +254,6 @@ export const clientsTableRelations = relations(clientsTable, ({ one, many }) => 
     treatments: many(treatmentsTable),
 }));
 
-//Client sessions table relationships
-export const clientSessionsTableRelations = relations(clientSessionsTable, ({ one }) => ({
-    client: one(clientsTable, {
-        fields: [clientSessionsTable.clientId],
-        references: [clientsTable.id],
-    }),
-    enterprise: one(enterprisesTable, {
-        fields: [clientSessionsTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
-}));
 
 //Tickets relations
 export const ticketsTableRelations = relations(ticketsTable, ({ one }) => ({

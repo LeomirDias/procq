@@ -15,8 +15,8 @@ const AuthenticationPage = async () => {
     headers: await headers(),
   })
 
-  if (!session?.user) {
-    redirect("/authentication")
+  if (session?.user) {
+    redirect("/")
   }
 
   return (

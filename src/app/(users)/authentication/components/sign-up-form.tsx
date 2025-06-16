@@ -47,7 +47,7 @@ export function SignUpForm() {
         }, {
             onSuccess: () => {
                 toast.success("Cadastro realizado com sucesso")
-                router.push("/")
+                router.push("/clinic-form")
             },
             onError: (ctx) => {
                 if (ctx.error.code === "USER_ALREADY_EXISTS" || ctx.error.code === "EMAIL_ALREADY_EXISTS") {
