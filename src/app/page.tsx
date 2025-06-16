@@ -1,15 +1,9 @@
-import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { db } from "@/db";
-import { usersToEnterprisesTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
-import SignOutButton from "./components/sign-out-button";
-
 const Home = async () => {
-
   // Busca e verifica se o usuário está autenticado
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -17,23 +11,9 @@ const Home = async () => {
 
   if (!session?.user) {
     redirect("/authentication")
+  } else {
+    redirect("/users-home")
   }
-
-  const enterprise = await db.query.usersToEnterprisesTable.findMany({
-
-    where: eq(usersToEnterprisesTable.userId, session?.user.id)
-  })
-
-  if (enterprise.length === 0) {
-    redirect("/enterprise-form")
-  }
-
-  return (
-    <div>
-      <h1>Bem-vindo {session?.user?.name}</h1>
-      <SignOutButton />
-    </div>
-  );
 }
 
 export default Home;
