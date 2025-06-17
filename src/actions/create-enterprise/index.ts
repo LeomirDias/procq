@@ -52,5 +52,5 @@ export const createEnterprise = async (
         userId: session.user.id,
         enterpriseId: enterprise.id,
     });
-    redirect("/users-home");
+    redirect("/admins/dashboard");
 };

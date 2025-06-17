@@ -25,32 +25,32 @@ import { authClient } from "@/lib/auth.client"
 const itemsEnterprise = [
     {
         title: "Home",
-        url: "/users-home",
+        url: "/admins/home",
         icon: LayoutDashboard,
     },
     {
         title: "Profissionais",
-        url: "/professionals",
+        url: "/admins/professionals",
         icon: Users,
     },
     {
         title: "Setores",
-        url: "/sectors",
+        url: "/admins/sectors",
         icon: Tag,
     },
     {
         title: "Pontos de atendimento",
-        url: "/service-points",
+        url: "/admins/service-points",
         icon: MapPin,
     },
     {
         title: "Clientes",
-        url: "/clients",
+        url: "/admins/clients",
         icon: BookUser,
     },
     {
         title: "Atendimentos",
-        url: "/appointments",
+        url: "/admins/appointments",
         icon: ChartLine,
     },
 ]
@@ -58,17 +58,17 @@ const itemsEnterprise = [
 const othersItems = [
     {
         title: "Planos",
-        url: "/subscription",
+        url: "/admins/subscription",
         icon: CreditCard,
     },
     {
         title: "Tutoriais",
-        url: "/tutorials",
+        url: "/admins/tutorials",
         icon: PlaySquareIcon,
     },
     {
         title: "Suporte WiseFlow",
-        url: "/support",
+        url: "/admins/adm-support",
         icon: CircleHelp,
     },
 ]
@@ -91,7 +91,7 @@ export function AppSidebar() {
         });
     };
 
-    const enterpriseInitials = session.data?.user?.name
+    const userInitials = session.data?.user?.name
         .split(" ")
         .map((name) => name[0])
         .join("");
@@ -99,7 +99,8 @@ export function AppSidebar() {
     return (
         <Sidebar variant="floating" collapsible="icon">
             <SidebarHeader className="p-4 border-b flex items-center justify-center bg-background">
-                <h1 className="text-2xl font-bold text-primary">WiseFlow</h1>
+                {/* <h1 className="text-xl font-bold text-primary">WiseFlow</h1>
+                <p className="text-xs text-muted-foreground">{session.data?.user?.enterprise?.name}</p> */}
             </SidebarHeader>
 
             <SidebarContent className="bg-background">
@@ -145,14 +146,14 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton size="lg">
+                                <SidebarMenuButton size="lg" className="flex items-center">
                                     <Avatar className="h-10 w-10">
                                         <AvatarFallback>
-                                            {enterpriseInitials}
+                                            {userInitials}
                                         </AvatarFallback>
                                     </Avatar>
                                     <div>
-                                        <p className="text-sm">{session.data?.user?.name}</p>
+                                        <p className="text-sm text-muted-foreground">{session.data?.user?.name}</p>
                                         <p className="text-sm text-muted-foreground">{session.data?.user.email}</p>
                                     </div>
                                 </SidebarMenuButton>

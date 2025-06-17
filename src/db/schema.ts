@@ -7,7 +7,6 @@ export const usersTable = pgTable("users", {
     name: text('name').notNull(),
     email: text('email').notNull().unique(),
     emailVerified: boolean('email_verified').notNull(),
-    image: text('image'),
     stripeCustomerId: text('stripe_customer_id'),
     stripeSubscriptionId: text('stripe_subscription_id'),
     plan: text('plan'),
@@ -76,9 +75,6 @@ export const professionalsTable = pgTable("professionals", {
     enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    sectorId: uuid("sector_id")
-        .notNull()
-        .references(() => sectorsTable.id, { onDelete: "cascade" }),
 });
 
 //Tabela para armazenar setores
@@ -103,6 +99,9 @@ export const servicePointsTable = pgTable("service_points", {
     enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
+    sectorId: uuid("sector_id")
+        .notNull()
+        .references(() => sectorsTable.id, { onDelete: "cascade" }),
 });
 
 //Tabela para armazenar clientes
@@ -130,9 +129,6 @@ export const ticketsTable = pgTable("tickets", {
     enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    sectorId: uuid("sector_id")
-        .notNull()
-        .references(() => sectorsTable.id, { onDelete: "cascade" }),
     servicePointId: uuid("service_point_id")
         .notNull()
         .references(() => servicePointsTable.id, { onDelete: "cascade" }),
@@ -158,9 +154,6 @@ export const treatmentsTable = pgTable("treatments", {
     professionalId: uuid("professional_id")
         .notNull()
         .references(() => professionalsTable.id, { onDelete: "cascade" }),
-    clientId: uuid("client_id")
-        .notNull()
-        .references(() => clientsTable.id, { onDelete: "cascade" }),
 })
 
 //Tabela para armazenar planos
@@ -228,10 +221,6 @@ export const professionalsTableRelations = relations(professionalsTable, ({ one,
         fields: [professionalsTable.enterpriseId],
         references: [enterprisesTable.id],
     }),
-    sector: one(sectorsTable, {
-        fields: [professionalsTable.sectorId],
-        references: [sectorsTable.id],
-    }),
     treatments: many(treatmentsTable),
 }));
 
@@ -281,10 +270,6 @@ export const treatmentsTableRelations = relations(treatmentsTable, ({ one }) => 
     professional: one(professionalsTable, {
         fields: [treatmentsTable.professionalId],
         references: [professionalsTable.id],
-    }),
-    client: one(clientsTable, {
-        fields: [treatmentsTable.clientId],
-        references: [clientsTable.id],
     }),
 }));
 

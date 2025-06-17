@@ -12,8 +12,9 @@ const Home = async () => {
   if (!session?.user) {
     redirect("/authentication")
   } else {
-    redirect("/users-home")
+    redirect("/admins/dashboard")
   }
 }
 
 export default Home;
+//LOGIN VIRÁ PARA ESSA PÁGINA QUE FARÁ A DIFERENÇA ENTRE USUÁRIO E COLABORADOR
