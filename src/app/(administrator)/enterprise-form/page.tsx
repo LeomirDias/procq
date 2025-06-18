@@ -1,3 +1,4 @@
+
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -12,12 +13,11 @@ const EnterpriseFormPage = async () => {
         headers: await headers(),
     });
     if (!session?.user) {
-        redirect("/authentication");
+        redirect("/admin-authentication");
     }
-    // if (session.user.enterprise) {
-    //     redirect("/dashboard");
-    // }
-
+    if (session.user.enterprise) {
+        redirect("/dashboard");
+    }
 
 
     return (

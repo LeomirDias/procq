@@ -15,7 +15,7 @@ const AdminsProfessionals = async () => {
         headers: await headers(),
     });
     if (!session?.user) {
-        redirect("/authentication");
+        redirect("/admin-authentication");
     }
     if (!session.user.enterprise) {
         redirect("/enterprise-form");

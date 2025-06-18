@@ -44,7 +44,7 @@ export function LoginForm() {
     }, {
       onSuccess: () => {
         toast.success("Login realizado com sucesso")
-        router.push("/")
+        router.push("/dashboard")
       },
       onError: () => {
         toast.error("Email ou senha inválidos")
