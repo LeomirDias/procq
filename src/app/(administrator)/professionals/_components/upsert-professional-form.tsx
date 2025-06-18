@@ -11,30 +11,33 @@ import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/c
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { professionalsTable } from "@/db/schema";
+import { professionalsTable, sectorsTable } from "@/db/schema";
 
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do profissional é obrigatório." }),
     position: z.string().trim().min(1, { message: "Posição é obrigatória." }),
-    phoneNumber: z.string().trim().min(1, { message: "Telefone é obrigatório." }),
+    register: z.string().trim().min(1, { message: "Registro é obrigatório." }),
     acessLevel: z.string().trim().min(1, { message: "Nível de acesso é obrigatório." }),
+    sectorId: z.string().uuid({ message: "Setor é obrigatório." }),
 });
 
 interface UpsertProfessionalFormProps {
     professional?: typeof professionalsTable.$inferSelect;
+    sectors: (typeof sectorsTable.$inferSelect)[];
     onSuccess?: () => void;
 }
 
-const UpsertProfessionalForm = ({ professional, onSuccess }: UpsertProfessionalFormProps) => {
+const UpsertProfessionalForm = ({ professional, sectors, onSuccess }: UpsertProfessionalFormProps) => {
     const form = useForm<z.infer<typeof formSchema>>({
         shouldUnregister: true,
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: professional?.name || "",
             position: professional?.position || "",
-            phoneNumber: professional?.phoneNumber || "",
+            register: professional?.register || "",
             acessLevel: professional?.acessLevel || "",
+            sectorId: professional?.sectorId || "",
         }
     });
 
@@ -96,14 +99,14 @@ const UpsertProfessionalForm = ({ professional, onSuccess }: UpsertProfessionalF
                     />
                     <FormField
                         control={form.control}
-                        name="phoneNumber"
+                        name="register"
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Telefone
+                                    Registro
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Digite o número de telefone do profissional"{...field} />
+                                    <Input placeholder="Digite o registro do profissional" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -127,6 +130,36 @@ const UpsertProfessionalForm = ({ professional, onSuccess }: UpsertProfessionalF
                                     <SelectContent>
                                         <SelectItem value="admin">Administrador</SelectItem>
                                         <SelectItem value="professional">Padrão</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        control={form.control}
+                        name="sectorId"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Setor</FormLabel>
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+                                    <FormControl>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Selecione o setor" />
+                                        </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                        {sectors.map((sector) => (
+                                            <SelectItem
+                                                key={sector.id}
+                                                value={sector.id}
+                                            >
+                                                {sector.name}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />

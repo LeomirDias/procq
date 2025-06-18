@@ -1,5 +1,5 @@
 "use client";
-import { Briefcase, Lock, Phone, Trash2 } from "lucide-react";
+import { Briefcase, IdCard, Lock, MonitorSmartphone, Pencil, Trash2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks"
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,15 +22,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { professionalsTable } from "@/db/schema";
+import { professionalsTable, sectorsTable } from "@/db/schema";
 
 import UpsertProfessionalForm from "./upsert-professional-form";
 
 interface ProfessionalCardProps {
     professional: typeof professionalsTable.$inferSelect
+    sectors: typeof sectorsTable.$inferSelect[];
 }
 
-const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
+const ProfessionalCard = ({ professional, sectors }: ProfessionalCardProps) => {
 
     const [isUpsertPRofessionalFormOpen, setIsUpsertProfessionalFormOpen] = useState(false);
 
@@ -72,16 +73,21 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
             <CardContent className="flex flex-col gap-2">
                 <Badge variant="outline">
                     <Briefcase className="mr-1" />
-                    {professional.position}
+                    Cargo: {professional.position}
                 </Badge>
                 <Badge variant="outline">
-                    <Phone className="mr-1" />
-                    {professional.phoneNumber}
+                    <MonitorSmartphone className="mr-1" />
+                    Setor: {sectors.find(sector => sector.id === professional.sectorId)?.name}
+                </Badge>
+                <Badge variant="outline">
+                    <IdCard className="mr-1" />
+                    Registro: {professional.register.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
                 </Badge>
                 <Badge variant="outline">
                     <Lock className="mr-1" />
-                    {professional.acessLevel === "admin" ? "Administrador" : "Padrão"}
+                    Acesso: {professional.acessLevel === "admin" ? "Administrador" : "Padrão"}
                 </Badge>
+
             </CardContent>
             <Separator />
             <CardFooter className="flex flex-col gap-2">
@@ -89,9 +95,12 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
                     open={isUpsertPRofessionalFormOpen}
                     onOpenChange={setIsUpsertProfessionalFormOpen}>
                     <DialogTrigger asChild>
-                        <Button className="w-full">Ver detalhes</Button>
+                        <Button className="w-full">
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Editar profissional
+                        </Button>
                     </DialogTrigger>
-                    <UpsertProfessionalForm professional={{
+                    <UpsertProfessionalForm sectors={sectors} professional={{
                         ...professional,
                     }}
                         onSuccess={() => setIsUpsertProfessionalFormOpen(false)}

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 
 import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
 import { db } from "@/db";
-import { professionalsTable } from "@/db/schema";
+import { professionalsTable, sectorsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import AddProfessionalButton from "./_components/add-professional-button";
@@ -20,9 +20,14 @@ const AdminsProfessionals = async () => {
     if (!session.user.enterprise) {
         redirect("/enterprise-form");
     }
-    const professionals = await db.query.professionalsTable.findMany({
-        where: eq(professionalsTable.enterpriseId, session.user.enterprise.id),
-    })
+    const [professionals, sectors] = await Promise.all([
+        db.query.professionalsTable.findMany({
+            where: eq(professionalsTable.enterpriseId, session.user.enterprise.id),
+        }),
+        db.query.sectorsTable.findMany({
+            where: eq(sectorsTable.enterpriseId, session.user.enterprise.id),
+        })
+    ]);
 
     return (
         <PageContainer>
@@ -32,12 +37,18 @@ const AdminsProfessionals = async () => {
                     <PageDescription>Gerencie os profissionais da sua empresa.</PageDescription>
                 </PageHeaderContent>
                 <PageActions>
-                    <AddProfessionalButton />
+                    <AddProfessionalButton sectors={sectors} />
                 </PageActions>
             </PageHeader>
             <PageContent>
                 <div className="grid grid-cols-5 gap-6">
-                    {professionals.map(professional => <ProfessionalCard key={professional.id} professional={professional} />)}
+                    {professionals.map(professional => (
+                        <ProfessionalCard
+                            key={professional.id}
+                            professional={professional}
+                            sectors={sectors}
+                        />
+                    ))}
                 </div>
             </PageContent>
         </PageContainer>

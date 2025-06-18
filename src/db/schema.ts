@@ -66,10 +66,10 @@ export const enterprisesTable = pgTable("enterprises", {
 export const professionalsTable = pgTable("professionals", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
+    register: text("register").unique().notNull(),
     position: text("position").notNull(),
-    phoneNumber: text("phone_number").notNull(),
     acessLevel: text("acess_level").notNull().default("professional"),
-    availability: text("availability").notNull().default("free"),
+    availability: text("availability").default("free"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
     //Relationships
@@ -131,7 +131,7 @@ export const operationsTable = pgTable("operations", {
 export const clientsTable = pgTable("clients", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
-    register: text("register").notNull(),
+    register: text("register").unique().notNull(),
     phoneNumber: text("phone_number").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
