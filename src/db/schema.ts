@@ -92,8 +92,7 @@ export const sectorsTable = pgTable("sectors", {
 export const servicePointsTable = pgTable("service_points", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
-    type: text("type").notNull(),
-    isActive: boolean("is_active").notNull().default(true),
+    isActive: text("is_active").notNull().default("active"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
     enterpriseId: uuid("enterprise_id")
@@ -129,9 +128,9 @@ export const ticketsTable = pgTable("tickets", {
     enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    servicePointId: uuid("service_point_id")
+    sectorId: uuid("sector_id")
         .notNull()
-        .references(() => servicePointsTable.id, { onDelete: "cascade" }),
+        .references(() => sectorsTable.id, { onDelete: "cascade" }),
     clientId: uuid("client_id")
         .notNull()
         .references(() => clientsTable.id, { onDelete: "cascade" }),
@@ -231,6 +230,8 @@ export const sectorsTableRelations = relations(sectorsTable, ({ one, many }) => 
         references: [enterprisesTable.id],
     }),
     professionals: many(professionalsTable),
+    tickets: many(ticketsTable),
+    servicePoints: many(servicePointsTable),
 }));
 
 //Clients tables relationships
