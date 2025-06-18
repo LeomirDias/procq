@@ -25,32 +25,32 @@ import { authClient } from "@/lib/auth.client"
 const itemsEnterprise = [
     {
         title: "Home",
-        url: "/admins/home",
+        url: "/dashboard",
         icon: LayoutDashboard,
     },
     {
         title: "Profissionais",
-        url: "/admins/professionals",
+        url: "/professionals",
         icon: Users,
     },
     {
         title: "Setores",
-        url: "/admins/sectors",
+        url: "/sectors",
         icon: Tag,
     },
     {
         title: "Pontos de atendimento",
-        url: "/admins/service-points",
+        url: "/service-points",
         icon: MapPin,
     },
     {
         title: "Clientes",
-        url: "/admins/clients",
+        url: "/clients",
         icon: BookUser,
     },
     {
         title: "Atendimentos",
-        url: "/admins/appointments",
+        url: "/appointments",
         icon: ChartLine,
     },
 ]
@@ -58,17 +58,17 @@ const itemsEnterprise = [
 const othersItems = [
     {
         title: "Planos",
-        url: "/admins/subscription",
+        url: "/subscription",
         icon: CreditCard,
     },
     {
         title: "Tutoriais",
-        url: "/admins/tutorials",
+        url: "/tutorials",
         icon: PlaySquareIcon,
     },
     {
         title: "Suporte WiseFlow",
-        url: "/admins/adm-support",
+        url: "/support",
         icon: CircleHelp,
     },
 ]
