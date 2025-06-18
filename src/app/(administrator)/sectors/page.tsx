@@ -29,7 +29,7 @@ const AdminsSectors = async () => {
             <PageHeader>
                 <PageHeaderContent>
                     <PageTitle>Setores</PageTitle>
-                    <PageDescription>Gerencie os setores da sua empresa.</PageDescription>
+                    <PageDescription>Gerencie seus setores.</PageDescription>
                 </PageHeaderContent>
                 <PageActions>
                     <AddSectorButton />
