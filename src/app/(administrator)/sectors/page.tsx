@@ -23,7 +23,12 @@ const AdminsSectors = async () => {
     }
     const sectors = await db.query.sectorsTable.findMany({
         where: eq(sectorsTable.enterpriseId, session.user.enterprise.id),
-    })
+        with: {
+            professionals: true,
+            servicePoints: true
+        }
+    });
+
     return (
         <PageContainer>
             <PageHeader>
@@ -37,7 +42,9 @@ const AdminsSectors = async () => {
             </PageHeader>
             <PageContent>
                 <div className="grid grid-cols-5 gap-6">
-                    {sectors.map(sector => <SectorCard key={sector.id} sector={sector} />)}
+                    {sectors.map(sector => (
+                        <SectorCard key={sector.id} sector={sector} />
+                    ))}
                 </div>
             </PageContent>
         </PageContainer>

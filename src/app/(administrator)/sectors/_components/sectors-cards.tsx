@@ -1,5 +1,5 @@
 "use client";
-import { Trash2 } from "lucide-react";
+import { MapPin, Pencil, Trash2, User } from "lucide-react";
 import { useAction } from "next-safe-action/hooks"
 import { useState } from "react";
 import { toast } from "sonner";
@@ -16,18 +16,20 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { sectorsTable } from "@/db/schema";
+import { professionalsTable, sectorsTable, servicePointsTable } from "@/db/schema";
 
 import UpsertSectorForm from "./upsert-sector-form";
 
-
-
 interface SectorCardProps {
-    sector: typeof sectorsTable.$inferSelect
+    sector: typeof sectorsTable.$inferSelect & {
+        professionals: typeof professionalsTable.$inferSelect[]
+        servicePoints: typeof servicePointsTable.$inferSelect[]
+    }
 }
 
 const SectorCard = ({ sector }: SectorCardProps) => {
@@ -54,16 +56,32 @@ const SectorCard = ({ sector }: SectorCardProps) => {
     return (
         <Card>
             <CardHeader>
-                <div className="flex items-center gap-2">
-                    <div>
-                        <h3 className="text-sm font-medium">{sector.name}</h3>
-                    </div>
+                <div className="flex items-center">
+                    <h3 className="text-sm font-medium">{sector.name}</h3>
                 </div>
             </CardHeader>
             <Separator />
-            <CardContent className="flex flex-col gap-2">
-                <p className="text-sm text-muted-foreground">
-                    Profissionais
+            <CardContent className="flex flex-col space-y-2">
+                <h4 className="text-sm font-medium">Profissionais</h4>
+                <p className="text-sm text-muted-foreground flex flex-wrap gap-2">
+                    {sector.professionals.map(professional => (
+                        <Badge key={professional.id} variant="outline" className="text-xs">
+                            <User className="mr-2 h-4 w-4" />
+                            {professional.name}
+                        </Badge>
+                    ))}
+                </p>
+            </CardContent>
+            <Separator />
+            <CardContent className="flex flex-col space-y-2">
+                <h4 className="text-sm font-medium">Pontos de atendimento</h4>
+                <p className="text-sm text-muted-foreground flex flex-wrap gap-2">
+                    {sector.servicePoints.map(servicePoint => (
+                        <Badge key={servicePoint.id} variant="outline" className="text-xs">
+                            <MapPin className="mr-2 h-4 w-4" />
+                            {servicePoint.name}
+                        </Badge>
+                    ))}
                 </p>
             </CardContent>
             <Separator />
@@ -72,7 +90,10 @@ const SectorCard = ({ sector }: SectorCardProps) => {
                     open={isUpsertSectorFormOpen}
                     onOpenChange={setIsUpsertSectorFormOpen}>
                     <DialogTrigger asChild>
-                        <Button className="w-full">Ver detalhes</Button>
+                        <Button className="w-full">
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Editar setor
+                        </Button>
                     </DialogTrigger>
                     <UpsertSectorForm sector={{
                         ...sector,
