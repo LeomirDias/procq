@@ -15,7 +15,6 @@ import { sectorsTable, servicePointsTable } from "@/db/schema";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do ponto de atendimento é obrigatório." }),
-    isActive: z.enum(["active", "inactive", "paused"]),
     sectorId: z.string().uuid({ message: "Setor é obrigatório." }),
 });
 
@@ -32,7 +31,6 @@ const UpsertServicePointForm = ({ servicePoint, sectors, onSuccess }: UpsertServ
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: servicePoint?.name ?? "",
-            isActive: (servicePoint?.isActive as FormData["isActive"]) ?? "active",
             sectorId: servicePoint?.sectorId ?? "",
         }
     });
@@ -106,31 +104,6 @@ const UpsertServicePointForm = ({ servicePoint, sectors, onSuccess }: UpsertServ
                                                 {sector.name}
                                             </SelectItem>
                                         ))}
-                                    </SelectContent>
-                                </Select>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="isActive"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Status do ponto de atendimento</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Selecione o status do ponto de atendimento" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        <SelectItem value="active">Ativo</SelectItem>
-                                        <SelectItem value="inactive">Inativo</SelectItem>
-                                        <SelectItem value="paused">Pausado</SelectItem>
                                     </SelectContent>
                                 </Select>
                                 <FormMessage />

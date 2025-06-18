@@ -35,7 +35,7 @@ const AdminsServicePoints = async () => {
             <PageHeader>
                 <PageHeaderContent>
                     <PageTitle>Pontos de atendimento</PageTitle>
-                    <PageDescription>Gerencie os pontos de atendimento da sua empresa.</PageDescription>
+                    <PageDescription>Gerencie seus pontos de atendimento.</PageDescription>
                 </PageHeaderContent>
                 <PageActions>
                     <AddServicePointButton sectors={sectors} />

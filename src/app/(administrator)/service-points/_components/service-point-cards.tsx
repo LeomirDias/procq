@@ -1,5 +1,5 @@
 "use client";
-import { Trash2 } from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks"
 import { useState } from "react";
 import { toast } from "sonner";
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { sectorsTable, servicePointsTable } from "@/db/schema";
@@ -56,28 +56,23 @@ const ServicePointCard = ({ servicePoint, sectors }: ServicePointCardProps) => {
     return (
         <Card>
             <CardHeader>
-                <div className="flex items-center gap-2">
-                    <div>
-                        <h3 className="text-sm font-medium">{servicePoint.name}</h3>
-                    </div>
+                <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-sm font-medium">{servicePoint.name} - {sectors.find(sector => sector.id === servicePoint.sectorId)?.name}</h3>
+                    <Badge variant="outline" className="text-xs">
+                        {servicePoint.availability === "free" ? "Livre" : servicePoint.availability === "busy" ? "Ocupado" : "Indisponível"}
+                    </Badge>
                 </div>
             </CardHeader>
-            <Separator />
-            <CardContent className="flex flex-col gap-2">
-                <Badge variant="outline">
-                    {sectors.find(sector => sector.id === servicePoint.sectorId)?.name}
-                </Badge>
-                <Badge variant="outline">
-                    {servicePoint.isActive === "active" ? "Ativo" : "Inativo"}
-                </Badge>
-            </CardContent>
             <Separator />
             <CardFooter className="flex flex-col gap-2">
                 <Dialog
                     open={isUpsertSectorFormOpen}
                     onOpenChange={setIsUpsertSectorFormOpen}>
                     <DialogTrigger asChild>
-                        <Button className="w-full">Ver detalhes</Button>
+                        <Button className="w-full">
+                            <Pencil className="mr-2 h-4 w-4" />
+                            Editar ponto de atendimento
+                        </Button>
                     </DialogTrigger>
                     <UpsertServicePointForm sectors={sectors} servicePoint={{
                         ...servicePoint,

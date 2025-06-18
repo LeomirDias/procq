@@ -69,12 +69,16 @@ export const professionalsTable = pgTable("professionals", {
     position: text("position").notNull(),
     phoneNumber: text("phone_number").notNull(),
     acessLevel: text("acess_level").notNull().default("professional"),
+    availability: text("availability").notNull().default("free"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
     //Relationships
     enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
+    sectorId: uuid("sector_id")
+        .notNull()
+        .references(() => sectorsTable.id, { onDelete: "cascade" }),
 });
 
 //Tabela para armazenar setores
@@ -86,13 +90,14 @@ export const sectorsTable = pgTable("sectors", {
     enterpriseId: uuid("enterprise_id")
         .notNull()
         .references(() => enterprisesTable.id, { onDelete: "cascade" }),
+
 });
 
 //Tabela para armazenar pontos de serviço
 export const servicePointsTable = pgTable("service_points", {
     id: uuid("id").primaryKey().defaultRandom(),
     name: text("name").notNull(),
-    isActive: text("is_active").notNull().default("active"),
+    availability: text("availability").default("free"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
     enterpriseId: uuid("enterprise_id")
@@ -102,6 +107,25 @@ export const servicePointsTable = pgTable("service_points", {
         .notNull()
         .references(() => sectorsTable.id, { onDelete: "cascade" }),
 });
+
+//Tabela para armazenar operações de profissionais em pontos de serviço
+export const operationsTable = pgTable("operations", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    status: text("status").notNull().default("active"),
+    createdAT: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
+    //Relationships
+    enterpriseId: uuid("enterprise_id")
+        .notNull()
+        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
+    professionalId: uuid("professional_id")
+        .notNull()
+        .references(() => professionalsTable.id, { onDelete: "cascade" }),
+    servicePointId: uuid("service_point_id")
+        .notNull()
+        .references(() => servicePointsTable.id, { onDelete: "cascade" }),
+});
+
 
 //Tabela para armazenar clientes
 export const clientsTable = pgTable("clients", {
@@ -150,9 +174,12 @@ export const treatmentsTable = pgTable("treatments", {
     ticketId: uuid("ticket_id")
         .notNull()
         .references(() => ticketsTable.id, { onDelete: "cascade" }),
-    professionalId: uuid("professional_id")
+    clientId: uuid("client_id")
         .notNull()
-        .references(() => professionalsTable.id, { onDelete: "cascade" }),
+        .references(() => clientsTable.id, { onDelete: "cascade" }),
+    operationId: uuid("operation_id")
+        .notNull()
+        .references(() => operationsTable.id, { onDelete: "cascade" }),
 })
 
 //Tabela para armazenar planos
@@ -220,6 +247,10 @@ export const professionalsTableRelations = relations(professionalsTable, ({ one,
         fields: [professionalsTable.enterpriseId],
         references: [enterprisesTable.id],
     }),
+    sector: one(sectorsTable, {
+        fields: [professionalsTable.sectorId],
+        references: [sectorsTable.id],
+    }),
     treatments: many(treatmentsTable),
 }));
 
@@ -230,8 +261,25 @@ export const sectorsTableRelations = relations(sectorsTable, ({ one, many }) => 
         references: [enterprisesTable.id],
     }),
     professionals: many(professionalsTable),
-    tickets: many(ticketsTable),
     servicePoints: many(servicePointsTable),
+    tickets: many(ticketsTable),
+}));
+
+//Operations tables relationships
+export const operationsTableRelations = relations(operationsTable, ({ one, many }) => ({
+    enterprise: one(enterprisesTable, {
+        fields: [operationsTable.enterpriseId],
+        references: [enterprisesTable.id],
+    }),
+    professional: one(professionalsTable, {
+        fields: [operationsTable.professionalId],
+        references: [professionalsTable.id],
+    }),
+    servicePoint: one(servicePointsTable, {
+        fields: [operationsTable.servicePointId],
+        references: [servicePointsTable.id],
+    }),
+    treatments: many(treatmentsTable),
 }));
 
 //Clients tables relationships
@@ -244,6 +292,18 @@ export const clientsTableRelations = relations(clientsTable, ({ one, many }) => 
     treatments: many(treatmentsTable),
 }));
 
+//Service points tables relationships
+export const servicePointsTableRelations = relations(servicePointsTable, ({ one, many }) => ({
+    enterprise: one(enterprisesTable, {
+        fields: [servicePointsTable.enterpriseId],
+        references: [enterprisesTable.id],
+    }),
+    sector: one(sectorsTable, {
+        fields: [servicePointsTable.sectorId],
+        references: [sectorsTable.id],
+    }),
+    operations: many(operationsTable),
+}));
 
 //Tickets relations
 export const ticketsTableRelations = relations(ticketsTable, ({ one }) => ({
@@ -268,9 +328,13 @@ export const treatmentsTableRelations = relations(treatmentsTable, ({ one }) => 
         fields: [treatmentsTable.ticketId],
         references: [ticketsTable.id],
     }),
-    professional: one(professionalsTable, {
-        fields: [treatmentsTable.professionalId],
-        references: [professionalsTable.id],
+    client: one(clientsTable, {
+        fields: [treatmentsTable.clientId],
+        references: [clientsTable.id],
+    }),
+    operation: one(operationsTable, {
+        fields: [treatmentsTable.operationId],
+        references: [operationsTable.id],
     }),
 }));
 

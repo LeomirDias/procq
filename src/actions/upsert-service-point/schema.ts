@@ -4,7 +4,7 @@ export const upsertServicePointSchema = z
     .object({
         id: z.string().uuid().optional(),
         name: z.string().trim().min(1, { message: "Nome é obrigatório.", }),
-        isActive: z.enum(["active", "inactive", "paused"]).default("active"),
+        availability: z.enum(["free", "busy", "unavailable"]).default("free"),
         sectorId: z.string().uuid(),
     })
 
