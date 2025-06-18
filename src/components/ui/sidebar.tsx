@@ -332,7 +332,7 @@ function SidebarInput({
   )
 }
 
-function SidebarHeader({ className, children, ...props }: React.ComponentProps<"div">) {
+function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sidebar-header"
@@ -340,7 +340,9 @@ function SidebarHeader({ className, children, ...props }: React.ComponentProps<"
       className={cn("flex items-center justify-between gap-2 p-2", className)}
       {...props}
     >
-      <div className="flex-1 flex items-center min-w-0">{children}</div>
+      <div className="flex-1 flex items-center min-w-0 group-data-[state=collapsed]:hidden">
+        <h1 className="text-xl font-bold text-primary">WiseFlow</h1>
+      </div>
       <SidebarTrigger />
     </div>
   )

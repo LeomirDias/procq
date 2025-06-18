@@ -1,6 +1,6 @@
 "use client";
 
-import { BookUser, ChartLine, CircleHelp, CreditCard, LayoutDashboard, LogOutIcon, MapPin, PlaySquareIcon, SettingsIcon, Tag, Users } from "lucide-react"
+import { BookUser, ChartLine, LayoutDashboard, LogOutIcon, MapPin, SettingsIcon, Tag, Users } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation";
 
@@ -55,23 +55,23 @@ const itemsEnterprise = [
     },
 ]
 
-const othersItems = [
-    {
-        title: "Planos",
-        url: "/subscription",
-        icon: CreditCard,
-    },
-    {
-        title: "Tutoriais",
-        url: "/tutorials",
-        icon: PlaySquareIcon,
-    },
-    {
-        title: "Suporte WiseFlow",
-        url: "/support",
-        icon: CircleHelp,
-    },
-]
+// const othersItems = [
+//     {
+//         title: "Planos",
+//         url: "/subscription",
+//         icon: CreditCard,
+//     },
+//     {
+//         title: "Tutoriais",
+//         url: "/tutorials",
+//         icon: PlaySquareIcon,
+//     },
+//     {
+//         title: "Suporte WiseFlow",
+//         url: "/support",
+//         icon: CircleHelp,
+//     },
+// ]
 
 export function AppSidebar() {
 
@@ -98,14 +98,12 @@ export function AppSidebar() {
 
     return (
         <Sidebar variant="floating" collapsible="icon">
-            <SidebarHeader className="p-4 border-b flex items-center justify-center bg-background">
-                {/* <h1 className="text-xl font-bold text-primary">WiseFlow</h1>
-                <p className="text-xs text-muted-foreground">{session.data?.user?.enterprise?.name}</p> */}
-            </SidebarHeader>
+            <SidebarHeader className="p-4 border-b flex items-center justify-center bg-background" />
 
             <SidebarContent className="bg-background">
                 <SidebarGroup>
-                    <SidebarGroupLabel>Minha empresa</SidebarGroupLabel>
+                    <SidebarGroupLabel className="font-bold text-md">{session.data?.user?.enterprise?.name}</SidebarGroupLabel>
+                    <SidebarGroupLabel className="text-muted-foreground">Menu principal</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {itemsEnterprise.map((item) => (
@@ -122,7 +120,7 @@ export function AppSidebar() {
                     </SidebarGroupContent>
                 </SidebarGroup>
 
-                <SidebarGroup>
+                {/* <SidebarGroup>
                     <SidebarGroupLabel>Outros</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
@@ -138,7 +136,7 @@ export function AppSidebar() {
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
-                </SidebarGroup>
+                </SidebarGroup> */}
             </SidebarContent>
 
             <SidebarFooter className="p-4 border-t bg-background">
