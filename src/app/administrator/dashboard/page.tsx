@@ -1,24 +1,37 @@
 
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { AccessDenied } from "@/components/ui/access-denied";
 import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
+import { db } from "@/db";
+import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 
 const Home = async () => {
 
-    // Busca e verifica se o usuário está autenticado
     const session = await auth.api.getSession({
         headers: await headers(),
-    })
+    });
 
     if (!session?.user) {
-        redirect("/admin-authentication")
+        redirect("/");
     }
-    if (!session.user.enterprise) {
+
+    const user = await db.query.usersTable.findFirst({
+        where: eq(usersTable.id, session.user.id),
+    });
+
+    if (user?.role !== "admin") {
+        return <AccessDenied />
+    }
+
+    if (user?.role === "admin" && !session.user.enterprise) {
         redirect("/enterprise-form");
     }
+
 
     return (
         <PageContainer>

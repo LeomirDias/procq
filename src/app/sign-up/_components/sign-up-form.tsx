@@ -56,9 +56,10 @@ export function SignUpForm() {
                             userId: ctx.data.user.id,
                             cpf: values.cpf,
                             phoneNumber: values.phoneNumber,
+                            role: 'admin'
                         });
                         toast.success("Cadastro realizado com sucesso")
-                        router.push("/dashboard")
+                        router.push("/administrator/dashboard")
                     } catch {
                         toast.error("Erro ao salvar dados adicionais")
                     }

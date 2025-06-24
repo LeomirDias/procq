@@ -17,6 +17,7 @@ export const updateUserData = actionClient
                 .set({
                     cpf: parsedInput.cpf,
                     phoneNumber: parsedInput.phoneNumber,
+                    role: parsedInput.role || 'admin',
                     updatedAt: new Date(),
                 })
                 .where(eq(usersTable.id, parsedInput.userId));

@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react"
-import Image from "next/image"
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -28,7 +27,7 @@ const loginSchema = z.object({
 })
 
 
-const LoginForm = () => {
+const AdministratorLoginForm = () => {
   const router = useRouter();
   const formLogin = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -46,7 +45,7 @@ const LoginForm = () => {
     }, {
       onSuccess: () => {
         toast.success("Login realizado com sucesso")
-        router.push("/dashboard")
+        router.push("/administrator/dashboard")
       },
       onError: () => {
         toast.error("Email ou senha inválidos")
@@ -55,11 +54,10 @@ const LoginForm = () => {
   }
 
 
-
   return (
     <Card className="overflow-hidden p-0">
-      <CardContent className="grid p-0 md:grid-cols-2">
-        <div className="p-6 md:p-8">
+      <CardContent className="grid p-0">
+        <div className="mx-auto w-full max-w-md p-6 md:p-8">
           <Form {...formLogin}>
             <form onSubmit={formLogin.handleSubmit(onSubmitLogin)} className="space-y-4">
               <CardHeader className="p-0">
@@ -108,18 +106,9 @@ const LoginForm = () => {
             </form>
           </Form>
         </div>
-        <div className="bg-muted relative hidden md:block">
-          <Image
-            src="/horizontal.png"
-            alt="Image"
-            className="absolute inset-0 h-full w-full object-cover"
-            width={500}
-            height={500}
-          />
-        </div>
       </CardContent>
     </Card>
   )
 }
 
-export default LoginForm;
+export default AdministratorLoginForm;
