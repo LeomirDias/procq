@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
+import { updateUserData } from "@/actions/update-user-data";
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -24,6 +25,8 @@ const registerSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
     email: z.string().trim().email({ message: "Email inválido" }),
     password: z.string().trim().min(8, { message: "Senha é obrigatória e deve ter pelo menos 8 caracteres" }),
+    phoneNumber: z.string().trim().min(1, { message: "Telefone é obrigatório" }),
+    cpf: z.string().trim().min(1, { message: "CPF é obrigatório" }),
 })
 
 export function SignUpForm() {
@@ -35,32 +38,43 @@ export function SignUpForm() {
             name: "",
             email: "",
             password: "",
+            phoneNumber: "",
+            cpf: "",
         },
     })
 
     async function onSubmitRegister(values: z.infer<typeof registerSchema>) {
-
-        await authClient.signUp.email({
-            email: values.email,
-            password: values.password,
-            name: values.name,
-        }, {
-            onSuccess: () => {
-                toast.success("Cadastro realizado com sucesso")
-                router.push("/dashboard")
-            },
-            onError: (ctx) => {
-                if (ctx.error.code === "USER_ALREADY_EXISTS" || ctx.error.code === "EMAIL_ALREADY_EXISTS") {
-                    toast.error("Email já cadastrado, por favor faça login")
-                    return;
-                } else {
-                    toast.error("Erro ao cadastrar, por favor tente novamente")
+        try {
+            await authClient.signUp.email({
+                email: values.email,
+                password: values.password,
+                name: values.name,
+            }, {
+                onSuccess: async (ctx) => {
+                    try {
+                        await updateUserData({
+                            userId: ctx.data.user.id,
+                            cpf: values.cpf,
+                            phoneNumber: values.phoneNumber,
+                        });
+                        toast.success("Cadastro realizado com sucesso")
+                        router.push("/dashboard")
+                    } catch {
+                        toast.error("Erro ao salvar dados adicionais")
+                    }
+                },
+                onError: (ctx) => {
+                    if (ctx.error.code === "USER_ALREADY_EXISTS" || ctx.error.code === "EMAIL_ALREADY_EXISTS") {
+                        toast.error("Email já cadastrado, por favor faça login")
+                        return;
+                    } else {
+                        toast.error("Erro ao cadastrar, por favor tente novamente")
+                    }
                 }
-                // if (ctx.error.code === "USER_ALREADY_EXISTS") {
-                //     toast.error("Usuário já cadastrado, por favor faça login")
-                // }
-            }
-        })
+            })
+        } catch {
+            toast.error("Erro ao realizar cadastro")
+        }
     }
 
     return (
@@ -84,7 +98,33 @@ export function SignUpForm() {
                                             <FormItem>
                                                 <FormLabel>Nome</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Nome" {...field} />
+                                                    <Input placeholder="Digite seu nome" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={formRegister.control}
+                                        name="cpf"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>CPF</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Digite seu CPF" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <FormField
+                                        control={formRegister.control}
+                                        name="phoneNumber"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Telefone</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Digite seu telefone" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -97,7 +137,7 @@ export function SignUpForm() {
                                             <FormItem>
                                                 <FormLabel>Email</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Email" {...field} />
+                                                    <Input placeholder="Digite seu email" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -110,7 +150,7 @@ export function SignUpForm() {
                                             <FormItem>
                                                 <FormLabel>Senha</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Senha" {...field} />
+                                                    <Input placeholder="Crie sua senha" type="password" {...field} />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>

@@ -1,5 +1,5 @@
+import { SignUpForm } from "./_components/sign-up-form";
 
-import LoginForm from "./_components/login-form";
 
 const AuthenticationPage = () => {
 
@@ -10,7 +10,7 @@ const AuthenticationPage = () => {
           <h1 className="text-2xl font-bold">Procon Itumbiara</h1>
           {/* <p className="text-muted-foreground">Gerencie seus atendimentos com facilidade</p> */}
         </div>
-        <LoginForm />
+        <SignUpForm />
       </div>
       <div className="text-muted-foreground mt-2 *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
         Ao continuar, você concorda com nossos <a href="#">Termos de Serviço</a> e <a href="#">Política de Privacidade</a>.
