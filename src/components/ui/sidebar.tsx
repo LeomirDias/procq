@@ -340,8 +340,9 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
       className={cn("flex items-center justify-between gap-2 p-2", className)}
       {...props}
     >
-      <div className="flex-1 flex items-center min-w-0 group-data-[state=collapsed]:hidden">
-        <h1 className="text-xl font-bold text-primary">WiseFlow</h1>
+      <div className="flex-1 flex flex-col items-center min-w-0 group-data-[state=collapsed]:hidden">
+        <h1 className="text-xl font-bold text-primary">ProcQ</h1>
+        <span className="text-sm text-muted-foreground">Procon Itumbiara</span>
       </div>
       <SidebarTrigger />
     </div>

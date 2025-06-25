@@ -30,7 +30,7 @@ const itemsEnterprise = [
     },
     {
         title: "Profissionais",
-        url: "/administrator/professionals",
+        url: "/administrator/users-professionals",
         icon: Users,
     },
     {
@@ -55,23 +55,6 @@ const itemsEnterprise = [
     },
 ]
 
-// const othersItems = [
-//     {
-//         title: "Planos",
-//         url: "/subscription",
-//         icon: CreditCard,
-//     },
-//     {
-//         title: "Tutoriais",
-//         url: "/tutorials",
-//         icon: PlaySquareIcon,
-//     },
-//     {
-//         title: "Suporte WiseFlow",
-//         url: "/support",
-//         icon: CircleHelp,
-//     },
-// ]
 
 export function AppSidebar() {
 
@@ -102,8 +85,6 @@ export function AppSidebar() {
 
             <SidebarContent className="bg-background">
                 <SidebarGroup>
-                    <SidebarGroupLabel className="font-bold text-md">ProcQ</SidebarGroupLabel>
-                    <SidebarGroupLabel className="text-muted-foreground">Menu principal</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {itemsEnterprise.map((item) => (
@@ -119,24 +100,6 @@ export function AppSidebar() {
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
-
-                {/* <SidebarGroup>
-                    <SidebarGroupLabel>Outros</SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu>
-                            {othersItems.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild isActive={pathname === item.url}>
-                                        <Link href={item.url}>
-                                            <item.icon />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
-                            ))}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup> */}
             </SidebarContent>
 
             <SidebarFooter className="p-4 border-t bg-background">
@@ -145,7 +108,7 @@ export function AppSidebar() {
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <SidebarMenuButton size="lg" className="flex items-center">
-                                    <Avatar className="h-10 w-10">
+                                    <Avatar className="h-12 w-12 border-2 border-red-500 rounded-full group-data-[state=collapsed]:h-8 group-data-[state=collapsed]:w-8">
                                         <AvatarFallback>
                                             {userInitials}
                                         </AvatarFallback>
