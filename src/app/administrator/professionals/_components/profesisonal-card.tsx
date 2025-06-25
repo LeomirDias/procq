@@ -25,16 +25,16 @@ import { Separator } from "@/components/ui/separator";
 import { usersTable } from "@/db/schema";
 
 interface ProfessionalCardProps {
-    professional: typeof usersTable.$inferSelect
+    professional: any // Ajustado para aceitar o tipo retornado pela action
 }
 
 const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
 
     const [isUpsertPRofessionalFormOpen, setIsUpsertProfessionalFormOpen] = useState(false);
 
-    const professionalInitials = professional.name
+    const professionalInitials = (professional.name as string)
         .split(" ")
-        .map((name) => name[0])
+        .map((name: string) => name[0])
         .join("");
 
     const deleteUserAction = useAction(deleteUser, {
@@ -71,11 +71,11 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
             <CardContent className="flex flex-col gap-2">
                 <Badge variant="outline">
                     <Briefcase className="mr-1" />
-                    Cargo: {professional.role}
+                    Contato: {professional.phoneNumber?.replace(/^(\d{2})(\d{1})?(\d{4})(\d{4})$/, "($1) $2 $3-$4")}
                 </Badge>
                 <Badge variant="outline">
                     <IdCard className="mr-1" />
-                    Registro: {professional.cpf?.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
+                    CPF: {professional.cpf?.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
                 </Badge>
                 <Badge variant="outline">
                     <Lock className="mr-1" />

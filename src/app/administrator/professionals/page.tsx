@@ -6,6 +6,7 @@ import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, P
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { getProfessionals } from "@/actions/get-user-professional";
 
 import ProfessionalCard from "./_components/profesisonal-card";
 
@@ -18,10 +19,11 @@ const AdminsProfessionals = async () => {
         redirect("/")
     }
 
-    const [user] = await Promise.all([
+    const [user, professionals] = await Promise.all([
         db.query.usersTable.findFirst({
             where: eq(usersTable.id, session.user.id),
         }),
+        getProfessionals({}),
     ]);
 
     if (user?.role === "professional") {
@@ -38,11 +40,14 @@ const AdminsProfessionals = async () => {
             </PageHeader>
             <PageContent>
                 <div className="grid grid-cols-5 gap-6">
-                    {user?.role === "professional" && (
+                    {professionals?.data && professionals.data.length > 0 && professionals.data.map((professional: any) => (
                         <ProfessionalCard
-                            key={user.id}
-                            professional={user}
+                            key={professional.id}
+                            professional={professional}
                         />
+                    ))}
+                    {professionals?.serverError && (
+                        <span className="text-red-500">Erro ao buscar profissionais: {professionals.serverError}</span>
                     )}
                 </div>
             </PageContent>
