@@ -22,17 +22,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
+import UpdateUserForm from "./update-user-form";
 import { usersTable } from "@/db/schema";
 
-interface ProfessionalCardProps {
-    professional: any // Ajustado para aceitar o tipo retornado pela action
+interface UserCardProps {
+    user: typeof usersTable.$inferSelect
 }
 
-const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
+const UserCard = ({ user }: UserCardProps) => {
 
     const [isUpsertPRofessionalFormOpen, setIsUpsertProfessionalFormOpen] = useState(false);
 
-    const professionalInitials = (professional.name as string)
+    const professionalInitials = (user.name as string)
         .split(" ")
         .map((name: string) => name[0])
         .join("");
@@ -46,12 +47,12 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
         },
     });
 
-    const handleDeleteProfessional = () => {
-        if (!professional?.id) {
+    const handleDeleteUser = () => {
+        if (!user?.id) {
             toast.error("Usuário não encontrado.");
             return;
         }
-        deleteUserAction.execute({ id: professional?.id || "" });
+        deleteUserAction.execute({ id: user?.id || "" });
         setIsUpsertProfessionalFormOpen(false);
     };
 
@@ -63,7 +64,7 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
                         <AvatarFallback>{professionalInitials}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <h3 className="text-sm font-medium">{professional.name}</h3>
+                        <h3 className="text-sm font-medium">{user.name}</h3>
                     </div>
                 </div>
             </CardHeader>
@@ -71,15 +72,15 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
             <CardContent className="flex flex-col gap-2">
                 <Badge variant="outline">
                     <Briefcase className="mr-1" />
-                    Contato: {professional.phoneNumber?.replace(/^(\d{2})(\d{1})?(\d{4})(\d{4})$/, "($1) $2 $3-$4")}
+                    Contato: {user.phoneNumber?.replace(/^(\d{2})(\d{1})?(\d{4})(\d{4})$/, "($1) $2 $3-$4")}
                 </Badge>
                 <Badge variant="outline">
                     <IdCard className="mr-1" />
-                    CPF: {professional.cpf?.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
+                    CPF: {user.cpf?.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
                 </Badge>
                 <Badge variant="outline">
                     <Lock className="mr-1" />
-                    Acesso: {professional.role === "admin" ? "Administrador" : "Profissional"}
+                    Acesso: {user.role === "admin" ? "Administrador" : "Profissional"}
                 </Badge>
 
             </CardContent>
@@ -93,15 +94,11 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
                             <Pencil className="mr-2 h-4 w-4" />
                             Editar profissional
                         </Button>
-                    </DialogTrigger>
-                    {/* <UpsertProfessionalForm professional={{
-                        ...professional,
-                    }}
-                        onSuccess={() => setIsUpsertProfessionalFormOpen(false)}
-                    /> */}
+                     </DialogTrigger>
+                    <UpdateUserForm user={user} onSuccess={() => setIsUpsertProfessionalFormOpen(false)} />
                 </Dialog>
 
-                {professional && (
+                {user && (
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="outline" className="w-full hover:bg-red-500 hover:text-white">
@@ -118,7 +115,7 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDeleteProfessional}>Deletar</AlertDialogAction>
+                                <AlertDialogAction onClick={handleDeleteUser}>Deletar</AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
@@ -129,4 +126,4 @@ const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
     );
 }
 
-export default ProfessionalCard;
+export default UserCard;

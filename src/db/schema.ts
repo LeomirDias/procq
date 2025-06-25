@@ -3,7 +3,7 @@ import { boolean, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg
 
 //Usuários
 export const usersTable = pgTable("users", {
-  id: uuid("id").primaryKey().defaultRandom(),
+  id: text("id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").notNull(),

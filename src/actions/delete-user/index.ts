@@ -13,7 +13,7 @@ import { actionClient } from "@/lib/next-safe-action";
 export const deleteUser = actionClient
     .schema(
         z.object({
-            id: z.string().uuid(),
+            id: z.string(),
         }),
     )
     .action(async ({ parsedInput }) => {
@@ -28,10 +28,7 @@ export const deleteUser = actionClient
         });
         if (!user) {
             throw new Error("Usuário não encontrado");
-        }
-        if (user.enterpriseId !== session.user.enterprise?.id) {
-            throw new Error("Usuário não encontrado");
-        }
+            }
         await db.delete(usersTable).where(eq(usersTable.id, parsedInput.id));
-        revalidatePath("/professionals");
+        revalidatePath("/administrator/users-professionals");
     });
