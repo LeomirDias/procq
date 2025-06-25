@@ -18,13 +18,9 @@ const AdminsSectors = async () => {
     if (!session?.user) {
         redirect("/admin-authentication");
     }
-    if (!session.user.enterprise) {
-        redirect("/enterprise-form");
-    }
     const sectors = await db.query.sectorsTable.findMany({
-        where: eq(sectorsTable.enterpriseId, session.user.enterprise.id),
         with: {
-            professionals: true,
+            users: true,
             servicePoints: true
         }
     });

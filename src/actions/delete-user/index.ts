@@ -6,11 +6,11 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { professionalsTable } from "@/db/schema";
+import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-export const deleteProfessional = actionClient
+export const deleteUser = actionClient
     .schema(
         z.object({
             id: z.string().uuid(),
@@ -23,15 +23,15 @@ export const deleteProfessional = actionClient
         if (!session?.user) {
             throw new Error("Unauthorized");
         }
-        const professional = await db.query.professionalsTable.findFirst({
-            where: eq(professionalsTable.id, parsedInput.id),
+        const user = await db.query.usersTable.findFirst({
+            where: eq(usersTable.id, parsedInput.id),
         });
-        if (!professional) {
-            throw new Error("Profissional não encontrado");
+        if (!user) {
+            throw new Error("Usuário não encontrado");
         }
-        if (professional.enterpriseId !== session.user.enterprise?.id) {
-            throw new Error("Profissional não encontrado");
+        if (user.enterpriseId !== session.user.enterprise?.id) {
+            throw new Error("Usuário não encontrado");
         }
-        await db.delete(professionalsTable).where(eq(professionalsTable.id, parsedInput.id));
+        await db.delete(usersTable).where(eq(usersTable.id, parsedInput.id));
         revalidatePath("/professionals");
     });

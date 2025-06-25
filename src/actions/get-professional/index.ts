@@ -4,31 +4,31 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { professionalsTable } from "@/db/schema";
+import { usersTable } from "@/db/schema";
 import { actionClient } from "@/lib/next-safe-action";
 
-export const getProfessional = actionClient
+export const getUser = actionClient
     .schema(
         z.object({
-            professionalId: z.string(),
+            userId: z.string(),
         }),
     )
     .action(async ({ parsedInput }) => {
         try {
-            const professional = await db.query.professionalsTable.findFirst({
-                where: eq(professionalsTable.id, parsedInput.professionalId),
+            const user = await db.query.usersTable.findFirst({
+                where: eq(usersTable.id, parsedInput.userId),
                 with: {
-                    enterprise: true
+                    enterprise: true,
                 }
             });
 
-            if (!professional) {
-                throw new Error("Profissional não encontrado");
+            if (!user) {
+                throw new Error("Usuário não encontrado");
             }
 
-            return professional;
+            return user;
         } catch (error) {
-            console.error("[GET_PROFESSIONAL]", error);
-            throw new Error("Erro ao buscar profissional");
+            console.error("[GET_USER]", error);
+            throw new Error("Erro ao buscar usuário");
         }
     }); 

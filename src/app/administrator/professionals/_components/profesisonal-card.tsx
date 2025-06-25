@@ -4,7 +4,7 @@ import { useAction } from "next-safe-action/hooks"
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { deleteProfessional } from "@/actions/delete-professional";
+import { deleteUser } from "@/actions/delete-user";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -22,16 +22,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { professionalsTable, sectorsTable } from "@/db/schema";
-
-import UpsertProfessionalForm from "./upsert-professional-form";
+import { usersTable } from "@/db/schema";
 
 interface ProfessionalCardProps {
-    professional: typeof professionalsTable.$inferSelect
-    sectors: typeof sectorsTable.$inferSelect[];
+    professional: typeof usersTable.$inferSelect
 }
 
-const ProfessionalCard = ({ professional, sectors }: ProfessionalCardProps) => {
+const ProfessionalCard = ({ professional }: ProfessionalCardProps) => {
 
     const [isUpsertPRofessionalFormOpen, setIsUpsertProfessionalFormOpen] = useState(false);
 
@@ -40,21 +37,22 @@ const ProfessionalCard = ({ professional, sectors }: ProfessionalCardProps) => {
         .map((name) => name[0])
         .join("");
 
-    const deleteProfessionalAction = useAction(deleteProfessional, {
-        onSuccess: () => {
-            toast.success("Profissional deletado com sucesso!");
+    const deleteUserAction = useAction(deleteUser, {
+            onSuccess: () => {
+            toast.success("Usuário deletado com sucesso!");
         },
         onError: () => {
-            toast.error(`Erro ao deletar profissional.`);
+            toast.error(`Erro ao deletar usuário.`);
         },
     });
 
     const handleDeleteProfessional = () => {
         if (!professional?.id) {
-            toast.error("Profissional não encontrado.");
+            toast.error("Usuário não encontrado.");
             return;
         }
-        deleteProfessionalAction.execute({ id: professional?.id || "" });
+        deleteUserAction.execute({ id: professional?.id || "" });
+        setIsUpsertProfessionalFormOpen(false);
     };
 
     return (
@@ -73,19 +71,15 @@ const ProfessionalCard = ({ professional, sectors }: ProfessionalCardProps) => {
             <CardContent className="flex flex-col gap-2">
                 <Badge variant="outline">
                     <Briefcase className="mr-1" />
-                    Cargo: {professional.position}
-                </Badge>
-                <Badge variant="outline">
-                    <MonitorSmartphone className="mr-1" />
-                    Setor: {sectors.find(sector => sector.id === professional.sectorId)?.name}
+                    Cargo: {professional.role}
                 </Badge>
                 <Badge variant="outline">
                     <IdCard className="mr-1" />
-                    Registro: {professional.register.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
+                    Registro: {professional.cpf?.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")}
                 </Badge>
                 <Badge variant="outline">
                     <Lock className="mr-1" />
-                    Acesso: {professional.acessLevel === "admin" ? "Administrador" : "Padrão"}
+                    Acesso: {professional.role === "admin" ? "Administrador" : "Profissional"}
                 </Badge>
 
             </CardContent>
@@ -100,11 +94,11 @@ const ProfessionalCard = ({ professional, sectors }: ProfessionalCardProps) => {
                             Editar profissional
                         </Button>
                     </DialogTrigger>
-                    <UpsertProfessionalForm sectors={sectors} professional={{
+                    {/* <UpsertProfessionalForm professional={{
                         ...professional,
                     }}
                         onSuccess={() => setIsUpsertProfessionalFormOpen(false)}
-                    />
+                    /> */}
                 </Dialog>
 
                 {professional && (

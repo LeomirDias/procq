@@ -3,15 +3,15 @@ import { boolean, integer, pgTable, text, timestamp, uuid } from "drizzle-orm/pg
 
 //Usuários
 export const usersTable = pgTable("users", {
-    id: text("id").primaryKey().notNull(),
-    name: text('name').notNull(),
-    email: text('email').notNull().unique(),
-    emailVerified: boolean('email_verified').notNull(),
-    cpf: text("cpf").unique(),
-    phoneNumber: text("phone_number").unique(),
-    role: text('role').notNull().default('user'),
-    createdAt: timestamp('created_at').notNull(),
-    updatedAt: timestamp('updated_at').notNull()
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  emailVerified: boolean("email_verified").notNull(),
+  cpf: text("cpf").unique(),
+  phoneNumber: text("phone_number").unique(),
+  role: text("role").notNull().default("user"),
+  createdAt: timestamp("created_at").notNull(),
+  updatedAt: timestamp("updated_at").notNull(),
 });
 
 export const sessionsTable = pgTable("sessions", {
@@ -50,17 +50,6 @@ export const verificationsTable = pgTable("verifications", {
     updatedAt: timestamp('updated_at')
 });
 
-//Tabela para armazenar empresas
-export const enterprisesTable = pgTable("enterprises", {
-    id: uuid("id").primaryKey().defaultRandom(),
-    name: text("name").notNull(),
-    register: text("register").notNull(),
-    unityNumber: text("unity_number"),
-    phoneNumber: text("phone_number").notNull(),
-    slug: text("slug").notNull().unique(),
-    createdAT: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-});
 
 //Tabela para armazenar setores
 export const sectorsTable = pgTable("sectors", {
@@ -68,9 +57,6 @@ export const sectorsTable = pgTable("sectors", {
     name: text("name").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: uuid("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
 
 });
 
@@ -81,9 +67,6 @@ export const servicePointsTable = pgTable("service_points", {
     availability: text("availability").default("free"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: uuid("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
     sectorId: uuid("sector_id")
         .notNull()
         .references(() => sectorsTable.id, { onDelete: "cascade" }),
@@ -96,9 +79,6 @@ export const operationsTable = pgTable("operations", {
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
     //Relationships
-    enterpriseId: uuid("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
     userId: text("user_id")
         .notNull()
         .references(() => usersTable.id, { onDelete: "cascade" }),
@@ -116,9 +96,6 @@ export const clientsTable = pgTable("clients", {
     phoneNumber: text("phone_number").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: uuid("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
 });
 
 
@@ -130,9 +107,6 @@ export const ticketsTable = pgTable("tickets", {
     priority: text("priority").notNull().default("common"),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: uuid("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
     sectorId: uuid("sector_id")
         .notNull()
         .references(() => sectorsTable.id, { onDelete: "cascade" }),
@@ -149,9 +123,6 @@ export const treatmentsTable = pgTable("treatments", {
     durationInMinutes: integer("duration_in_minutes").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-    enterpriseId: uuid("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
     ticketId: uuid("ticket_id")
         .notNull()
         .references(() => ticketsTable.id, { onDelete: "cascade" }),
@@ -166,61 +137,20 @@ export const treatmentsTable = pgTable("treatments", {
 //Relationships
 
 //Users table relationships
-export const usersTableRelations = relations(usersTable, ({ many }) => ({
-    usersToEnterprises: many(usersToEnterprisesTable),
+export const usersTableRelations = relations(usersTable, ({ one, many }) => ({
     operations: many(operationsTable),
 }));
 
-//Mid Table for relation N-N Users & Enterprises
-export const usersToEnterprisesTable = pgTable("users_to_enterprises", {
-    userId: text("user_id")
-        .notNull()
-        .references(() => usersTable.id, { onDelete: "cascade" }),
-    enterpriseId: uuid("enterprise_id")
-        .notNull()
-        .references(() => enterprisesTable.id, { onDelete: "cascade" }),
-    createdAT: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-});
-
-//Mid table "usersToEnterprisesTable" relations table
-export const usersToEnterprisesTableRelations = relations(usersToEnterprisesTable, ({ one }) => ({
-    user: one(usersTable, {
-        fields: [usersToEnterprisesTable.userId],
-        references: [usersTable.id],
-    }),
-    enterprise: one(enterprisesTable, {
-        fields: [usersToEnterprisesTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
-}));
-
-//Enterprises tables relationships
-export const enterpriseTablesRelations = relations(enterprisesTable, ({ many }) => ({
-    sectors: many(sectorsTable),
-    clients: many(clientsTable),
-    tickets: many(ticketsTable),
-    treatments: many(treatmentsTable),
-    usersToEnterprises: many(usersToEnterprisesTable),
-}));
 
 //Sectors tables relationships
 export const sectorsTableRelations = relations(sectorsTable, ({ one, many }) => ({
-    enterprise: one(enterprisesTable, {
-        fields: [sectorsTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
     users: many(usersTable),
     servicePoints: many(servicePointsTable),
     tickets: many(ticketsTable),
 }));
 
 //Operations tables relationships
-export const operationsTableRelations = relations(operationsTable, ({ one, many }) => ({
-    enterprise: one(enterprisesTable, {
-        fields: [operationsTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
+export const operationsTableRelations = relations(operationsTable, ({ one, many }) => ({    
     user: one(usersTable, {
         fields: [operationsTable.userId],
         references: [usersTable.id],
@@ -234,20 +164,12 @@ export const operationsTableRelations = relations(operationsTable, ({ one, many 
 
 //Clients tables relationships
 export const clientsTableRelations = relations(clientsTable, ({ one, many }) => ({
-    enterprise: one(enterprisesTable, {
-        fields: [clientsTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
     tickets: many(ticketsTable),
     treatments: many(treatmentsTable),
 }));
 
 //Service points tables relationships
 export const servicePointsTableRelations = relations(servicePointsTable, ({ one, many }) => ({
-    enterprise: one(enterprisesTable, {
-        fields: [servicePointsTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
     sector: one(sectorsTable, {
         fields: [servicePointsTable.sectorId],
         references: [sectorsTable.id],
@@ -257,10 +179,6 @@ export const servicePointsTableRelations = relations(servicePointsTable, ({ one,
 
 //Tickets relations
 export const ticketsTableRelations = relations(ticketsTable, ({ one }) => ({
-    enterprise: one(enterprisesTable, {
-        fields: [ticketsTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
     client: one(clientsTable, {
         fields: [ticketsTable.clientId],
         references: [clientsTable.id],
@@ -270,10 +188,6 @@ export const ticketsTableRelations = relations(ticketsTable, ({ one }) => ({
 
 //Treatments tables relationships
 export const treatmentsTableRelations = relations(treatmentsTable, ({ one }) => ({
-    enterprise: one(enterprisesTable, {
-        fields: [treatmentsTable.enterpriseId],
-        references: [enterprisesTable.id],
-    }),
     ticket: one(ticketsTable, {
         fields: [treatmentsTable.ticketId],
         references: [ticketsTable.id],

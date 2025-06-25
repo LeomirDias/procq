@@ -28,17 +28,12 @@ const Home = async () => {
         return <AccessDenied />
     }
 
-    if (user?.role === "admin" && !session.user.enterprise) {
-        redirect("/enterprise-form");
-    }
-
-
     return (
         <PageContainer>
             <PageHeader>
                 <PageHeaderContent>
                     <PageTitle>Dashboard</PageTitle>
-                    <PageDescription>Gerencie a sua empresa.</PageDescription>
+                    <PageDescription>Relatórios e informações sobre a operação.</PageDescription>
                 </PageHeaderContent>
                 <PageActions>
                     <></>

@@ -21,13 +21,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { professionalsTable, sectorsTable, servicePointsTable } from "@/db/schema";
+import { usersTable, sectorsTable, servicePointsTable } from "@/db/schema";
 
 import UpsertSectorForm from "./upsert-sector-form";
 
 interface SectorCardProps {
     sector: typeof sectorsTable.$inferSelect & {
-        professionals: typeof professionalsTable.$inferSelect[]
+        users: typeof usersTable.$inferSelect[]
         servicePoints: typeof servicePointsTable.$inferSelect[]
     }
 }
@@ -64,10 +64,10 @@ const SectorCard = ({ sector }: SectorCardProps) => {
             <CardContent className="flex flex-col space-y-2">
                 <h4 className="text-sm font-medium">Profissionais</h4>
                 <p className="text-sm text-muted-foreground flex flex-wrap gap-2">
-                    {sector.professionals.map(professional => (
-                        <Badge key={professional.id} variant="outline" className="text-xs">
+                    {sector.users.map(user => (
+                        <Badge key={user.id} variant="outline" className="text-xs">
                             <User className="mr-2 h-4 w-4" />
-                            {professional.name}
+                            {user.name}
                         </Badge>
                     ))}
                 </p>
@@ -79,7 +79,7 @@ const SectorCard = ({ sector }: SectorCardProps) => {
                     {sector.servicePoints.map(servicePoint => (
                         <Badge key={servicePoint.id} variant="outline" className="text-xs">
                             <MapPin className="mr-2 h-4 w-4" />
-                            {servicePoint.name}
+                            {servicePoint.name || "Ponto de atendimento"    }
                         </Badge>
                     ))}
                 </p>

@@ -25,32 +25,32 @@ import { authClient } from "@/lib/auth.client"
 const itemsEnterprise = [
     {
         title: "Home",
-        url: "/dashboard",
+        url: "/administrator/dashboard",
         icon: LayoutDashboard,
     },
     {
         title: "Profissionais",
-        url: "/professionals",
+        url: "/administrator/professionals",
         icon: Users,
     },
     {
         title: "Setores",
-        url: "/sectors",
+        url: "/administrator/sectors",
         icon: Tag,
     },
     {
         title: "Pontos de atendimento",
-        url: "/service-points",
+        url: "/administrator/service-points",
         icon: MapPin,
     },
     {
         title: "Clientes",
-        url: "/clients",
+        url: "/administrator/clients",
         icon: BookUser,
     },
     {
         title: "Atendimentos",
-        url: "/appointments",
+        url: "/administrator/appointments",
         icon: ChartLine,
     },
 ]
@@ -102,7 +102,7 @@ export function AppSidebar() {
 
             <SidebarContent className="bg-background">
                 <SidebarGroup>
-                    <SidebarGroupLabel className="font-bold text-md">{session.data?.user?.enterprise?.name}</SidebarGroupLabel>
+                    <SidebarGroupLabel className="font-bold text-md">ProcQ</SidebarGroupLabel>
                     <SidebarGroupLabel className="text-muted-foreground">Menu principal</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
