@@ -35,10 +35,18 @@ export function AppMenuBar() {
                 <p className="text-sm text-muted-foreground">Bem-vindo ao seu painel de controle</p>
             </div>
             <div className="flex gap-2">
-                <Button variant={activeContent === "file" ? "default" : "outline"} onClick={() => setActiveContent("file")}>Arquivo</Button>
-                <Button variant={activeContent === "edit" ? "default" : "outline"} onClick={() => setActiveContent("edit")}>Editar</Button>
-                <Button variant={activeContent === "view" ? "default" : "outline"} onClick={() => setActiveContent("view")}>Visualizar</Button>
-                <Button variant={activeContent === "profiles" ? "default" : "outline"} onClick={() => setActiveContent("profiles")}>Perfis</Button>
+                <a href="/professional/arquivo">
+                    <Button variant={activeContent === "operation" ? "default" : "outline"}>Operar</Button>
+                </a>
+                <a href="/professional/editar">
+                    <Button variant={activeContent === "passwords" ? "default" : "outline"}>Senhas</Button>
+                </a>
+                <a href="/professional/visualizar">
+                    <Button variant={activeContent === "consumers" ? "default" : "outline"}>Consumidores</Button>
+                </a>
+                <a href="/professional/perfis">
+                    <Button variant={activeContent === "other" ? "default" : "outline"}>Outra</Button>
+                </a>
             </div>
             <div className="flex items-center gap-2">
                 <DropdownMenu>

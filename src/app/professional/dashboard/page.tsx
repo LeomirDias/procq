@@ -5,6 +5,8 @@ import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
+import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container-professional";
+import StartOperationButton from "./_components/start-operation-button";
 
 const ProfessionalDashboardPage = async () => {
     const session = await auth.api.getSession({
@@ -23,12 +25,28 @@ const ProfessionalDashboardPage = async () => {
         redirect("/administrator/dashboard");
     }
 
+    const sectors = await db.query.sectorsTable.findMany({
+        with: {
+            servicePoints: true,
+        }
+    });
+
 
     return (
-        <div>
-            <h1>Dashboard do Profissional</h1>
-            {/* Conteúdo do dashboard aqui */}
-        </div>
+        <PageContainer>
+            <PageHeader>
+                <PageHeaderContent>
+                    <PageTitle>Dashboard</PageTitle>
+                    <PageDescription>Relatórios e informações sobre a operação.</PageDescription>
+                </PageHeaderContent>
+                <PageActions>
+                    <StartOperationButton sectors={sectors} />
+                </PageActions>
+            </PageHeader>
+            <PageContent>
+                <></>
+            </PageContent>
+        </PageContainer>
     );
 };
 
