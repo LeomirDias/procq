@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { sectorsTable } from "@/db/schema";
+import { sectorsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
@@ -23,6 +23,10 @@ export const deleteSector = actionClient
         if (!session?.user) {
             throw new Error("Unauthorized");
         }
+        const user = await db.query.usersTable.findFirst({
+            where: eq(usersTable.id, session.user.id),
+        });
+        if (user?.role !== "administrator") throw new Error("Unauthorized");
         const sector = await db.query.sectorsTable.findFirst({
             where: eq(sectorsTable.id, parsedInput.id),
         });

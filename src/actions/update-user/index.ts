@@ -22,6 +22,11 @@ export const updateUser = actionClient
       throw new Error("Usuário não autenticado");
     }
 
+    const user = await db.query.usersTable.findFirst({
+      where: eq(usersTable.id, session.user.id),
+    });
+    if (user?.role !== "administrator") throw new Error("Unauthorized");
+
     await db
       .update(usersTable)
       .set({ name: parsedInput.name, phoneNumber: parsedInput.phoneNumber, cpf: parsedInput.cpf, role: parsedInput.role })

@@ -4,11 +4,12 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { servicePointsTable } from "@/db/schema";
+import { servicePointsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
 import { upsertServicePointSchema } from "./schema";
+import { eq } from "drizzle-orm";
 
 export const upsertServicePoint = actionClient
     .schema(upsertServicePointSchema)
@@ -19,6 +20,10 @@ export const upsertServicePoint = actionClient
         if (!session?.user) {
             throw new Error("Unauthorized");
         }
+        const user = await db.query.usersTable.findFirst({
+            where: eq(usersTable.id, session.user.id),
+        });
+        if (user?.role !== "administrator") throw new Error("Unauthorized");
         await db
             .insert(servicePointsTable)
             .values({

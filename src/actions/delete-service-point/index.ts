@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { db } from "@/db";
-import { servicePointsTable } from "@/db/schema";
+import { servicePointsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
@@ -23,15 +23,16 @@ export const deleteServicePoint = actionClient
         if (!session?.user) {
             throw new Error("Unauthorized");
         }
+        const user = await db.query.usersTable.findFirst({
+            where: eq(usersTable.id, session.user.id),
+        });
+        if (user?.role !== "administrator") throw new Error("Unauthorized");
         const servicePoint = await db.query.servicePointsTable.findFirst({
             where: eq(servicePointsTable.id, parsedInput.id),
         });
         if (!servicePoint) {
             throw new Error("Ponto de atendimento não encontrado");
         }
-        if (servicePoint.enterpriseId !== session.user.enterprise?.id) {
-            throw new Error("Ponto de atendimento não encontrado");
-        }
         await db.delete(servicePointsTable).where(eq(servicePointsTable.id, parsedInput.id));
-        revalidatePath("/service-points");
+        revalidatePath("/administrator/service-points");
     });

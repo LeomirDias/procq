@@ -24,11 +24,9 @@ export const deleteUser = actionClient
             throw new Error("Unauthorized");
         }
         const user = await db.query.usersTable.findFirst({
-            where: eq(usersTable.id, parsedInput.id),
+            where: eq(usersTable.id, session.user.id),
         });
-        if (!user) {
-            throw new Error("Usuário não encontrado");
-            }
+        if (user?.role !== "administrator") throw new Error("Unauthorized");
         await db.delete(usersTable).where(eq(usersTable.id, parsedInput.id));
         revalidatePath("/administrator/users-professionals");
     });
