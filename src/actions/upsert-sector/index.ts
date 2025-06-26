@@ -19,14 +19,10 @@ export const upsertSector = actionClient
         if (!session?.user) {
             throw new Error("Unauthorized");
         }
-        if (!session?.user.enterprise?.id) {
-            throw new Error("Enterprise not found");
-        }
         await db
             .insert(sectorsTable)
             .values({
                 ...parsedInput,
-                enterpriseId: session?.user.enterprise?.id,
             })
             .onConflictDoUpdate({
                 target: [sectorsTable.id],
@@ -34,5 +30,5 @@ export const upsertSector = actionClient
                     ...parsedInput,
                 },
             });
-        revalidatePath("/admins/sectors");
+        revalidatePath("/administrator/sectors");
     });

@@ -39,11 +39,6 @@ const itemsEnterprise = [
         icon: Tag,
     },
     {
-        title: "Pontos de atendimento",
-        url: "/administrator/service-points",
-        icon: MapPin,
-    },
-    {
         title: "Clientes",
         url: "/administrator/clients",
         icon: BookUser,

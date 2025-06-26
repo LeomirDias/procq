@@ -1,5 +1,5 @@
 "use client";
-import { MapPin, Pencil, Trash2, User } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks"
 import { useState } from "react";
 import { toast } from "sonner";
@@ -16,26 +16,26 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import { usersTable, sectorsTable, servicePointsTable } from "@/db/schema";
+import { sectorsTable, servicePointsTable } from "@/db/schema";
 
 import UpsertSectorForm from "./upsert-sector-form";
+import UpsertServicePointForm from "./upsert-service-point-form";
+import ServicePointCard from "./service-point-cards";
 
-interface SectorCardProps {
-    sector: typeof sectorsTable.$inferSelect & {
-        users: typeof usersTable.$inferSelect[]
+interface SectorsGridProps {
+    sectors: (typeof sectorsTable.$inferSelect & {
         servicePoints: typeof servicePointsTable.$inferSelect[]
-    }
+    })[]
 }
 
-const SectorCard = ({ sector }: SectorCardProps) => {
+const SectorsGrid = ({ sectors }: SectorsGridProps) => {
+    const [openSectorForm, setOpenSectorForm] = useState<string | null>(null);
+    const [openServicePointForm, setOpenServicePointForm] = useState<string | null>(null);
 
-    const [isUpsertSectorFormOpen, setIsUpsertSectorFormOpen] = useState(false);
-
+    // Hook deve ser chamado no topo do componente!
     const deleteSectorAction = useAction(deleteSector, {
         onSuccess: () => {
             toast.success("Setor deletado com sucesso!");
@@ -45,89 +45,84 @@ const SectorCard = ({ sector }: SectorCardProps) => {
         },
     });
 
-    const handleDeleteSector = () => {
-        if (!sector?.id) {
+    const handleDeleteSector = (sectorId: string) => {
+        if (!sectorId) {
             toast.error("Setor não encontrado.");
             return;
         }
-        deleteSectorAction.execute({ id: sector?.id || "" });
+        deleteSectorAction.execute({ id: sectorId });
     };
 
     return (
-        <Card>
-            <CardHeader>
-                <div className="flex items-center">
-                    <h3 className="text-sm font-medium">{sector.name}</h3>
-                </div>
-            </CardHeader>
-            <Separator />
-            <CardContent className="flex flex-col space-y-2">
-                <h4 className="text-sm font-medium">Profissionais</h4>
-                <p className="text-sm text-muted-foreground flex flex-wrap gap-2">
-                    {sector.users.map(user => (
-                        <Badge key={user.id} variant="outline" className="text-xs">
-                            <User className="mr-2 h-4 w-4" />
-                            {user.name}
-                        </Badge>
-                    ))}
-                </p>
-            </CardContent>
-            <Separator />
-            <CardContent className="flex flex-col space-y-2">
-                <h4 className="text-sm font-medium">Pontos de atendimento</h4>
-                <p className="text-sm text-muted-foreground flex flex-wrap gap-2">
-                    {sector.servicePoints.map(servicePoint => (
-                        <Badge key={servicePoint.id} variant="outline" className="text-xs">
-                            <MapPin className="mr-2 h-4 w-4" />
-                            {servicePoint.name || "Ponto de atendimento"    }
-                        </Badge>
-                    ))}
-                </p>
-            </CardContent>
-            <Separator />
-            <CardFooter className="flex flex-col gap-2">
-                <Dialog
-                    open={isUpsertSectorFormOpen}
-                    onOpenChange={setIsUpsertSectorFormOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="w-full">
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Editar setor
-                        </Button>
-                    </DialogTrigger>
-                    <UpsertSectorForm sector={{
-                        ...sector,
-                    }}
-                        onSuccess={() => setIsUpsertSectorFormOpen(false)}
-                    />
-                </Dialog>
-
-                {sector && (
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button variant="outline" className="w-full hover:bg-red-500 hover:text-white">
-                                <Trash2 />
-                                Deletar setor
-                            </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>Tem certeza que deseja deletar esse setor?</AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    Essa ação não pode ser desfeita. Todos os dados relacionados a esse setor serão perdidos permanentemente.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDeleteSector}>Deletar</AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                )}
-
-            </CardFooter>
-        </Card>
+        <div className="overflow-x-auto w-full">
+            <div className="flex flex-wrap gap-6 w-full">
+                {sectors.map((sector) => (
+                    <div key={sector.id} className="bg-card border rounded-lg flex flex-col min-w-[280px] w-full">
+                        <div className="p-4 border-b flex items-center justify-between">
+                            <h3 className="text-base font-semibold">{sector.name}</h3>
+                            <div className="flex gap-2">
+                                <Dialog
+                                    open={openSectorForm === sector.id}
+                                    onOpenChange={(open) => setOpenSectorForm(open ? sector.id : null)}>
+                                    <DialogTrigger asChild>
+                                        <Button variant="default" className="w-auto">
+                                            <Pencil className="mr-2 h-4 w-4" />
+                                            Editar setor
+                                        </Button>
+                                    </DialogTrigger>
+                                    <UpsertSectorForm sector={{ ...sector }} onSuccess={() => setOpenSectorForm(null)} />
+                                </Dialog>
+                                <Dialog
+                                    open={openServicePointForm === sector.id}
+                                    onOpenChange={(open) => setOpenServicePointForm(open ? sector.id : null)}>
+                                    <DialogTrigger asChild>
+                                        <Button variant="outline" className="w-auto">
+                                            <Plus className="h-4 w-4" />
+                                            Adicionar ponto de atendimento
+                                        </Button>
+                                    </DialogTrigger>
+                                    <UpsertServicePointForm servicePoint={{ sectorId: sector.id }} onSuccess={() => setOpenServicePointForm(null)} />
+                                </Dialog>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button variant="outline" className="w-auto">
+                                            <Trash2 />
+                                            Deletar setor
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Tem certeza que deseja deletar esse setor?</AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                Essa ação não pode ser desfeita. Todos os dados relacionados a esse setor serão perdidos permanentemente.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                            <AlertDialogAction onClick={() => handleDeleteSector(sector.id)}>Deletar</AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            </div>
+                        </div>
+                        <Separator />
+                        <div className="flex-1 flex flex-col p-4 gap-2">
+                            <h4 className="text-base font-semibold">Pontos de atendimento em {sector.name}</h4>
+                            <div className="grid grid-cols-5 gap-6">
+                                {sector.servicePoints.map(servicePoint => (
+                                    <ServicePointCard
+                                        key={servicePoint.id}
+                                        servicePoint={servicePoint}
+                                        sectors={sectors}
+                                    />
+                                ))}
+                            </div>  
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 }
 
-export default SectorCard;
+export default SectorsGrid;

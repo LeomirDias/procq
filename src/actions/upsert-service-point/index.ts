@@ -19,14 +19,10 @@ export const upsertServicePoint = actionClient
         if (!session?.user) {
             throw new Error("Unauthorized");
         }
-        if (!session?.user.enterprise?.id) {
-            throw new Error("Enterprise not found");
-        }
         await db
             .insert(servicePointsTable)
             .values({
                 ...parsedInput,
-                enterpriseId: session?.user.enterprise?.id,
             })
             .onConflictDoUpdate({
                 target: [servicePointsTable.id],
@@ -34,5 +30,5 @@ export const upsertServicePoint = actionClient
                     ...parsedInput,
                 },
             });
-        revalidatePath("/service-points");
+        revalidatePath("/administrator/sectors");
     });

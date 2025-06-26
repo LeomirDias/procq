@@ -57,36 +57,49 @@ const ServicePointCard = ({ servicePoint, sectors }: ServicePointCardProps) => {
         <Card>
             <CardHeader>
                 <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-sm font-medium">{servicePoint.name} - {sectors.find(sector => sector.id === servicePoint.sectorId)?.name}</h3>
-                    <Badge variant="outline" className="text-xs">
-                        {servicePoint.availability === "free" ? "Livre" : servicePoint.availability === "busy" ? "Ocupado" : "Indisponível"}
-                    </Badge>
+                    <h3 className="text-sm font-medium">{servicePoint.name}</h3>
+                    {servicePoint.availability === "free" && (
+                        <Badge className="text-xs bg-green-100 text-green-800 border-green-300">
+                            Livre
+                        </Badge>
+                    )}
+                    {servicePoint.availability === "operating" && (
+                        <Badge className="text-xs bg-blue-100 text-blue-800 border-blue-300">
+                            Operando
+                        </Badge>
+                    )}
+                    {servicePoint.availability === "paused" && (
+                        <Badge className="text-xs bg-yellow-100 text-yellow-800 border-yellow-300">
+                            Pausado
+                        </Badge>
+                    )}
+                    {(!["free", "operating", "paused"].includes(servicePoint.availability as string)) && (
+                        <Badge className="text-xs bg-red-100 text-red-800 border-red-300">
+                            Indisponível
+                        </Badge>
+                    )}
                 </div>
             </CardHeader>
             <Separator />
-            <CardFooter className="flex flex-col gap-2">
+            <CardFooter className="flex gap-2">
                 <Dialog
                     open={isUpsertSectorFormOpen}
                     onOpenChange={setIsUpsertSectorFormOpen}>
                     <DialogTrigger asChild>
-                        <Button className="w-full">
-                            <Pencil className="mr-2 h-4 w-4" />
-                            Editar ponto de atendimento
+                        <Button variant="default" className="w-auto">
+                            <Pencil />
+                            Editar
                         </Button>
                     </DialogTrigger>
-                    <UpsertServicePointForm sectors={sectors} servicePoint={{
-                        ...servicePoint,
-                    }}
-                        onSuccess={() => setIsUpsertSectorFormOpen(false)}
-                    />
+                    <UpsertServicePointForm servicePoint={servicePoint} onSuccess={() => setIsUpsertSectorFormOpen(false)} />
                 </Dialog>
 
                 {servicePoint && (
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button variant="outline" className="w-full hover:bg-red-500 hover:text-white">
+                            <Button variant="outline" className="w-auto">
                                 <Trash2 />
-                                Deletar ponto de atendimento
+                                Excluir
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>

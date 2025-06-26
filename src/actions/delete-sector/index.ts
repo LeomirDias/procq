@@ -29,9 +29,6 @@ export const deleteSector = actionClient
         if (!sector) {
             throw new Error("Setor não encontrado");
         }
-        if (sector.enterpriseId !== session.user.enterprise?.id) {
-            throw new Error("Setor não encontrado");
-        }
         await db.delete(sectorsTable).where(eq(sectorsTable.id, parsedInput.id));
-        revalidatePath("/sectors");
+        revalidatePath("/administrator/sectors");
     });

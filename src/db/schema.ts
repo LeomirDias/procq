@@ -57,7 +57,6 @@ export const sectorsTable = pgTable("sectors", {
     name: text("name").notNull(),
     createdAT: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().$onUpdate(() => new Date()),
-
 });
 
 //Tabela para armazenar pontos de serviço
@@ -137,16 +136,14 @@ export const treatmentsTable = pgTable("treatments", {
 //Relationships
 
 //Users table relationships
-export const usersTableRelations = relations(usersTable, ({ one, many }) => ({
+export const usersTableRelations = relations(usersTable, ({ many }) => ({
     operations: many(operationsTable),
 }));
 
 
 //Sectors tables relationships
-export const sectorsTableRelations = relations(sectorsTable, ({ one, many }) => ({
-    users: many(usersTable),
+export const sectorsTableRelations = relations(sectorsTable, ({ many }) => ({
     servicePoints: many(servicePointsTable),
-    tickets: many(ticketsTable),
 }));
 
 //Operations tables relationships

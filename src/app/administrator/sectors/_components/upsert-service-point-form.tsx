@@ -15,23 +15,20 @@ import { sectorsTable, servicePointsTable } from "@/db/schema";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do ponto de atendimento é obrigatório." }),
-    sectorId: z.string().uuid({ message: "Setor é obrigatório." }),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
 interface UpsertServicePointFormProps {
-    servicePoint?: typeof servicePointsTable.$inferSelect;
-    sectors: (typeof sectorsTable.$inferSelect)[];
+    servicePoint?: Partial<typeof servicePointsTable.$inferSelect>;
     onSuccess?: () => void;
 }
 
-const UpsertServicePointForm = ({ servicePoint, sectors, onSuccess }: UpsertServicePointFormProps) => {
+const UpsertServicePointForm = ({ servicePoint, onSuccess }: UpsertServicePointFormProps) => {
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: servicePoint?.name ?? "",
-            sectorId: servicePoint?.sectorId ?? "",
         }
     });
 
@@ -51,6 +48,7 @@ const UpsertServicePointForm = ({ servicePoint, sectors, onSuccess }: UpsertServ
         execute({
             ...values,
             id: servicePoint?.id,
+            sectorId: servicePoint?.sectorId || "",
         });
     };
 
@@ -76,36 +74,6 @@ const UpsertServicePointForm = ({ servicePoint, sectors, onSuccess }: UpsertServ
                                         {...field}
                                     />
                                 </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                    <FormField
-                        control={form.control}
-                        name="sectorId"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>Setor</FormLabel>
-                                <Select
-                                    onValueChange={field.onChange}
-                                    defaultValue={field.value}
-                                >
-                                    <FormControl>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Selecione o setor" />
-                                        </SelectTrigger>
-                                    </FormControl>
-                                    <SelectContent>
-                                        {sectors.map((sector) => (
-                                            <SelectItem
-                                                key={sector.id}
-                                                value={sector.id}
-                                            >
-                                                {sector.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
                                 <FormMessage />
                             </FormItem>
                         )}
