@@ -7,8 +7,18 @@ import { authClient } from "@/lib/auth.client"
 import { Button } from "@/components/ui/button";
 import { Link, LogOutIcon, UserIcon } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { operationsTable, sectorsTable, servicePointsTable, usersTable } from "@/db/schema";
+import ClientOperationTimerCard from "../dashboard/_components/operation-timer-card";
 
-export function AppMenuBar() {
+const AppMenuBar = ({ sectors, operations, user }: {
+    sectors: (typeof sectorsTable.$inferSelect & { servicePoints: typeof servicePointsTable.$inferSelect[] })[],
+    operations: (typeof operationsTable.$inferSelect & { servicePoint: typeof servicePointsTable.$inferSelect })[],
+    user: typeof usersTable.$inferSelect
+}) => {
+    // Busca a operação ativa
+    const activeOperation = operations.find(op => op.status === "operating");
+    const sector = sectors.find(sector => sector.id === activeOperation?.servicePoint?.sectorId);
+
     const router = useRouter();
     const session = authClient.useSession();
     const [activeContent, setActiveContent] = useState<string>("file");
@@ -29,24 +39,29 @@ export function AppMenuBar() {
         .join("");
 
     return (
-        <div className="flex items-center justify-between w-full gap-4 p-2 border-b bg-background shadow-sm mb-4">
+        <div className="flex items-center justify-between w-full p-4 border-b bg-background shadow-sm rounded-md mt-2">
             <div className="flex flex-col items-start">
                 <h1 className="text-lg font-semibold">Olá, {session.data?.user?.name}</h1>
                 <p className="text-sm text-muted-foreground">Bem-vindo ao seu painel de controle</p>
             </div>
-            <div className="flex gap-2">
-                <a href="/professional/arquivo">
-                    <Button variant={activeContent === "operation" ? "default" : "outline"}>Operar</Button>
-                </a>
-                <a href="/professional/editar">
-                    <Button variant={activeContent === "passwords" ? "default" : "outline"}>Senhas</Button>
-                </a>
-                <a href="/professional/visualizar">
-                    <Button variant={activeContent === "consumers" ? "default" : "outline"}>Consumidores</Button>
-                </a>
-                <a href="/professional/perfis">
-                    <Button variant={activeContent === "other" ? "default" : "outline"}>Outra</Button>
-                </a>
+            <div className="flex flex-col gap-2 items-center justify-center">
+                <h1 className="text-sm text-muted-foreground">{activeOperation?.servicePoint?.name} - {sector?.name}</h1>
+                {activeOperation ? (
+                    <div className="flex flex-row gap-2 items-center">
+                        <p className="flex items-center gap-1">
+                            <span className="text-sm text-green-600">
+                                {activeOperation?.status === "operating" ? "Em operação" : activeOperation?.status}
+                            </span>
+                        </p>
+                        <div>
+                            {activeOperation.createdAT && (
+                                <ClientOperationTimerCard createdAt={activeOperation.createdAT} status={activeOperation.status} />
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <p className="text-sm text-gray-500">Nenhuma operação ativa no momento.</p>
+                )}
             </div>
             <div className="flex items-center gap-2">
                 <DropdownMenu>
@@ -76,3 +91,5 @@ export function AppMenuBar() {
         </div>
     )
 }
+
+export default AppMenuBar;

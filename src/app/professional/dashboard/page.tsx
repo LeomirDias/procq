@@ -3,10 +3,12 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { db } from "@/db";
-import { usersTable } from "@/db/schema";
+import { operationsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
-import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container-professional";
-import StartOperationButton from "./_components/start-operation-button";
+import { PageContainer, PageContent, PageHeader } from "@/components/ui/page-container-professional";
+import OperationCard from "./_components/operation-card";
+import AppMenuBar from "../_components/app-menu-bar";
+
 
 const ProfessionalDashboardPage = async () => {
     const session = await auth.api.getSession({
@@ -21,6 +23,7 @@ const ProfessionalDashboardPage = async () => {
         where: eq(usersTable.id, session.user.id),
     });
 
+
     if (user?.role === "admin") {
         redirect("/administrator/dashboard");
     }
@@ -31,20 +34,26 @@ const ProfessionalDashboardPage = async () => {
         }
     });
 
+    const operations = await db.query.operationsTable.findMany({
+        where: eq(operationsTable.userId, user?.id ?? ""),
+        with: {
+            servicePoint: true,
+        },
+    });
 
     return (
         <PageContainer>
             <PageHeader>
-                <PageHeaderContent>
-                    <PageTitle>Dashboard</PageTitle>
-                    <PageDescription>Relatórios e informações sobre a operação.</PageDescription>
-                </PageHeaderContent>
-                <PageActions>
-                    <StartOperationButton sectors={sectors} />
-                </PageActions>
+                {user && (
+                    <AppMenuBar sectors={sectors} operations={operations} user={user} />
+                )}
             </PageHeader>
             <PageContent>
-                <></>
+                <div className="flex flex-col items-center justify-center w-1/3 h-[calc(100vh-100px)]">
+                    {user && (
+                        <OperationCard sectors={sectors} operations={operations} user={user} />
+                    )}
+                </div>
             </PageContent>
         </PageContainer>
     );
