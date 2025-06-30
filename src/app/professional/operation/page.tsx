@@ -7,8 +7,7 @@ import { operationsTable, treatmentsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { PageContainer, PageContent, PageHeader } from "@/components/ui/page-container-professional";
 import TreatmentsCard from "./_components/treatments-card";
-import AppMenuBar from "../_components/app-menu-bar";
-import MenuButtons from "./_components/menu-buttons";
+import OperationBar from "./_components/operation-bar";
 import TicketsCard from "./_components/tickets-card";
 
 
@@ -25,25 +24,42 @@ const ProfessionalDashboardPage = async () => {
         where: eq(usersTable.id, session.user.id),
     });
 
-
     if (user?.role === "admin") {
         redirect("/administrator/dashboard");
     }
 
-    const sectors = await db.query.sectorsTable.findMany({
-        with: {
-            servicePoints: true,
-        }
-    });
-
-    const operations = await db.query.operationsTable.findMany({
-        where: eq(operationsTable.userId, user?.id ?? ""),
-        with: {
-            servicePoint: true,
-        },
-    });
-
-    const treatments = await db.query.treatmentsTable.findMany({
+    const [
+        sectors,
+        operations,
+        treatments,
+        clients,
+        tickets
+    ] = await Promise.all([
+        db.query.sectorsTable.findMany({
+            with: {
+                servicePoints: true,
+            }
+        }),
+        db.query.operationsTable.findMany({
+            where: eq(operationsTable.userId, user?.id ?? ""),
+            with: {
+                servicePoint: true,
+            },
+        }),
+        Promise.resolve([]),
+        db.query.clientsTable.findMany({
+            with: {
+                treatments: true,
+            }
+        }),
+        db.query.ticketsTable.findMany({
+            with: {
+                client: true,
+                treatment: true,
+            }
+        })
+    ]);
+    const actualTreatments = await db.query.treatmentsTable.findMany({
         where: eq(treatmentsTable.operationId, operations[0]?.id ?? ""),
         with: {
             operation: true,
@@ -52,11 +68,6 @@ const ProfessionalDashboardPage = async () => {
 
     return (
         <PageContainer>
-            <PageHeader>
-                {user && (
-                    <AppMenuBar sectors={sectors} operations={operations} user={user} />
-                )}
-            </PageHeader>
             <PageContent>
                 <div className="flex flex-row w-full h-[calc(100vh-100px)] gap-4">
                     {/* Coluna esquerda: MenuButtons acima do TicketsCard */}
@@ -64,7 +75,7 @@ const ProfessionalDashboardPage = async () => {
                         {user && (
                             <>
                                 <div className="w-full">
-                                    <MenuButtons sectors={sectors} operations={operations} user={user} />
+                                    <OperationBar sectors={sectors} operations={operations} user={user} />
                                 </div>
                                 <div className="flex-1 w-full">
                                     <TicketsCard sectors={sectors} operations={operations} user={user} treatments={treatments} />
