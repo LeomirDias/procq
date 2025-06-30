@@ -1,6 +1,6 @@
 export const PageContainer = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="w-full px-2 space-y-6">
+        <div className="w-full h-full px-2 space-y-2">
             {children}
         </div>
     );
@@ -48,7 +48,7 @@ export const PageActions = ({ children }: { children: React.ReactNode }) => {
 
 export const PageContent = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="space-y-6">
+        <div className="w-full h-full flex flex-col items-center justify-center">
             {children}
         </div>
     );
