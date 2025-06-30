@@ -33,17 +33,6 @@ const itemsEnterprise = [
         url: "/professional/operation",
         icon: Scale,
     },
-    {
-        title: "Atendimentos",
-        url: "/professional/treatments",
-        icon: ChartLine,
-    },
-    {
-        title: "Consumidores",
-        url: "/professional/consumers",
-        icon: Users,
-    },
-
 ]
 
 export function ProfessionalAppSidebar() {
