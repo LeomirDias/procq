@@ -18,7 +18,7 @@ const MenuButtons = async ({ sectors, operations, user }: {
 
     return (
         <Card className="flex w-full">
-            <CardContent className="flex flex-col gap-2 items-center justify-center w-full">
+            <CardContent className="flex flex-row gap-2 items-center justify-center w-full">
                 {activeOperation ? (
                     <>
                         <FinishOperationButton operation={activeOperation} disabled={!activeOperation} />

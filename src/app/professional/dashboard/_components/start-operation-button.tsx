@@ -15,7 +15,7 @@ const StartOperationButton = ({ sectors, disabled }: { sectors: (typeof sectorsT
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-primary text-white hover:bg-primary/90" disabled={disabled}>
+                <Button className="flex flex-col h-auto bg-green-500 text-white hover:bg-green-700" disabled={disabled}>
                     <Plus className={disabled ? "hidden" : ""} />
                     {disabled ? "Operando" : "Iniciar operação"}
                 </Button>

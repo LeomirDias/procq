@@ -32,7 +32,7 @@ const FinishOperationButton = ({ operation, disabled }: { operation?: (typeof op
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button className="bg-green-500 text-white hover:bg-green-700" disabled={disabled || finishOperationAction.isPending} onClick={handleFinish}>
+                <Button className="flex flex-col h-auto bg-red-500 text-white hover:bg-red-700" disabled={disabled || finishOperationAction.isPending} onClick={handleFinish}>
                     <Check className={disabled ? "hidden" : ""} />
                     {finishOperationAction.isPending ? "Finalizando..." : disabled ? "Finalizando" : "Finalizar operação"}
                 </Button>
