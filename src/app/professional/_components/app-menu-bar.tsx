@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Link, LogOutIcon, UserIcon } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { operationsTable, sectorsTable, servicePointsTable, usersTable } from "@/db/schema";
-import ClientOperationTimerCard from "../dashboard/_components/operation-timer-card";
+import ClientOperationTimerCard from "../operation/_components/operation-timer-card";
 import { useAction } from "next-safe-action/hooks";
 import { finishOperation } from "@/actions/finish-operation";
 import { toast } from "sonner";
