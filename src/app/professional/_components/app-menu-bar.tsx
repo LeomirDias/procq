@@ -9,6 +9,9 @@ import { Link, LogOutIcon, UserIcon } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { operationsTable, sectorsTable, servicePointsTable, usersTable } from "@/db/schema";
 import ClientOperationTimerCard from "../dashboard/_components/operation-timer-card";
+import { useAction } from "next-safe-action/hooks";
+import { finishOperation } from "@/actions/finish-operation";
+import { toast } from "sonner";
 
 const AppMenuBar = ({ sectors, operations, user }: {
     sectors: (typeof sectorsTable.$inferSelect & { servicePoints: typeof servicePointsTable.$inferSelect[] })[],
@@ -23,7 +26,25 @@ const AppMenuBar = ({ sectors, operations, user }: {
     const session = authClient.useSession();
     const [activeContent, setActiveContent] = useState<string>("file");
 
+    const finishOperationAction = useAction(finishOperation, {
+        onSuccess: () => {
+            toast.success("Operação finalizada com sucesso!");
+        },
+        onError: (error) => {
+            toast.error("Erro ao finalizar operação.");
+            console.error(error);
+        },
+    });
+
     const handleSignOut = async () => {
+        if (activeOperation) {
+            try {
+                await finishOperationAction.execute({ operationId: activeOperation.id });
+            } catch (error) {
+                // já tratado pelo onError do useAction
+                return;
+            }
+        }
         await authClient.signOut({
             fetchOptions: {
                 onSuccess: () => {
