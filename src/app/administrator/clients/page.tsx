@@ -24,7 +24,7 @@ const ClientsPage = async () => {
         where: eq(usersTable.id, session.user.id),
     });
 
-    if (user?.role !== "admin") {
+    if (user?.role !== "administrator") {
         return <AccessDenied />
     }
 

@@ -39,7 +39,7 @@ const itemsEnterprise = [
         icon: Tag,
     },
     {
-        title: "Clientes",
+        title: "Consumidores",
         url: "/administrator/clients",
         icon: BookUser,
     },

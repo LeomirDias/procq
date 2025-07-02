@@ -2,11 +2,14 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
-import { db } from "@/db";  
+import { db } from "@/db";
 import { auth } from "@/lib/auth";
 
 import AddSectorButton from "./_components/add-sector-button";
 import SectorsGrid from "./_components/sectors-cards";
+import { AccessDenied } from "@/components/ui/access-denied";
+import { eq } from "drizzle-orm";
+import { usersTable } from "@/db/schema";
 
 const AdminsSectors = async () => {
 
@@ -14,13 +17,21 @@ const AdminsSectors = async () => {
         headers: await headers(),
     });
     if (!session?.user) {
-        redirect("/admin-authentication");
+        redirect("/");
     }
     const sectors = await db.query.sectorsTable.findMany({
         with: {
             servicePoints: true,
         }
     });
+
+    const user = await db.query.usersTable.findFirst({
+        where: eq(usersTable.id, session.user.id),
+    });
+
+    if (user?.role !== "administrator") {
+        return <AccessDenied />
+    }
 
     return (
         <PageContainer>

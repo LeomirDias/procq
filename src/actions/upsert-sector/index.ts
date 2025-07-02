@@ -12,28 +12,28 @@ import { upsertSectorSchema } from "./schema";
 import { eq } from "drizzle-orm";
 
 export const upsertSector = actionClient
-    .schema(upsertSectorSchema)
-    .action(async ({ parsedInput }) => {
-        const session = await auth.api.getSession({
-            headers: await headers(),
-        });
-        if (!session?.user) {
-            throw new Error("Unauthorized");
-        }
-        const user = await db.query.usersTable.findFirst({
-            where: eq(usersTable.id, session.user.id),
-        });
-        if (user?.role !== "administrator") throw new Error("Unauthorized");
-        await db
-            .insert(sectorsTable)
-            .values({
-                ...parsedInput,
-            })
-            .onConflictDoUpdate({
-                target: [sectorsTable.id],
-                set: {
-                    ...parsedInput,
-                },
-            });
-        revalidatePath("/administrator/sectors");
+  .schema(upsertSectorSchema)
+  .action(async ({ parsedInput }) => {
+    const session = await auth.api.getSession({
+      headers: await headers(),
     });
+    if (!session?.user) {
+      throw new Error("Unauthorized");
+    }
+    const user = await db.query.usersTable.findFirst({
+      where: eq(usersTable.id, session.user.id),
+    });
+    if (user?.role !== "administrator") throw new Error("Unauthorized");
+    await db
+      .insert(sectorsTable)
+      .values({
+        ...parsedInput,
+      })
+      .onConflictDoUpdate({
+        target: [sectorsTable.id],
+        set: {
+          ...parsedInput,
+        },
+      });
+    revalidatePath("/administrator/sectors");
+  });

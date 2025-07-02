@@ -28,7 +28,7 @@ const AdminsProfessionals = async () => {
         }),
     ]);
 
-    if (user?.role !== "admin") {
+    if (user?.role !== "administrator") {
         return <AccessDenied />
     }
 
