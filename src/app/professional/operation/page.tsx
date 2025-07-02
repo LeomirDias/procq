@@ -24,7 +24,11 @@ const ProfessionalDashboardPage = async () => {
         where: eq(usersTable.id, session.user.id),
     });
 
-    if (user?.role === "admin") {
+    if (!user?.id) {
+        redirect("/");
+    }
+
+    if (user.role === "admin") {
         redirect("/administrator/dashboard");
     }
 
@@ -41,7 +45,7 @@ const ProfessionalDashboardPage = async () => {
             }
         }),
         db.query.operationsTable.findMany({
-            where: eq(operationsTable.userId, user?.id ?? ""),
+            where: eq(operationsTable.userId, user.id),
             with: {
                 servicePoint: true,
             },
@@ -59,12 +63,16 @@ const ProfessionalDashboardPage = async () => {
             }
         })
     ]);
-    const actualTreatments = await db.query.treatmentsTable.findMany({
-        where: eq(treatmentsTable.operationId, operations[0]?.id ?? ""),
-        with: {
-            operation: true,
-        }
-    });
+
+    let actualTreatments = [];
+    if (operations.length > 0 && operations[0]?.id) {
+        actualTreatments = await db.query.treatmentsTable.findMany({
+            where: eq(treatmentsTable.operationId, operations[0].id),
+            with: {
+                operation: true,
+            }
+        });
+    }
 
     return (
         <PageContainer>
