@@ -41,14 +41,14 @@ export function ProfessionalMenuBar() {
                 </div>
 
                 <div className="flex flex-row items-center gap-2">
-                    <Link href="/professional/home" className="h-full">
+                    <Link href="/professional/front-desk-sector" className="h-full">
                         <Button variant={pathname === "/professional/home" ? "link" : "ghost"} size="lg" className="flex flex-col h-full items-center p-1">
                             <Home className="w-6 h-6" />
                             <span className="text-xs">Recepção</span>
                         </Button>
                     </Link>
 
-                    <Link href="/professional/operation">
+                    <Link href="/professional/service-sector">
                         <Button variant={pathname === "/professional/operation" ? "link" : "ghost"} size="lg" className="flex flex-col h-full items-center p-1">
                             <Scale className="w-6 h-6" />
                             <span className="text-xs">Atendimento</span>
