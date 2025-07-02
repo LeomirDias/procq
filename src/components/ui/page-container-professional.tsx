@@ -8,7 +8,7 @@ export const PageContainer = ({ children }: { children: React.ReactNode }) => {
 
 export const PageHeader = ({ children }: { children: React.ReactNode }) => {
     return (
-        <div className="flex w-full items-center justify-between ">
+        <div className="flex flex-col w-full ">
             {children}
         </div>
     );

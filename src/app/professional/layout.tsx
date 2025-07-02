@@ -1,18 +1,12 @@
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { ProfessionalAppSidebar } from "./_components/professional-app-sidebar";
-
-
-
+import { ProfessionalMenuBar } from "./_components/professional-menu-bar";
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-
-
     return (
-        <SidebarProvider>
-            <ProfessionalAppSidebar />
-            <main className="w-full">
+        <>
+            <ProfessionalMenuBar />
+            <main className="w-full pt-15">{/* padding-bottom para não cobrir conteúdo */}
                 {children}
             </main>
-        </SidebarProvider>
+        </>
     )
 }
