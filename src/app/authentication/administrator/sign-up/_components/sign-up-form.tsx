@@ -59,7 +59,7 @@ export function SignUpForm() {
                             role: 'administrator'
                         });
                         toast.success("Cadastro realizado com sucesso")
-                        router.push("/administrator/dashboard")
+                        router.push("/users/dashboard")
                     } catch {
                         toast.error("Erro ao salvar dados adicionais")
                     }

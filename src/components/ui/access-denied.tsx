@@ -10,7 +10,7 @@ export const AccessDenied = () => {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            router.push("/professional/dashboard");
+            router.push("/users");
         }, 5000);
 
         return () => clearTimeout(timeout);

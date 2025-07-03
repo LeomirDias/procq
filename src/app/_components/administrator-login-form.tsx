@@ -45,7 +45,7 @@ const AdministratorLoginForm = () => {
     }, {
       onSuccess: () => {
         toast.success("Login realizado com sucesso")
-        router.push("/administrator/dashboard")
+        router.push("/users/dashboard")
       },
       onError: () => {
         toast.error("Email ou senha inválidos")

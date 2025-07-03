@@ -59,7 +59,7 @@ export function SignUpForm() {
                             role: 'professional'
                         });
                         toast.success("Cadastro realizado com sucesso")
-                        router.push("/professional/service-sector")
+                        router.push("/users")
                     } catch {
                         toast.error("Erro ao salvar dados adicionais")
                     }

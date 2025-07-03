@@ -9,28 +9,29 @@ import { startOperation } from "@/actions/start-operation";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectValue, SelectTrigger, SelectItem, SelectContent } from "@/components/ui/select";
-import { sectorsTable, servicePointsTable } from "@/db/schema";
-import { useState } from "react";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const formSchema = z.object({
-    servicePointId: z.string().trim().min(1, { message: "Ponto de serviço é obrigatório." }),
+    servicePointId: z.string().min(1, { message: "Selecione o ponto de atendimento." }),
 });
 
 interface StartOperationFormProps {
-    sectors: (typeof sectorsTable.$inferSelect & { servicePoints: typeof servicePointsTable.$inferSelect[] })[];
     onSuccess?: () => void;
+    sectors: {
+        id: string;
+        name: string;
+        servicePoints: { id: string; name: string }[];
+    }[];
 }
 
-const StartOperationForm = ({ sectors, onSuccess }: StartOperationFormProps) => {
-    const [selectedServicePoint, setSelectedServicePoint] = useState<typeof servicePointsTable.$inferSelect | null>(null);
+const StartOperationForm = ({ onSuccess, sectors }: StartOperationFormProps) => {
     const form = useForm<z.infer<typeof formSchema>>({
         shouldUnregister: true,
         resolver: zodResolver(formSchema),
         defaultValues: {
             servicePointId: "",
         }
-    })
+    });
 
     const startOperationAction = useAction(startOperation, {
         onSuccess: () => {
@@ -44,15 +45,14 @@ const StartOperationForm = ({ sectors, onSuccess }: StartOperationFormProps) => 
         },
     });
 
-
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        startOperationAction.execute(values)
+        startOperationAction.execute(values);
     };
 
     return (
         <DialogContent>
             <DialogTitle>Iniciar operação</DialogTitle>
-            <DialogDescription>Selecione o ponto de serviço para iniciar a operação.</DialogDescription>
+            <DialogDescription>Selecione o ponto de atendimento.</DialogDescription>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
@@ -60,25 +60,25 @@ const StartOperationForm = ({ sectors, onSuccess }: StartOperationFormProps) => 
                         name="servicePointId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>
-                                    Ponto de serviço
-                                </FormLabel>
+                                <FormLabel>Ponto de atendimento</FormLabel>
                                 <FormControl>
-                                    <Select {...field} onValueChange={(value) => {
-                                        // Encontrar o objeto servicePoint correspondente ao id selecionado
-                                        const selected = sectors.flatMap(sector => sector.servicePoints).find(sp => sp.id === value) || null;
-                                        setSelectedServicePoint(selected);
-                                        field.onChange(value); // Atualiza o valor do formulário normalmente
-                                    }}>
+                                    <Select
+                                        onValueChange={field.onChange}
+                                        value={field.value}
+                                        disabled={startOperationAction.isPending}
+                                    >
                                         <SelectTrigger>
-                                            <SelectValue placeholder="Selecione o ponto de serviço" />
+                                            <SelectValue placeholder="Selecione o ponto de atendimento" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            {sectors.map((sector) => sector.servicePoints.map((servicePoint) => (
-                                                <SelectItem key={servicePoint.id} value={servicePoint.id}>
-                                                    {servicePoint.name} - {sector.name}
-                                                </SelectItem>
-                                            )))}
+                                            {sectors.map(sector => (
+                                                <SelectGroup key={sector.id}>
+                                                    <SelectLabel>{sector.name}</SelectLabel>
+                                                    {sector.servicePoints.map(sp => (
+                                                        <SelectItem key={sp.id} value={sp.id}>{sp.name}</SelectItem>
+                                                    ))}
+                                                </SelectGroup>
+                                            ))}
                                         </SelectContent>
                                     </Select>
                                 </FormControl>
@@ -88,8 +88,8 @@ const StartOperationForm = ({ sectors, onSuccess }: StartOperationFormProps) => 
                     />
                     <DialogFooter>
                         <Button type="submit" disabled={startOperationAction.isPending}>
-                            {(startOperationAction.isPending)
-                                ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</>
+                            {startOperationAction.isPending
+                                ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Iniciando...</>
                                 : "Iniciar operação"}
                         </Button>
                     </DialogFooter>

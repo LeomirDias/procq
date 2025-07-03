@@ -45,7 +45,7 @@ const ProfessionalLoginForm = () => {
     }, {
       onSuccess: () => {
         toast.success("Login realizado com sucesso")
-        router.push("/professional/dashboard")
+        router.push("/users")
       },
       onError: () => {
         toast.error("Email ou senha inválidos")
