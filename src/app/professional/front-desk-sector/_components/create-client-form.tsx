@@ -41,8 +41,7 @@ const CreateClientForm = () => {
         if (existingClient) {
             toast.error("Consumidor já possui cadastro");
             return;
-        }
-        insertClientAction.execute(values);
+        } else insertClientAction.execute(values);
     };
 
     return (
