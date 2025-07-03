@@ -57,7 +57,7 @@ const itemsProfessionals = [
 const itemsClients = [
     {
         title: "Buscar consumidor",
-        url: "/users/#",
+        url: "/users/consumer-research",
         icon: UserRoundSearch,
     },
     {
