@@ -11,11 +11,12 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { clientsTable } from "@/db/schema";
 import { insertClient, updateUser } from "@/actions/upsert-client";
+import { formatCPF, formatPhoneNumber } from "@/lib/utils";
 
 const formSchema = z.object({
-    name: z.string().trim().min(3, { message: "Nome do cliente deve ter pelo menos 3 caracteres." }),
-    register: z.string().trim().min(11, { message: "CPF do cliente deve ter pelo menos 11 caracteres." }),
-    phoneNumber: z.string().trim().min(11, { message: "Telefone do cliente deve ter pelo menos 11 caracteres." }),
+    name: z.string().trim().min(3, { message: "Nome do consumidor deve ter pelo menos 3 caracteres." }),
+    register: z.string().trim().min(11, { message: "CPF do consumidor deve ter pelo menos 11 caracteres." }),
+    phoneNumber: z.string().trim().min(11, { message: "Telefone do consumidor deve ter pelo menos 11 caracteres." }),
 })
 
 interface upsertClientForm {
@@ -36,36 +37,41 @@ const UpsertClientForm = ({ client, onSuccess }: upsertClientForm) => {
 
     const { execute: executeInsertClient, status: insertStatus } = useAction(insertClient, {
         onSuccess: () => {
-            toast.success("Cliente adicionado com sucesso!");
+            toast.success("Consumidor adicionado com sucesso!");
             onSuccess?.();
             form.reset();
         },
         onError: (error) => {
-            toast.error("Erro ao adicionar cliente.");
+            toast.error("Consumidor já possui cadastro.");
             console.log(error);
         },
     });
 
     const { execute: executeUpdateUser, status: updateStatus } = useAction(updateUser, {
         onSuccess: () => {
-            toast.success("Cliente atualizado com sucesso!");
+            toast.success("Consumidor atualizado com sucesso!");
             onSuccess?.();
             form.reset();
         },
         onError: (error) => {
-            toast.error("Erro ao atualizar cliente.");
+            toast.error("Erro ao atualizar Consumidor.");
             console.log(error);
         },
     });
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
+        const sanitizedValues = {
+            ...values,
+            register: values.register.replace(/\D/g, ""),
+            phoneNumber: values.phoneNumber.replace(/\D/g, ""),
+        };
         if (client) {
             executeUpdateUser({
-                ...values,
+                ...sanitizedValues,
                 id: client.id,
             });
         } else {
-            executeInsertClient(values);
+            executeInsertClient(sanitizedValues);
         }
     };
 
@@ -73,8 +79,8 @@ const UpsertClientForm = ({ client, onSuccess }: upsertClientForm) => {
 
     return (
         <DialogContent>
-            <DialogTitle>{client ? client.name : "Adicionar cliente"}</DialogTitle>
-            <DialogDescription>{client ? "Edite as informações desse cliente." : "Adicione um novo cliente à sua empresa!"}</DialogDescription>
+            <DialogTitle>{client ? client.name : "Adicionar Consumidor"}</DialogTitle>
+            <DialogDescription>{client ? "Edite as informações desse consumidor." : "Adicione um novo consumidor à sua empresa!"}</DialogDescription>
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                     <FormField
@@ -83,10 +89,10 @@ const UpsertClientForm = ({ client, onSuccess }: upsertClientForm) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    Nome do cliente
+                                    Nome do consumidor
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Digite o nome do cliente" {...field} />
+                                    <Input placeholder="Digite o nome do consumidor" {...field} />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -98,10 +104,15 @@ const UpsertClientForm = ({ client, onSuccess }: upsertClientForm) => {
                         render={({ field }) => (
                             <FormItem>
                                 <FormLabel>
-                                    CPF do cliente
+                                    CPF do consumidor
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Digite o CPF do cliente" {...field} />
+                                    <Input
+                                        placeholder="Digite o CPF do consumidor"
+                                        {...field}
+                                        value={formatCPF(field.value)}
+                                        onChange={e => field.onChange(e.target.value.replace(/\D/g, "").slice(0, 11))}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
@@ -112,11 +123,12 @@ const UpsertClientForm = ({ client, onSuccess }: upsertClientForm) => {
                         name="phoneNumber"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Telefone do cliente</FormLabel>
+                                <FormLabel>Telefone do consumidor</FormLabel>
                                 <FormControl>
                                     <Input
-                                        placeholder="Digite o telefone do cliente"
+                                        placeholder="Digite o telefone do consumidor"
                                         {...field}
+                                        value={formatPhoneNumber(field.value)}
                                         onChange={e => field.onChange(e.target.value.replace(/\D/g, "").slice(0, 11))}
                                     />
                                 </FormControl>
@@ -128,8 +140,8 @@ const UpsertClientForm = ({ client, onSuccess }: upsertClientForm) => {
                         <Button type="submit" disabled={isPending}>
                             {isPending
                                 ? "Salvando..."
-                                : client ? "Editar cliente"
-                                    : "Cadastrar cliente"}
+                                : client ? "Editar consumidor"
+                                    : "Cadastrar consumidor"}
                         </Button>
                     </DialogFooter>
                 </form>

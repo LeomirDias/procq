@@ -53,7 +53,5 @@ export const insertClient = actionClient
       phoneNumber: parsedInput.phoneNumber,
     });
 
-    revalidatePath("/professional/front-desk-sector");
-    revalidatePath("/administrator/clients");
-    revalidatePath("/administrator/dashboard");
+    revalidatePath("/users/consumer-research");
   });

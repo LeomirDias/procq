@@ -61,16 +61,6 @@ const itemsClients = [
         icon: UserRoundSearch,
     },
     {
-        title: "Cadastrar consumidor",
-        url: "/users/#",
-        icon: UserRoundPlus,
-    },
-    {
-        title: "Gerar senha de atendimento",
-        url: "/users/#",
-        icon: PlusSquareIcon,
-    },
-    {
         title: "Fila de atendimentos",
         url: "/users/#",
         icon: ListOrdered,

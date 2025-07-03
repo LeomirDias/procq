@@ -10,6 +10,7 @@ import { eq } from "drizzle-orm";
 import AddClientButton from "./_components/add-client-button";
 import { clientsTableColumns } from "./_components/table-columns";
 import { DataTable } from "@/components/ui/data-table";
+import ClientFilters from "./_components/client-filters";
 
 const ProfessionalServices = async () => {
 
@@ -35,7 +36,7 @@ const ProfessionalServices = async () => {
                 </PageActions>
             </PageHeader>
             <PageContent>
-                <DataTable data={clients} columns={clientsTableColumns} />
+                <ClientFilters clients={clients} />
             </PageContent>
         </PageContainer>
     );

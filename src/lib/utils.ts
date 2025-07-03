@@ -1,6 +1,28 @@
-import { type ClassValue, clsx } from "clsx"
-import { twMerge } from "tailwind-merge"
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
+}
+
+export function formatCPF(cpf: string) {
+  // Remove non-digits and format as xxx.xxx.xxx-xx
+  const cleaned = cpf.replace(/\D/g, "").slice(0, 11);
+  return cleaned.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+}
+
+export function formatPhoneNumber(phone: string) {
+  // Remove non-digits and format as (DDD) x xxxx-xxxx
+  const cleaned = phone.replace(/\D/g, "").slice(0, 11);
+  if (cleaned.length <= 10) {
+    // Format as (XX) XXXX-XXXX
+    return cleaned
+      .replace(/(\d{2})(\d{4})(\d{0,4})/, "($1) $2-$3")
+      .replace(/-$/, "");
+  } else {
+    // Format as (XX) X XXXX-XXXX
+    return cleaned
+      .replace(/(\d{2})(\d{1})(\d{4})(\d{0,4})/, "($1) $2 $3-$4")
+      .replace(/-$/, "");
+  }
 }
