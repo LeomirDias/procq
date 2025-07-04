@@ -1,4 +1,4 @@
-import { EditIcon, LucideSmilePlus, MoreVerticalIcon, TicketPlus, Trash2 } from "lucide-react";
+import { EditIcon, LaptopMinimalCheck, LucideSmilePlus, MessageCirclePlus, MoreVerticalIcon, TicketPlus, Trash2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -61,7 +61,7 @@ const TableClientActions = ({ client, sectors }: ClientsTableActionsProps) => {
                     onClick={() => setCreateTicketDialogOpen(true)}
                     aria-label={`Criar ticket para ${client.name}`}
                 >
-                    <LucideSmilePlus className="w-6 h-6" />
+                    <MessageCirclePlus className="w-6 h-6" />
                 </Button>
                 {createTicketDialogIsOpen && (
                     <CreateTicketForm

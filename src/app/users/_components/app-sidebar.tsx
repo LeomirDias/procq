@@ -1,6 +1,6 @@
 "use client";
 
-import { BriefcaseBusinessIcon, ChartBarBig, Headset, LayoutDashboard, ListCheck, ListOrdered, LogOutIcon, PlusSquareIcon, SettingsIcon, UserRoundPlus, UserRoundSearch, Users } from "lucide-react"
+import { BriefcaseBusinessIcon, ChartBarBig, Headset, LayoutDashboard, ListCheck, ListOrdered, LogOutIcon, PlusSquareIcon, SettingsIcon, Smile, UserRoundPlus, UserRoundSearch, Users } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation";
 
@@ -48,7 +48,7 @@ const itemsProfessionals = [
     },
     {
         title: "Meus atendimentos",
-        url: "/users/#",
+        url: "/users/my-services",
         icon: ListCheck,
     },
 
@@ -56,13 +56,13 @@ const itemsProfessionals = [
 
 const itemsClients = [
     {
-        title: "Buscar consumidor",
+        title: "Consumidores",
         url: "/users/consumer-research",
-        icon: UserRoundSearch,
+        icon: Smile,
     },
     {
         title: "Fila de atendimentos",
-        url: "/users/#",
+        url: "/users/pending-appointments",
         icon: ListOrdered,
     },
 ]

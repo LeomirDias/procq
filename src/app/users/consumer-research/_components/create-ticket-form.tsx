@@ -81,7 +81,7 @@ const CreateTicketForm = ({ clientId, sectors, onSuccess, defaultSectorId }: Cre
                             </FormItem>
                         )}
                     />
-                    <p className="text-sm text-primary/60">
+                    <p className="text-sm text-muted-foreground">
                         Ao registrar o atendimento, informe o consumidor para aguardar a chamada do seu nome no painel. O atendimento começará assim que houver disponibilidade no setor.
                     </p>
                     <DialogFooter>
