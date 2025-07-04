@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useAction } from "next-safe-action/hooks";
 import { finishOperation } from "@/actions/finish-operation";
 import { toast } from "sonner";
+import { BadgeCheck } from "lucide-react";
 
 interface FinishOperationButtonProps {
     operationId: string;
@@ -30,6 +31,7 @@ const FinishOperationButton = ({ operationId }: FinishOperationButtonProps) => {
             disabled={status === "executing"}
             onClick={() => execute({ operationId })}
         >
+            <BadgeCheck className="w-4 h-4" />
             Finalizar operação
         </Button>
     );

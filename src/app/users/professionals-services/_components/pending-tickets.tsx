@@ -35,8 +35,9 @@ const PendingTickets = async () => {
     return (
         <div className="flex flex-col gap-4 w-full h-full max-h-[80vh]">
             <Card className="w-full h-full flex flex-col">
-                <CardHeader>
+                <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Atendimentos Pendentes</CardTitle>
+                    <CallNextTicketButton />
                 </CardHeader>
                 <CardContent className="flex-1 overflow-auto p-0">
                     <div className="p-6">
@@ -44,7 +45,6 @@ const PendingTickets = async () => {
                     </div>
                 </CardContent>
             </Card>
-            <CallNextTicketButton />
         </div>
     );
 };

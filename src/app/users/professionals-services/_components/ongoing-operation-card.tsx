@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
 import { usersTable, servicePointsTable, sectorsTable } from "@/db/schema";
@@ -36,26 +36,34 @@ const OngoingOperationCard = async ({ operations, sectors }: OngoingOperationCar
     }
 
     return (
-        <Card className="relative w-full" >
+        <Card className="relative w-full h-full flex flex-col">
             {/* Bola verde no canto superior direito */}
             {operatingOperation && (
                 <span className="absolute top-3 right-3 w-4 h-4 rounded-full bg-green-500 border-1 border-white shadow" title="Online"></span>
             )}
-            <CardHeader className="space-y-4">
-                <CardTitle>Operação em andamento</CardTitle>
-                <Separator />
-                <CardDescription>
-                    {operatingOperation ? (
-                        <>
-                            Status: {operatingOperation.status === "operating" ? "Operando" : operatingOperation.status} <br />
-                            Usuário: {userName} <br />
-                            Ponto de Serviço: {servicePointName}
-                        </>
-                    ) : (
-                        "Nenhuma operação em andamento."
-                    )}
-                </CardDescription>
-            </CardHeader>
+            <CardContent className="flex-1 overflow-auto p-0">
+                {operatingOperation ? (
+                    <div className="flex flex-col items-center justify-center gap-4">
+                        <h1 className="font-semibold text-primary">Dados da operação atual</h1>
+                        <div className="flex flex-row gap-2">
+                            <p className="text-sm text-muted-foreground"><span className="font-semibold text-primary">Status:</span> {operatingOperation.status === "operating" ? "Operando" : operatingOperation.status}</p>
+                            <div className="h-4 border-l-1 border-gray-300" />
+                            <p className="text-sm text-muted-foreground"><span className="font-semibold text-primary">Usuário:</span> {userName}</p>
+                            <div className="h-4 border-l-1 border-gray-300" />
+                            <p className="text-sm text-muted-foreground"><span className="font-semibold text-primary">Ponto de Serviço:</span> {servicePointName}</p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex items-center justify-center h-full">
+                        <p className="text-sm text-muted-foreground">Nenhuma operação em andamento.</p>
+                    </div>
+                )}
+            </CardContent>
+            {operatingOperation && (
+                <CardFooter className="flex flex-row items-center justify-center gap-4 w-full">
+                    <FinishOperationButton operationId={operatingOperation.id} />
+                </CardFooter>
+            )}
         </Card>
     );
 }

@@ -5,10 +5,10 @@ import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, P
 import { db } from "@/db";
 import { auth } from "@/lib/auth";
 import StartOperationButton from "./_components/start-operation-button";
-import { Separator } from "@radix-ui/react-dropdown-menu";
 import OngoingOperationCard from "./_components/ongoing-operation-card";
 import FinishOperationButton from "./_components/finish-operation-button";
 import PendingTickets from "./_components/pending-tickets";
+import ServiceInProgressCard from "./_components/service-in-progress-card";
 
 
 const ProfessionalServices = async () => {
@@ -41,14 +41,12 @@ const ProfessionalServices = async () => {
                 </PageHeaderContent>
                 <PageActions>
                     <StartOperationButton sectors={sectors} disabled={!!operatingOperation} />
-                    {operatingOperation && (
-                        <FinishOperationButton operationId={operatingOperation.id} />
-                    )}
                 </PageActions>
             </PageHeader>
             <PageContent>
                 <div className="flex gap-2 w-full h-full">
                     <OngoingOperationCard operations={operations} sectors={sectors} />
+                    <ServiceInProgressCard />
                 </div>
                 <div className="flex gap-2 w-full h-full items-center justify-center">
                     <PendingTickets />
