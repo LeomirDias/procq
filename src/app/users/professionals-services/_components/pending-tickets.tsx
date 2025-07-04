@@ -1,6 +1,8 @@
 import { db } from "@/db";
 import { eq } from "drizzle-orm";
-import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { DataTable } from "@/components/ui/data-table";
+import { ticketsTableColumns, TicketTableRow } from "./tickets-table-columns";
 import CallNextTicketButton from "./call-next-ticket-button";
 
 const PendingTickets = async () => {
@@ -13,29 +15,35 @@ const PendingTickets = async () => {
     });
 
     if (!tickets.length) {
-        return <div>Nenhum atendimento pendente.</div>;
+        return <div className="w-full h-full flex items-center justify-center">Nenhum atendimento pendente.</div>;
     }
 
     // Fetch all sectors and create a map for quick lookup
     const sectors = await db.query.sectorsTable.findMany();
     const sectorMap = Object.fromEntries(sectors.map(s => [s.id, s.name]));
 
+    // Map tickets to TicketTableRow
+    const tableData: TicketTableRow[] = tickets.map(ticket => ({
+        id: ticket.id,
+        status: ticket.status,
+        clientName: ticket.client?.name || ticket.clientId,
+        clientId: ticket.clientId,
+        sectorName: sectorMap[ticket.sectorId] || ticket.sectorId,
+        sectorId: ticket.sectorId,
+    }));
+
     return (
-        <div className="flex flex-col gap-4 mt-4">
-            {tickets.map((ticket) => (
-                <div key={ticket.id} className="border rounded p-4 flex flex-col gap-2 bg-white shadow">
-                    <div className="flex items-center gap-2">
-                        <Badge>{ticket.status}</Badge>
-                        <span className="text-sm font-semibold">Prioridade:</span> {ticket.priority}
+        <div className="flex flex-col gap-4 w-full h-full max-h-[80vh]">
+            <Card className="w-full h-full flex flex-col">
+                <CardHeader>
+                    <CardTitle>Atendimentos Pendentes</CardTitle>
+                </CardHeader>
+                <CardContent className="flex-1 overflow-auto p-0">
+                    <div className="p-6">
+                        <DataTable data={tableData} columns={ticketsTableColumns} />
                     </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold">Setor:</span> {sectorMap[ticket.sectorId] || ticket.sectorId}
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold">Cliente:</span> {ticket.client?.name || ticket.clientId}
-                    </div>
-                </div>
-            ))}
+                </CardContent>
+            </Card>
             <CallNextTicketButton />
         </div>
     );

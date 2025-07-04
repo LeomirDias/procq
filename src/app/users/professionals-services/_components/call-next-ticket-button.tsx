@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button"
-import { SmilePlus } from "lucide-react";
+import { BadgePlus, SmilePlus } from "lucide-react";
 
 const CallNextTicketButton = () => {
     return (
         <Button>
-            <SmilePlus />
-            Chamar próximo atendimento
+            <BadgePlus className="w-4 h-4" />
+            Chamar próximo consumidor
         </Button>
     );
 }
