@@ -22,16 +22,19 @@ export const updateTicket = actionClient
             throw new Error("Usuário não autenticado");
         }
 
+        // Buscar ticket atual para manter sectorId e clientId
+        const ticket = await db.query.ticketsTable.findFirst({ where: eq(ticketsTable.id, parsedInput.id) });
+        if (!ticket) throw new Error('Ticket não encontrado');
         await db
             .update(ticketsTable)
             .set({
-                status: parsedInput.status,
-                sectorId: parsedInput.sectorId,
-                clientId: parsedInput.clientId,
+                status: 'canceled',
+                sectorId: ticket.sectorId,
+                clientId: ticket.clientId,
             })
             .where(eq(ticketsTable.id, parsedInput.id));
 
-        revalidatePath("/users/consumer-research");
+        revalidatePath("/users/pending-appointments");
     });
 
 export const createTicket = actionClient
@@ -51,5 +54,5 @@ export const createTicket = actionClient
             clientId: parsedInput.clientId,
         });
 
-        revalidatePath("/users/consumer-research");
+        revalidatePath("/users/pending-appointments");
     });
