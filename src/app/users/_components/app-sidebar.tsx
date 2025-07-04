@@ -57,7 +57,7 @@ const itemsProfessionals = [
 const itemsClients = [
     {
         title: "Consumidores",
-        url: "/users/consumer-research",
+        url: "/users/clients",
         icon: Smile,
     },
     {
