@@ -3,7 +3,7 @@ import { useState, useMemo } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { clientsTableColumns } from "./table-columns";
 
-export default function ClientFilters({ clients }: { clients: any[] }) {
+export default function ClientFilters({ clients, sectors }: { clients: any[], sectors: any[] }) {
     const [nameFilter, setNameFilter] = useState("");
     const [cpfFilter, setCpfFilter] = useState("");
 
@@ -13,6 +13,8 @@ export default function ClientFilters({ clients }: { clients: any[] }) {
             client.register.includes(cpfFilter)
         );
     }, [clients, nameFilter, cpfFilter]);
+
+    const columns = useMemo(() => clientsTableColumns(sectors), [sectors]);
 
     return (
         <>
@@ -38,7 +40,7 @@ export default function ClientFilters({ clients }: { clients: any[] }) {
                     Resetar filtros
                 </button>
             </div>
-            <DataTable data={filteredClients} columns={clientsTableColumns} />
+            <DataTable data={filteredClients} columns={columns} />
         </>
     );
 } 

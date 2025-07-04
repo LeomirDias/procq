@@ -9,7 +9,7 @@ import { formatCPF, formatPhoneNumber } from "@/lib/utils"
 
 type Client = typeof clientsTable.$inferSelect;
 
-export const clientsTableColumns: ColumnDef<Client>[] = [
+export const clientsTableColumns = (sectors: any[]): ColumnDef<Client>[] => [
     {
         id: "name",
         accessorKey: "name",
@@ -33,7 +33,7 @@ export const clientsTableColumns: ColumnDef<Client>[] = [
         cell: ({ row }) => {
             const client = row.original;
             return (
-                <TableClientActions client={client} />
+                <TableClientActions client={client} sectors={sectors} />
             )
         }
     },

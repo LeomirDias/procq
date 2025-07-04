@@ -5,11 +5,7 @@ import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, P
 import { auth } from "@/lib/auth";
 
 import { db } from "@/db";
-import { clientsTable } from "@/db/schema";
-import { eq } from "drizzle-orm";
 import AddClientButton from "./_components/add-client-button";
-import { clientsTableColumns } from "./_components/table-columns";
-import { DataTable } from "@/components/ui/data-table";
 import ClientFilters from "./_components/client-filters";
 
 const ProfessionalServices = async () => {
@@ -23,20 +19,21 @@ const ProfessionalServices = async () => {
     }
 
     const clients = await db.query.clientsTable.findMany();
+    const sectors = await db.query.sectorsTable.findMany();
 
     return (
         <PageContainer>
             <PageHeader>
                 <PageHeaderContent>
-                    <PageTitle>Produtos</PageTitle>
-                    <PageDescription>Visualize e gerencie os produtos em seu estoque.</PageDescription>
+                    <PageTitle>Consumidores</PageTitle>
+                    <PageDescription>Visualize e gerencie os consumidores.</PageDescription>
                 </PageHeaderContent>
                 <PageActions>
                     <AddClientButton />
                 </PageActions>
             </PageHeader>
             <PageContent>
-                <ClientFilters clients={clients} />
+                <ClientFilters clients={clients} sectors={sectors} />
             </PageContent>
         </PageContainer>
     );

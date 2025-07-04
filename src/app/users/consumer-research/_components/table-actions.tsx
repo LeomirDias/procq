@@ -1,4 +1,4 @@
-import { EditIcon, MoreVerticalIcon, Trash2 } from "lucide-react";
+import { EditIcon, LucideSmilePlus, MoreVerticalIcon, TicketPlus, Trash2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button";
-import { Dialog } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -27,38 +27,49 @@ import {
 import { clientsTable } from "@/db/schema";
 
 import UpsertClientForm from "./upsert-client-form";
+import CreateTicketForm from "./create-ticket-form";
 
 interface ClientsTableActionsProps {
     client: typeof clientsTable.$inferSelect;
+    sectors: { id: string; name: string }[];
 }
 
-const TableClientActions = ({ client }: ClientsTableActionsProps) => {
-
+const TableClientActions = ({ client, sectors }: ClientsTableActionsProps) => {
     const [upsertDialogIsOpen, setUpsertDialogOpen] = useState(false);
-    const [deleteAlertDialogIsOpen, setDeleteAlertDialogOpen] = useState(false);
+    const [createTicketDialogIsOpen, setCreateTicketDialogOpen] = useState(false);
 
     return (
         <>
             <Dialog open={upsertDialogIsOpen} onOpenChange={setUpsertDialogOpen}>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                            <MoreVerticalIcon className="w-4 h-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                        <DropdownMenuLabel>Ações para {client.name}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem onClick={() => setUpsertDialogOpen(true)}>
-                            <EditIcon className="w-4 h-4 mr-2" />
-                            Editar
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setUpsertDialogOpen(true)}
+                    aria-label={`Editar ${client.name}`}
+                >
+                    <EditIcon className="w-6 h-6" />
+                </Button>
                 <UpsertClientForm
                     client={client}
                     onSuccess={() => setUpsertDialogOpen(false)}
                 />
+            </Dialog>
+            <Dialog open={createTicketDialogIsOpen} onOpenChange={setCreateTicketDialogOpen}>
+                <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setCreateTicketDialogOpen(true)}
+                    aria-label={`Criar ticket para ${client.name}`}
+                >
+                    <LucideSmilePlus className="w-6 h-6" />
+                </Button>
+                {createTicketDialogIsOpen && (
+                    <CreateTicketForm
+                        clientId={client.id}
+                        sectors={sectors}
+                        onSuccess={() => setCreateTicketDialogOpen(false)}
+                    />
+                )}
             </Dialog>
         </>
     );
