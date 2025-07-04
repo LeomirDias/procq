@@ -21,7 +21,7 @@ const StartOperationButton = ({ sectors, disabled }: StartOperationButtonProps) 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button disabled={disabled}>
+                <Button disabled={disabled} variant="default">
                     <SmilePlus />
                     Iniciar operação
                 </Button>

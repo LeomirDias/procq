@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { ticketsTableColumns, TicketTableRow } from "./table-columns";
+import { Button } from "@/components/ui/button";
 
 interface TicketsFiltersProps {
     tickets: TicketTableRow[];
@@ -12,14 +13,16 @@ export default function TicketsFilters({ tickets, sectors }: TicketsFiltersProps
     const [nameFilter, setNameFilter] = useState("");
     const [cpfFilter, setCpfFilter] = useState("");
     const [statusFilter, setStatusFilter] = useState("");
+    const [sectorFilter, setSectorFilter] = useState("");
 
     const filteredTickets = useMemo(() => {
         return tickets.filter(ticket =>
             ticket.clientName.toLowerCase().includes(nameFilter.toLowerCase()) &&
             ticket.clientId.includes(cpfFilter) &&
-            (statusFilter ? ticket.status === statusFilter : true)
+            (statusFilter ? ticket.status === statusFilter : true) &&
+            (sectorFilter ? ticket.sectorId === sectorFilter : true)
         );
-    }, [tickets, nameFilter, cpfFilter, statusFilter]);
+    }, [tickets, nameFilter, cpfFilter, statusFilter, sectorFilter]);
 
     return (
         <>
@@ -43,17 +46,27 @@ export default function TicketsFilters({ tickets, sectors }: TicketsFiltersProps
                     onChange={e => setStatusFilter(e.target.value)}
                     className="border rounded p-2 text-sm"
                 >
-                    <option value="">Todos status</option>
+                    <option value="">Status</option>
                     <option value="pending">Pendente</option>
                     <option value="canceled">Cancelado</option>
                     <option value="finished">Finalizado</option>
                 </select>
-                <button
-                    onClick={() => { setNameFilter(""); setCpfFilter(""); setStatusFilter(""); }}
-                    className="border rounded p-2 bg-gray-200 hover:bg-gray-300"
+                <select
+                    value={sectorFilter}
+                    onChange={e => setSectorFilter(e.target.value)}
+                    className="border rounded p-2 text-sm"
+                >
+                    <option value="">Setores</option>
+                    {sectors.map(sector => (
+                        <option key={sector.id} value={sector.id}>{sector.name}</option>
+                    ))}
+                </select>
+                <Button
+                    onClick={() => { setNameFilter(""); setCpfFilter(""); setStatusFilter(""); setSectorFilter(""); }}
+                    variant="link"
                 >
                     Resetar filtros
-                </button>
+                </Button>
             </div>
             <DataTable data={filteredTickets} columns={ticketsTableColumns} />
         </>

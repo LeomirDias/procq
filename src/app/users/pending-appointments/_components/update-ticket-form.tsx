@@ -35,11 +35,11 @@ const UpdateTicketForm = ({ ticket, onSuccess }: UpdateTicketFormProps) => {
                 Tem certeza que deseja cancelar o ticket deste cliente?
             </DialogDescription>
             <div className="text-sm text-muted-foreground">
-                <p>Cliente: {ticket.clientName}</p>
+                <p>Consumidor: {ticket.clientName}</p>
                 <p>Setor: {ticket.sectorName}</p>
             </div>
             <DialogFooter>
-                <Button onClick={handleConfirm} disabled={isPending || isCanceled} variant="destructive">
+                <Button onClick={handleConfirm} disabled={isPending || isCanceled} variant="default">
                     {isPending ? "Cancelando..." : isCanceled ? "Já cancelado" : "Confirmar cancelamento"}
                 </Button>
             </DialogFooter>

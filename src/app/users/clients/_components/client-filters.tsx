@@ -2,6 +2,7 @@
 import { useState, useMemo } from "react";
 import { DataTable } from "@/components/ui/data-table";
 import { clientsTableColumns } from "./table-columns";
+import { Button } from "@/components/ui/button";
 
 export default function ClientFilters({ clients, sectors }: { clients: any[], sectors: any[] }) {
     const [nameFilter, setNameFilter] = useState("");
@@ -24,21 +25,21 @@ export default function ClientFilters({ clients, sectors }: { clients: any[], se
                     placeholder="Filtrar por nome"
                     value={nameFilter}
                     onChange={e => setNameFilter(e.target.value)}
-                    className="border rounded px-2 py-1"
+                    className="border rounded p-2 text-sm"
                 />
                 <input
                     type="text"
                     placeholder="Filtrar por CPF"
                     value={cpfFilter}
                     onChange={e => setCpfFilter(e.target.value)}
-                    className="border rounded px-2 py-1"
+                    className="border rounded p-2 text-sm"
                 />
-                <button
+                <Button
                     onClick={() => { setNameFilter(""); setCpfFilter(""); }}
-                    className="border rounded px-2 py-1 bg-gray-200 hover:bg-gray-300"
+                    variant="link"
                 >
                     Resetar filtros
-                </button>
+                </Button>
             </div>
             <DataTable data={filteredClients} columns={columns} />
         </>

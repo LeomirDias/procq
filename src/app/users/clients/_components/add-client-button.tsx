@@ -13,7 +13,7 @@ const AddClientButton = () => {
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <Button>
+                <Button variant="default">
                     <Plus />
                     Cadastrar consumidor
                 </Button>
