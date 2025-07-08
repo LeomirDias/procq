@@ -3,6 +3,8 @@
 import { BriefcaseBusinessIcon, ChartBarBig, Headset, LayoutDashboard, ListCheck, ListOrdered, LogOutIcon, PlusSquareIcon, SettingsIcon, Smile, UserRoundPlus, UserRoundSearch, Users } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { Sun, Moon } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -74,6 +76,8 @@ export function AppSidebar() {
     const session = authClient.useSession();
 
     const pathname = usePathname();
+
+    const { theme, setTheme, resolvedTheme } = useTheme();
 
     const handleSignOut = async () => {
         await authClient.signOut({
@@ -152,6 +156,15 @@ export function AppSidebar() {
 
             <SidebarFooter className="py-4 border-t bg-background">
                 <SidebarMenu>
+                    <SidebarMenuItem className="w-full flex justify-end">
+                        <button
+                            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
+                            className="flex items-center gap-2 px-3 py-2 text-muted-foreground rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
+                            aria-label="Alternar tema"
+                        >
+                            {resolvedTheme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                        </button>
+                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
