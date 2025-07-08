@@ -15,7 +15,7 @@ const PendingTickets = async () => {
     });
 
     if (!tickets.length) {
-        return <div className="w-full h-full flex items-center justify-center">Nenhum atendimento pendente.</div>;
+        return <Card className="w-full h-full text-sm text-muted-foreground text-center">Nenhum atendimento pendente.</Card>;
     }
 
     // Fetch all sectors and create a map for quick lookup

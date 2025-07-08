@@ -28,9 +28,7 @@ const ServiceInProgressCard = async () => {
 
     if (!operation) {
         return (
-            <div className="flex flex-col gap-4 w-full h-full max-h-[80vh] items-center justify-center">
-                <p className="text-sm text-muted-foreground">Nenhuma operação em andamento.</p>
-            </div>
+            <Card className="w-full h-full text-sm text-muted-foreground text-center hidden">Nenhuma operação em andamento.</Card>
         );
     }
 
@@ -44,9 +42,7 @@ const ServiceInProgressCard = async () => {
 
     if (!treatment) {
         return (
-            <div className="flex flex-col gap-4 w-full h-full max-h-[80vh] items-center justify-center">
-                <p className="text-sm text-muted-foreground">Nenhum atendimento em andamento.</p>
-            </div>
+            <Card className="w-full h-full text-sm text-muted-foreground text-center">Nenhum atendimento em andamento.</Card>
         );
     }
 
