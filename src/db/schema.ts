@@ -133,8 +133,7 @@ export const ticketsTable = pgTable("tickets", {
 //Tabela para armazenar atendimentos
 export const treatmentsTable = pgTable("treatments", {
   id: uuid("id").primaryKey().defaultRandom(),
-  status: text("status").notNull().default("pending"),
-  durationInMinutes: integer("duration_in_minutes").notNull(),
+  status: text("status").notNull().default("in_service"),
   createdAT: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -142,9 +141,6 @@ export const treatmentsTable = pgTable("treatments", {
   ticketId: uuid("ticket_id")
     .notNull()
     .references(() => ticketsTable.id, { onDelete: "cascade" }),
-  clientId: uuid("client_id")
-    .notNull()
-    .references(() => clientsTable.id, { onDelete: "cascade" }),
   operationId: uuid("operation_id")
     .notNull()
     .references(() => operationsTable.id, { onDelete: "cascade" }),
@@ -215,10 +211,6 @@ export const treatmentsTableRelations = relations(
     ticket: one(ticketsTable, {
       fields: [treatmentsTable.ticketId],
       references: [ticketsTable.id],
-    }),
-    client: one(clientsTable, {
-      fields: [treatmentsTable.clientId],
-      references: [clientsTable.id],
     }),
     operation: one(operationsTable, {
       fields: [treatmentsTable.operationId],
