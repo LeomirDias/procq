@@ -23,14 +23,17 @@ const PendingTickets = async () => {
     const sectorMap = Object.fromEntries(sectors.map(s => [s.id, s.name]));
 
     // Map tickets to TicketTableRow
-    const tableData: TicketTableRow[] = tickets.map(ticket => ({
-        id: ticket.id,
-        status: ticket.status,
-        clientName: ticket.client?.name || ticket.clientId,
-        clientId: ticket.clientId,
-        sectorName: sectorMap[ticket.sectorId] || ticket.sectorId,
-        sectorId: ticket.sectorId,
-    }));
+    const tableData: TicketTableRow[] = tickets
+        .map(ticket => ({
+            id: ticket.id,
+            status: ticket.status,
+            clientName: ticket.client?.name || ticket.clientId,
+            clientId: ticket.clientId,
+            sectorName: sectorMap[ticket.sectorId] || ticket.sectorId,
+            sectorId: ticket.sectorId,
+            createdAt: ticket.createdAT,
+        }))
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 
     return (
         <div className="flex flex-col gap-4 w-full h-full max-h-[80vh]">

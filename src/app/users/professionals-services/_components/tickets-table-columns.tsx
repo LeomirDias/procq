@@ -1,11 +1,8 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Dialog } from "@/components/ui/dialog"
-import CallNextTicketButton from "./call-next-ticket-button"
+
 
 export type TicketTableRow = {
     id: string
@@ -14,6 +11,7 @@ export type TicketTableRow = {
     clientId: string
     sectorName: string
     sectorId: string
+    createdAt: Date
 }
 
 export const ticketsTableColumns: ColumnDef<TicketTableRow>[] = [
