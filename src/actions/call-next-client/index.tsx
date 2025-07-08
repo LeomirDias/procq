@@ -4,7 +4,7 @@ import { eq, and, asc } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { treatmentsTable, ticketsTable, operationsTable } from "@/db/schema";
+import { treatmentsTable, ticketsTable, operationsTable, servicePointsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
@@ -30,13 +30,25 @@ export const callNextTicket = actionClient.action(async () => {
         throw new Error("Nenhuma operação ativa encontrada para o usuário logado");
     }
 
-    // Buscar ticket pendente mais antigo
+    // Buscar o ponto de serviço da operação para obter o setor
+    const servicePoint = await db.query.servicePointsTable.findFirst({
+        where: eq(servicePointsTable.id, operation.servicePointId),
+    });
+    if (!servicePoint) {
+        throw new Error("Ponto de serviço da operação não encontrado");
+    }
+    const sectorId = servicePoint.sectorId;
+
+    // Buscar ticket pendente mais antigo do mesmo setor
     const ticket = await db.query.ticketsTable.findFirst({
-        where: eq(ticketsTable.status, "pending"),
+        where: and(
+            eq(ticketsTable.status, "pending"),
+            eq(ticketsTable.sectorId, sectorId)
+        ),
         orderBy: (ticketsTable) => asc(ticketsTable.createdAT),
     });
     if (!ticket) {
-        throw new Error("Nenhum ticket pendente encontrado");
+        throw new Error("Nenhum ticket pendente encontrado para o setor");
     }
 
     await db.insert(treatmentsTable).values({
