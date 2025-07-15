@@ -11,7 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { clientsTable } from "@/db/schema";
 import { insertClient, updateUser } from "@/actions/upsert-client";
-import { formatCPF, formatPhoneNumber } from "@/lib/utils";
+import { formatCPF, formatPhoneNumber, formatName } from "@/lib/utils";
 
 const formSchema = z.object({
     name: z.string().trim().min(3, { message: "Nome do consumidor deve ter pelo menos 3 caracteres." }),
@@ -92,7 +92,14 @@ const UpsertClientForm = ({ client, onSuccess }: upsertClientForm) => {
                                     Nome do consumidor
                                 </FormLabel>
                                 <FormControl>
-                                    <Input placeholder="Digite o nome do consumidor" {...field} />
+                                    <Input
+                                        placeholder="Digite o nome do consumidor"
+                                        {...field}
+                                        onBlur={(e) => {
+                                            const formattedValue = formatName(e.target.value);
+                                            field.onChange(formattedValue);
+                                        }}
+                                    />
                                 </FormControl>
                                 <FormMessage />
                             </FormItem>
