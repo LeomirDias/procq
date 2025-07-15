@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { clientsTable } from "@/db/schema";
 import { actionClient } from "@/lib/next-safe-action";
+import { ErrorMessages, ErrorTypes } from "./schema";
 
 export const getClientByRegister = actionClient
   .schema(
@@ -20,13 +21,22 @@ export const getClientByRegister = actionClient
       });
 
       if (!clients || clients.length === 0) {
-        throw new Error("Cliente não encontrado");
+        return {
+          error: {
+            type: ErrorTypes.CLIENT_NOT_FOUND,
+            message: ErrorMessages[ErrorTypes.CLIENT_NOT_FOUND],
+          },
+        };
       }
 
       return clients[0];
     } catch (error) {
-      console.error("[GET_CLIENT_BY_REGISTER]", error);
-      throw new Error("Erro ao buscar cliente");
+      return {
+        error: {
+          type: ErrorTypes.CLIENT_NOT_FOUND,
+          message: ErrorMessages[ErrorTypes.CLIENT_NOT_FOUND],
+        },
+      };
     }
   });
 

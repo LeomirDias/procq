@@ -1,5 +1,14 @@
-import { phoneNumber } from "better-auth/plugins";
 import { z } from "zod";
+
+export const ErrorTypes = {
+  UNAUTHENTICATED: "UNAUTHENTICATED",
+} as const;
+
+export const ErrorMessages = {
+  [ErrorTypes.UNAUTHENTICATED]: "Usuário não autenticado",
+} as const;
+
+export type ErrorType = keyof typeof ErrorTypes;
 
 export const UpdateTicketSchema = z.object({
   id: z.string().min(1, "ID é obrigatório"),

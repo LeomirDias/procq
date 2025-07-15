@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { sectorsTable } from "@/db/schema";
 import { actionClient } from "@/lib/next-safe-action";
+import { ErrorMessages, ErrorTypes } from "./schema";
 
 export const getSectors = actionClient
   .schema(
@@ -23,12 +24,21 @@ export const getSectors = actionClient
       });
 
       if (!sectors) {
-        throw new Error("Setores não encontrados");
+        return {
+          error: {
+            type: ErrorTypes.SECTOR_NOT_FOUND,
+            message: ErrorMessages[ErrorTypes.SECTOR_NOT_FOUND],
+          },
+        };
       }
 
       return sectors;
     } catch (error) {
-      console.error("[GET_SECTORS]", error);
-      throw new Error("Erro ao buscar setores");
+      return {
+        error: {
+          type: ErrorTypes.SECTOR_NOT_FOUND,
+          message: ErrorMessages[ErrorTypes.SECTOR_NOT_FOUND],
+        },
+      };
     }
   });

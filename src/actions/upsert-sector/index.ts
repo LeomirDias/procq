@@ -8,7 +8,7 @@ import { sectorsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-import { upsertSectorSchema } from "./schema";
+import { ErrorMessages, ErrorTypes, upsertSectorSchema } from "./schema";
 import { eq } from "drizzle-orm";
 
 export const upsertSector = actionClient
@@ -18,12 +18,24 @@ export const upsertSector = actionClient
       headers: await headers(),
     });
     if (!session?.user) {
-      throw new Error("Unauthorized");
+      return {
+        error: {
+          type: ErrorTypes.UNAUTHENTICATED,
+          message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+        },
+      };
     }
     const user = await db.query.usersTable.findFirst({
       where: eq(usersTable.id, session.user.id),
     });
-    if (user?.role !== "administrator") throw new Error("Unauthorized");
+    if (user?.role !== "administrator") {
+      return {
+        error: {
+          type: ErrorTypes.USER_NOT_AUTHORIZED,
+          message: ErrorMessages[ErrorTypes.USER_NOT_AUTHORIZED],
+        },
+      };
+    }
     await db
       .insert(sectorsTable)
       .values({

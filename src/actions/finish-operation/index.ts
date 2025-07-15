@@ -7,7 +7,7 @@ import { db } from "@/db";
 import { operationsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
-
+import { ErrorTypes, ErrorMessages } from "./schema";
 import { schema } from "./schema";
 import { revalidatePath } from "next/cache";
 
@@ -19,13 +19,13 @@ export const finishOperation = actionClient
     });
 
     if (!session?.user) {
-      throw new Error("Usuário não autenticado");
+      return {
+        error: {
+          type: ErrorTypes.UNAUTHENTICATED,
+          message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+        },
+      };
     }
-
-    const user = await db.query.usersTable.findFirst({
-      where: eq(usersTable.id, session.user.id),
-    });
-    if (user?.role !== "professional") throw new Error("Unauthorized");
 
     await db
       .update(operationsTable)

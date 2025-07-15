@@ -8,7 +8,7 @@ import { ticketsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-import { UpdateTicketSchema, CreateTicketSchema } from "./schema";
+import { ErrorMessages, ErrorTypes, UpdateTicketSchema, CreateTicketSchema } from "./schema";
 import { revalidatePath } from "next/cache";
 
 export const updateTicket = actionClient
@@ -19,7 +19,12 @@ export const updateTicket = actionClient
         });
 
         if (!session?.user) {
-            throw new Error("Usuário não autenticado");
+            return {
+                error: {
+                    type: ErrorTypes.UNAUTHENTICATED,
+                    message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+                },
+            };
         }
 
         // Buscar ticket atual para manter sectorId e clientId
@@ -45,7 +50,12 @@ export const createTicket = actionClient
         });
 
         if (!session?.user) {
-            throw new Error("Usuário não autenticado");
+            return {
+                error: {
+                    type: ErrorTypes.UNAUTHENTICATED,
+                    message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+                },
+            };
         }
 
         await db.insert(ticketsTable).values({

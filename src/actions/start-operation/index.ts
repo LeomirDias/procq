@@ -1,14 +1,13 @@
 "use server";
 
-import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { operationsTable, usersTable } from "@/db/schema";
+import { operationsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-import { schema } from "./schema";
+import { ErrorMessages, ErrorTypes, schema } from "./schema";
 import { revalidatePath } from "next/cache";
 
 export const startOperation = actionClient
@@ -19,7 +18,12 @@ export const startOperation = actionClient
     });
 
     if (!session?.user) {
-      throw new Error("Usuário não autenticado");
+      return {
+        error: {
+          type: ErrorTypes.UNAUTHENTICATED,
+          message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+        },
+      };
     }
 
     await db.insert(operationsTable).values({

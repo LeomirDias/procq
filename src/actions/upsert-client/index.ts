@@ -8,7 +8,12 @@ import { clientsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-import { UpsertClientschema, InsertClientSchema } from "./schema";
+import {
+  ErrorMessages,
+  ErrorTypes,
+  UpsertClientschema,
+  InsertClientSchema,
+} from "./schema";
 import { revalidatePath } from "next/cache";
 
 export const updateUser = actionClient
@@ -19,7 +24,12 @@ export const updateUser = actionClient
     });
 
     if (!session?.user) {
-      throw new Error("Usuário não autenticado");
+      return {
+        error: {
+          type: ErrorTypes.UNAUTHENTICATED,
+          message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+        },
+      };
     }
 
     await db
@@ -44,7 +54,12 @@ export const insertClient = actionClient
     });
 
     if (!session?.user) {
-      throw new Error("Usuário não autenticado");
+      return {
+        error: {
+          type: ErrorTypes.UNAUTHENTICATED,
+          message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+        },
+      };
     }
 
     await db.insert(clientsTable).values({
