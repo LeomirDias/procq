@@ -22,11 +22,6 @@ export const startOperation = actionClient
       throw new Error("Usuário não autenticado");
     }
 
-    const user = await db.query.usersTable.findFirst({
-      where: eq(usersTable.id, session.user.id),
-    });
-    if (user?.role !== "professional") throw new Error("Unauthorized");
-
     await db.insert(operationsTable).values({
       status: "operating",
       userId: session.user.id,

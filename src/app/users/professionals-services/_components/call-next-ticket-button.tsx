@@ -6,6 +6,7 @@ import { useAction } from "next-safe-action/hooks";
 import { Button } from "@/components/ui/button";
 import { callNextTicket } from "@/actions/call-next-client";
 import { toast } from "sonner";
+import { ErrorType } from "@/actions/call-next-client/schema";
 
 interface CallNextTicketButtonProps {
     disabled?: boolean;
@@ -13,16 +14,20 @@ interface CallNextTicketButtonProps {
 
 const CallNextTicketButton = ({ disabled }: CallNextTicketButtonProps) => {
     const [error, setError] = useState<string | null>(null);
-    const [success, setSuccess] = useState<string | null>(null);
     const { execute, status } = useAction(callNextTicket, {
-        onSuccess: () => {
+        onSuccess: (result) => {
+            if (result.data?.error) {
+                toast.error(result.data.error.message);
+                setError(result.data.error.message);
+                return;
+            }
             toast.success("Atendimento iniciado com sucesso!");
             setError(null);
         },
         onError: (err) => {
-            let msg = err.error?.serverError || (err.error?.validationErrors?.formErrors?.[0]) || "Erro ao iniciar atendimento";
+            const msg = err.error?.serverError || (err.error?.validationErrors?.formErrors?.[0]) || "Erro ao iniciar atendimento";
+            toast.error(msg);
             setError(msg);
-            setSuccess(null);
         },
     });
 
@@ -36,8 +41,6 @@ const CallNextTicketButton = ({ disabled }: CallNextTicketButtonProps) => {
                 <SmilePlus />
                 {status === "executing" ? "Chamando..." : "Chamar próximo atendimento"}
             </Button>
-            {error && <div style={{ color: "red" }}>{error}</div>}
-            {success && <div style={{ color: "green" }}>{success}</div>}
         </div>
     );
 };

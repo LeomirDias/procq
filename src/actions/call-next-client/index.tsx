@@ -8,6 +8,7 @@ import { treatmentsTable, ticketsTable, operationsTable, servicePointsTable, cli
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 import { sendLastCalledClients } from "./send-last-called-clients";
+import { ErrorTypes, ErrorMessages } from "./schema";
 
 import { revalidatePath } from "next/cache";
 
@@ -17,7 +18,7 @@ export const callNextTicket = actionClient.action(async () => {
     });
 
     if (!session?.user) {
-        throw new Error("Usuário não autenticado");
+        return { error: { type: ErrorTypes.UNAUTHENTICATED, message: ErrorMessages[ErrorTypes.UNAUTHENTICATED] } };
     }
 
     // Buscar operação ativa do usuário logado
@@ -28,7 +29,19 @@ export const callNextTicket = actionClient.action(async () => {
         ),
     });
     if (!operation) {
-        throw new Error("Nenhuma operação ativa encontrada para o usuário logado");
+        return { error: { type: ErrorTypes.NO_ACTIVE_OPERATION, message: ErrorMessages[ErrorTypes.NO_ACTIVE_OPERATION] } };
+    }
+
+    // Verificar se já existe um atendimento em andamento para esta operação
+    const existingTreatment = await db.query.treatmentsTable.findFirst({
+        where: and(
+            eq(treatmentsTable.operationId, operation.id),
+            eq(treatmentsTable.status, "in_service")
+        ),
+    });
+
+    if (existingTreatment) {
+        return { error: { type: ErrorTypes.TREATMENT_IN_PROGRESS, message: ErrorMessages[ErrorTypes.TREATMENT_IN_PROGRESS] } };
     }
 
     // Buscar o ponto de serviço da operação para obter o setor
@@ -36,7 +49,7 @@ export const callNextTicket = actionClient.action(async () => {
         where: eq(servicePointsTable.id, operation.servicePointId),
     });
     if (!servicePoint) {
-        throw new Error("Ponto de serviço da operação não encontrado");
+        return { error: { type: ErrorTypes.SERVICE_POINT_NOT_FOUND, message: ErrorMessages[ErrorTypes.SERVICE_POINT_NOT_FOUND] } };
     }
     const sectorId = servicePoint.sectorId;
     // Buscar o setor do ponto de serviço
@@ -44,7 +57,7 @@ export const callNextTicket = actionClient.action(async () => {
         where: eq(sectorsTable.id, sectorId),
     });
     if (!sector) {
-        throw new Error("Setor não encontrado");
+        return { error: { type: ErrorTypes.SECTOR_NOT_FOUND, message: ErrorMessages[ErrorTypes.SECTOR_NOT_FOUND] } };
     }
 
     // Buscar ticket pendente mais antigo do mesmo setor
@@ -56,7 +69,7 @@ export const callNextTicket = actionClient.action(async () => {
         orderBy: (ticketsTable) => asc(ticketsTable.createdAT),
     });
     if (!ticket) {
-        throw new Error("Nenhum ticket pendente encontrado para o setor");
+        return { error: { type: ErrorTypes.NO_PENDING_TICKET, message: ErrorMessages[ErrorTypes.NO_PENDING_TICKET] } };
     }
 
     await db.insert(treatmentsTable).values({
@@ -79,7 +92,7 @@ export const callNextTicket = actionClient.action(async () => {
         where: eq(clientsTable.id, ticket.clientId),
     });
     if (!client) {
-        throw new Error("Cliente do ticket não encontrado");
+        return { error: { type: ErrorTypes.CLIENT_NOT_FOUND, message: ErrorMessages[ErrorTypes.CLIENT_NOT_FOUND] } };
     }
 
     // Buscar o nome do guichê (ponto de serviço)
@@ -95,4 +108,6 @@ export const callNextTicket = actionClient.action(async () => {
             guiche: servicePointName + " - " + sectorName,
         }),
     });
+
+    return { success: true };
 });
