@@ -79,7 +79,9 @@ const ServiceInProgressCard = async () => {
                     </div>
                 </CardContent>
                 <CardFooter className="flex flex-row items-center justify-center gap-4 w-full">
-                    <CallCustomerAgainButton />
+                    {ticket && treatment && (
+                        <CallCustomerAgainButton ticket={{ id: ticket.id }} treatment={{ id: treatment.id }} />
+                    )}
                     <FinishServiceButton treatmentId={treatment.id} />
                 </CardFooter>
             </Card>

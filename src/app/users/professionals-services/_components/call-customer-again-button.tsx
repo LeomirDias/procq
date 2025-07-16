@@ -6,9 +6,18 @@ import { useAction } from "next-safe-action/hooks";
 import { callTheCustomerAgain } from "@/actions/call-the-customer-again";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import EndServiceForm from "./end-service-form";
 
-const CallCustomerAgainButton = () => {
+interface CallCustomerAgainButtonProps {
+    ticket: { id: string };
+    treatment: { id: string };
+}
+
+const CallCustomerAgainButton = ({ ticket, treatment }: CallCustomerAgainButtonProps) => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
     const { execute, status } = useAction(callTheCustomerAgain, {
         onSuccess: (result) => {
             if (result.data?.error) {
@@ -27,14 +36,23 @@ const CallCustomerAgainButton = () => {
     });
 
     return (
-        <Button
-            variant="outline"
-            disabled={status === "executing"}
-            onClick={() => execute()}
-        >
-            <Volume2 className="w-4 h-4 mr-2" />
-            {status === "executing" ? "Chamando..." : "Chamar novamente"}
-        </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+                <Button
+                    variant="outline"
+                    disabled={status === "executing"}
+                    onClick={() => execute()}
+                >
+                    <Volume2 className="w-4 h-4 mr-2" />
+                    {status === "executing" ? "Chamando..." : "Chamar novamente"}
+                </Button>
+            </DialogTrigger>
+            <EndServiceForm
+                ticket={ticket}
+                treatment={treatment}
+                onSuccess={() => setIsDialogOpen(false)}
+            />
+        </Dialog>
     );
 };
 
