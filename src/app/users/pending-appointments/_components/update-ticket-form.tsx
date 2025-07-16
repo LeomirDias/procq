@@ -32,7 +32,7 @@ const UpdateTicketForm = ({ ticket, onSuccess }: UpdateTicketFormProps) => {
         <DialogContent>
             <DialogTitle>Cancelar Ticket</DialogTitle>
             <DialogDescription>
-                Tem certeza que deseja cancelar o ticket deste cliente?
+                Tem certeza que deseja cancelar o ticket deste consumidor?
             </DialogDescription>
             <div className="text-sm text-muted-foreground">
                 <p>Consumidor: {ticket.clientName}</p>

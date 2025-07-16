@@ -46,19 +46,19 @@ export default function TicketsFilters({ tickets, sectors }: TicketsFiltersProps
                     onChange={e => setStatusFilter(e.target.value)}
                     className="border rounded p-2 text-sm"
                 >
-                    <option value="">Status</option>
-                    <option value="pending">Pendente</option>
-                    <option value="canceled">Cancelado</option>
-                    <option value="finished">Finalizado</option>
+                    <option value="" className="bg-background">Status</option>
+                    <option value="pending" className="bg-background">Pendente</option>
+                    <option value="canceled" className="bg-background">Cancelado</option>
+                    <option value="finished" className="bg-background">Atendido</option>
                 </select>
                 <select
                     value={sectorFilter}
                     onChange={e => setSectorFilter(e.target.value)}
                     className="border rounded p-2 text-sm"
                 >
-                    <option value="">Setores</option>
+                    <option value="" className="bg-background">Setores</option>
                     {sectors.map(sector => (
-                        <option key={sector.id} value={sector.id}>{sector.name}</option>
+                        <option key={sector.id} value={sector.id} className="bg-background">{sector.name}</option>
                     ))}
                 </select>
                 <Button

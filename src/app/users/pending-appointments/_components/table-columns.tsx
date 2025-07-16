@@ -20,7 +20,7 @@ export const ticketsTableColumns: ColumnDef<TicketTableRow>[] = [
     {
         id: "clientName",
         accessorKey: "clientName",
-        header: "Cliente",
+        header: "Consumidor",
     },
     {
         id: "sectorName",
