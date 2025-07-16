@@ -6,7 +6,6 @@ import { useAction } from "next-safe-action/hooks";
 import { Button } from "@/components/ui/button";
 import { callNextTicket } from "@/actions/call-next-client";
 import { toast } from "sonner";
-import { ErrorType } from "@/actions/call-next-client/schema";
 
 interface CallNextTicketButtonProps {
     disabled?: boolean;
