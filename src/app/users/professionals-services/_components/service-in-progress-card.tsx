@@ -1,5 +1,6 @@
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import FinishServiceButton from "./finish-service-button";
+import CallCustomerAgainButton from "./call-customer-again-button";
 import { db } from "@/db";
 import { treatmentsTable, operationsTable, ticketsTable, clientsTable } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
@@ -78,6 +79,7 @@ const ServiceInProgressCard = async () => {
                     </div>
                 </CardContent>
                 <CardFooter className="flex flex-row items-center justify-center gap-4 w-full">
+                    <CallCustomerAgainButton />
                     <FinishServiceButton treatmentId={treatment.id} />
                 </CardFooter>
             </Card>
