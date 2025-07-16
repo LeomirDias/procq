@@ -82,7 +82,6 @@ const UpdateUserForm = ({ user, onSuccess }: UpdateUserFormProps) => {
             form.reset();
             onSuccess?.();
         } catch (error) {
-            console.error("Erro ao salvar usuário:", error);
             toast.error(user ? `Erro ao atualizar usuário.` : `Erro ao adicionar usuário.`);
         }
     };

@@ -26,7 +26,10 @@ const StartOperationButton = ({ sectors, disabled }: StartOperationButtonProps) 
                     Iniciar operação
                 </Button>
             </DialogTrigger>
-            <StartOperationForm sectors={sectors} onSuccess={() => setIsOpen(false)} />
+            <StartOperationForm
+                sectors={sectors}
+                onSuccess={() => setIsOpen(false)}
+            />
         </Dialog>
     );
 }

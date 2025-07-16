@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState } from "react";
 
 const formSchema = z.object({
     servicePointId: z.string().min(1, { message: "Selecione o ponto de atendimento." }),
@@ -25,6 +26,7 @@ interface StartOperationFormProps {
 }
 
 const StartOperationForm = ({ onSuccess, sectors }: StartOperationFormProps) => {
+    const [error, setError] = useState<string | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         shouldUnregister: true,
         resolver: zodResolver(formSchema),
@@ -33,20 +35,27 @@ const StartOperationForm = ({ onSuccess, sectors }: StartOperationFormProps) => 
         }
     });
 
-    const startOperationAction = useAction(startOperation, {
-        onSuccess: () => {
+    const { execute, status } = useAction(startOperation, {
+        onSuccess: (result) => {
+            if (result.data?.error) {
+                toast.error(result.data.error.message);
+                setError(result.data.error.message);
+                return;
+            }
             toast.success("Operação iniciada com sucesso!");
+            setError(null);
             onSuccess?.();
             form.reset();
         },
         onError: (error) => {
-            console.error("Erro ao iniciar operação:", error);
-            toast.error("Erro ao iniciar operação.");
+            const msg = error.error?.serverError || error.error?.validationErrors?.servicePointId?._errors?.[0] || "Erro ao iniciar operação";
+            toast.error(msg);
+            setError(msg);
         },
     });
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        startOperationAction.execute(values);
+        execute(values);
     };
 
     return (
@@ -65,7 +74,7 @@ const StartOperationForm = ({ onSuccess, sectors }: StartOperationFormProps) => 
                                     <Select
                                         onValueChange={field.onChange}
                                         value={field.value}
-                                        disabled={startOperationAction.isPending}
+                                        disabled={status === "executing"}
                                     >
                                         <SelectTrigger>
                                             <SelectValue placeholder="Selecione o ponto de atendimento" />
@@ -87,8 +96,8 @@ const StartOperationForm = ({ onSuccess, sectors }: StartOperationFormProps) => 
                         )}
                     />
                     <DialogFooter>
-                        <Button type="submit" disabled={startOperationAction.isPending}>
-                            {startOperationAction.isPending
+                        <Button type="submit" disabled={status === "executing"}>
+                            {status === "executing"
                                 ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Iniciando...</>
                                 : "Iniciar operação"}
                         </Button>

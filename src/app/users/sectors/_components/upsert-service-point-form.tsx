@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { sectorsTable, servicePointsTable } from "@/db/schema";
+import { useState } from "react";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do ponto de atendimento é obrigatório." }),
@@ -25,6 +26,7 @@ interface UpsertServicePointFormProps {
 }
 
 const UpsertServicePointForm = ({ servicePoint, onSuccess }: UpsertServicePointFormProps) => {
+    const [error, setError] = useState<string | null>(null);
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -32,15 +34,22 @@ const UpsertServicePointForm = ({ servicePoint, onSuccess }: UpsertServicePointF
         }
     });
 
-    const { execute, isPending } = useAction(upsertServicePoint, {
-        onSuccess: () => {
+    const { execute, status } = useAction(upsertServicePoint, {
+        onSuccess: (result) => {
+            if (result.data?.error) {
+                toast.error(result.data.error.message);
+                setError(result.data.error.message);
+                return;
+            }
             toast.success(servicePoint ? "Ponto de atendimento atualizado com sucesso!" : "Ponto de atendimento adicionado com sucesso!");
+            setError(null);
             onSuccess?.();
             form.reset();
         },
         onError: (error) => {
-            console.error("Erro ao salvar ponto de atendimento:", error);
-            toast.error(servicePoint ? "Erro ao atualizar ponto de atendimento." : "Erro ao adicionar ponto de atendimento.");
+            const msg = error.error?.serverError || error.error?.validationErrors?.name?._errors?.[0] || "Erro ao salvar ponto de atendimento";
+            toast.error(msg);
+            setError(msg);
         },
     });
 
@@ -79,8 +88,8 @@ const UpsertServicePointForm = ({ servicePoint, onSuccess }: UpsertServicePointF
                         )}
                     />
                     <DialogFooter>
-                        <Button type="submit" disabled={isPending}>
-                            {isPending ? (
+                        <Button type="submit" disabled={status === "executing"}>
+                            {status === "executing" ? (
                                 <>
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                     Salvando...

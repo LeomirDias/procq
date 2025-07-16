@@ -4,24 +4,28 @@ import { useAction } from "next-safe-action/hooks";
 import { finishOperation } from "@/actions/finish-operation";
 import { toast } from "sonner";
 import { BadgeCheck } from "lucide-react";
+import { useState } from "react";
 
 interface FinishOperationButtonProps {
     operationId: string;
 }
 
 const FinishOperationButton = ({ operationId }: FinishOperationButtonProps) => {
+    const [error, setError] = useState<string | null>(null);
     const { execute, status } = useAction(finishOperation, {
-        onSuccess: () => {
-            toast.success("Operação encerrada com sucesso!");
-        },
-        onError: (error) => {
-            const serverError = error.error?.serverError;
-            let validationError = undefined;
-            const validationErrors = error.error?.validationErrors;
-            if (validationErrors && validationErrors.operationId && Array.isArray(validationErrors.operationId._errors)) {
-                validationError = validationErrors.operationId._errors[0];
+        onSuccess: (result) => {
+            if (result.data?.error) {
+                toast.error(result.data.error.message);
+                setError(result.data.error.message);
+                return;
             }
-            toast.error(serverError || validationError || "Erro ao encerrar operação.");
+            toast.success("Operação encerrada com sucesso!");
+            setError(null);
+        },
+        onError: (err) => {
+            const msg = err.error?.serverError || err.error?.validationErrors?.operationId?._errors?.[0] || "Erro ao encerrar operação";
+            toast.error(msg);
+            setError(msg);
         },
     });
 

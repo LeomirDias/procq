@@ -11,6 +11,7 @@ import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/c
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { sectorsTable } from "@/db/schema";
+import { useState } from "react";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do setor é obrigatório." }),
@@ -22,6 +23,7 @@ interface UpsertSectorFormProps {
 }
 
 const UpsertSectorForm = ({ sector, onSuccess }: UpsertSectorFormProps) => {
+    const [error, setError] = useState<string | null>(null);
     const form = useForm<z.infer<typeof formSchema>>({
         shouldUnregister: true,
         resolver: zodResolver(formSchema),
@@ -30,21 +32,28 @@ const UpsertSectorForm = ({ sector, onSuccess }: UpsertSectorFormProps) => {
         }
     })
 
-    const upsertSectorAction = useAction(upsertSector, {
-        onSuccess: () => {
+    const { execute, status } = useAction(upsertSector, {
+        onSuccess: (result) => {
+            if (result.data?.error) {
+                toast.error(result.data.error.message);
+                setError(result.data.error.message);
+                return;
+            }
             toast.success(sector ? "Setor atualizado com sucesso!" : "Setor adicionado com sucesso!");
+            setError(null);
             onSuccess?.();
             form.reset();
         },
         onError: (error) => {
-            console.error("Erro ao salvar setor:", error);
-            toast.error(sector ? `Erro ao atualizar setor.` : `Erro ao adicionar setor.`);
+            const msg = error.error?.serverError || error.error?.validationErrors?.name?._errors?.[0] || "Erro ao salvar setor";
+            toast.error(msg);
+            setError(msg);
         },
     });
 
 
     const onSubmit = (values: z.infer<typeof formSchema>) => {
-        upsertSectorAction.execute({
+        execute({
             ...values,
             id: sector?.id,
         })
@@ -72,8 +81,8 @@ const UpsertSectorForm = ({ sector, onSuccess }: UpsertSectorFormProps) => {
                         )}
                     />
                     <DialogFooter>
-                        <Button type="submit" disabled={upsertSectorAction.isPending}>
-                            {(upsertSectorAction.isPending)
+                        <Button type="submit" disabled={status === "executing"}>
+                            {status === "executing"
                                 ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Salvando...</>
                                 : sector ? "Editar setor"
                                     : "Cadastrar setor"}
