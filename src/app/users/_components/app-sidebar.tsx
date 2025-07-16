@@ -44,7 +44,7 @@ const itemsEnterprise = [
 
 const itemsProfessionals = [
     {
-        title: "Iniciar atendimento",
+        title: "Operação",
         url: "/users/professionals-services",
         icon: Headset,
     },
@@ -58,7 +58,7 @@ const itemsProfessionals = [
 
 const itemsClients = [
     {
-        title: "Consumidores",
+        title: "Gerenciar consumidores",
         url: "/users/clients",
         icon: Smile,
     },
@@ -118,7 +118,7 @@ export function AppSidebar() {
                 </SidebarGroup>
 
                 <SidebarGroup>
-                    <SidebarGroupLabel>Colaboradores</SidebarGroupLabel>
+                    <SidebarGroupLabel>Atendimento</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {itemsProfessionals.map((item) => (
@@ -136,7 +136,7 @@ export function AppSidebar() {
                 </SidebarGroup>
 
                 <SidebarGroup>
-                    <SidebarGroupLabel>Consumidor</SidebarGroupLabel>
+                    <SidebarGroupLabel>Recepção</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {itemsClients.map((item) => (
