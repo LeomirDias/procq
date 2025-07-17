@@ -1,6 +1,6 @@
 "use client";
 
-import { BriefcaseBusinessIcon, ChartBarBig, Headset, LayoutDashboard, ListCheck, ListOrdered, LogOutIcon, PlusSquareIcon, SettingsIcon, Smile, UserRoundPlus, UserRoundSearch, Users } from "lucide-react"
+import { BriefcaseBusinessIcon, BookUser, ChartBarBig, Headset, ListCheck, ListOrdered, LogOutIcon, Users } from "lucide-react"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
@@ -60,7 +60,7 @@ const itemsClients = [
     {
         title: "Gerenciar consumidores",
         url: "/users/clients",
-        icon: Smile,
+        icon: BookUser,
     },
     {
         title: "Fila de atendimentos",

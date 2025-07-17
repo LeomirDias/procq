@@ -69,7 +69,7 @@ const LoginForm = () => {
                     <FormItem>
                       <FormLabel className="text-gray-950">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Digite seu email" {...field} className="bg-[#f8f8f8] shadow-md" />
+                        <Input placeholder="Digite seu email" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -82,7 +82,7 @@ const LoginForm = () => {
                     <FormItem>
                       <FormLabel className="text-gray-950">Senha</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Digite sua senha" {...field} className="bg-[#f8f8f8] shadow-md" />
+                        <Input type="password" placeholder="Digite sua senha" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
