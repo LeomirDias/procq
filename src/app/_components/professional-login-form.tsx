@@ -56,26 +56,20 @@ const ProfessionalLoginForm = () => {
 
 
   return (
-    <Card className="overflow-hidden p-0">
+    <Card className="overflow-hidden p-0 bg-[#f8f8f8] backdrop-blur-sm rounded-lg shadow-xl">
       <CardContent className="grid p-0">
         <div className="mx-auto w-full max-w-md p-6 md:p-8">
           <Form {...formLogin}>
             <form onSubmit={formLogin.handleSubmit(onSubmitLogin)} className="space-y-4">
-              <CardHeader className="p-0">
-                <CardTitle>Área do Profissional</CardTitle>
-                <CardDescription>
-                  Faça login na sua conta
-                </CardDescription>
-              </CardHeader>
               <div className="space-y-4">
                 <FormField
                   control={formLogin.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel className="text-muted-foreground">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Digite seu email" {...field} />
+                        <Input placeholder="Digite seu email" {...field} className="bg-white shadow-sm" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -86,9 +80,9 @@ const ProfessionalLoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Senha</FormLabel>
+                      <FormLabel className="text-muted-foreground">Senha</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Digite sua senha" {...field} />
+                        <Input type="password" placeholder="Digite sua senha" {...field} className="bg-white shadow-sm" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -96,7 +90,7 @@ const ProfessionalLoginForm = () => {
                 />
               </div>
               <CardFooter className="p-0">
-                <Button type="submit" className="w-full" disabled={formLogin.formState.isSubmitting}>
+                <Button variant="default" type="submit" className="w-full" disabled={formLogin.formState.isSubmitting}>
                   {formLogin.formState.isSubmitting ? (
                     <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Entrando...</>
                   ) : (
