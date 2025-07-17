@@ -21,8 +21,8 @@ const AuthenticationPage = async () => {
           <Image
             src="/Logo.svg"
             alt="Procon Logo"
-            width={200}
-            height={80}
+            width={400}
+            height={0}
             priority
           />
           <div className="w-full h-auto max-w-md rounded-md">

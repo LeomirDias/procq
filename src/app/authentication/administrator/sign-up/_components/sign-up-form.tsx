@@ -81,13 +81,22 @@ export function SignUpForm() {
 
     return (
         <div className="flex flex-col gap-6">
+            <div className="flex items-center justify-center">
+                <Image
+                    src="/Logo.svg"
+                    alt="Procon Logo"
+                    width={400}
+                    height={0}
+                    priority
+                />
+            </div>
             <Card className="overflow-hidden p-0 bg-[#f8f8f8]">
                 <CardContent className="grid p-0 md:grid-cols-2">
                     <div className="p-6 md:p-8">
                         <Form {...formRegister}>
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-col items-center text-center">
-                                    <h1 className="text-xl font-bold text-gray-950">Crie sua conta</h1>
+                                    <h1 className="text-xl font-bold text-secondary">Crie sua conta</h1>
                                 </div>
                                 <form onSubmit={formRegister.handleSubmit(onSubmitRegister)} className="space-y-8">
                                     <FormField
@@ -95,7 +104,7 @@ export function SignUpForm() {
                                         name="name"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-gray-950">Nome</FormLabel>
+                                                <FormLabel className="text-secondary">Nome</FormLabel>
                                                 <FormControl>
                                                     <Input placeholder="Digite seu nome"{...field} className="bg-[#f8f8f8] shadow-md" />
                                                 </FormControl>
@@ -147,7 +156,7 @@ export function SignUpForm() {
                                         name="password"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-gray-950">Senha</FormLabel>
+                                                <FormLabel className="text-secondary">Senha</FormLabel>
                                                 <FormControl>
                                                     <Input placeholder="Crie sua senha" type="password" {...field} className="bg-[#f8f8f8] shadow-md" />
                                                 </FormControl>
@@ -163,19 +172,8 @@ export function SignUpForm() {
                             </div>
                         </Form>
                     </div>
-                    <div className="bg-[#f8f8f8] flex flex-col items-center justify-between h-full p-6">
-                        <div className="flex-1 flex items-center justify-center">
-                            <p className="text-blue-950 font-bold text-4xl text-center">Cadastro de <br /> Administrador</p>
-                        </div>
-                        <div>
-                            <Image
-                                src="/Logo.svg"
-                                alt="Image"
-                                className="h-32 w-32 object-contain"
-                                width={128}
-                                height={128}
-                            />
-                        </div>
+                    <div className="bg-[#f8f8f8] w-full flex flex-col items-center justify-center h-full p-6">
+                        <p className="text-secondary font-bold text-4xl text-center">Cadastro de <br /> Administrador</p>
                     </div>
                 </CardContent>
             </Card>
