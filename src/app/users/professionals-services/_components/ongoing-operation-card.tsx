@@ -1,10 +1,11 @@
+import { eq } from "drizzle-orm";
+import React from "react";
+
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/db";
-import { usersTable, servicePointsTable, sectorsTable } from "@/db/schema";
+import { sectorsTable, servicePointsTable, usersTable } from "@/db/schema";
 
-import { eq } from "drizzle-orm";
-import React from "react";
 import FinishOperationButton from "./finish-operation-button";
 
 interface OngoingOperationCardProps {

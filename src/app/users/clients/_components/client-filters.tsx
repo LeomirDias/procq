@@ -1,8 +1,10 @@
 "use client";
-import { useState, useMemo } from "react";
-import { DataTable } from "@/components/ui/data-table";
-import { clientsTableColumns } from "./table-columns";
+import { useMemo, useState } from "react";
+
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+
+import { clientsTableColumns } from "./table-columns";
 
 export default function ClientFilters({ clients, sectors }: { clients: any[], sectors: any[] }) {
     const [nameFilter, setNameFilter] = useState("");
@@ -22,14 +24,14 @@ export default function ClientFilters({ clients, sectors }: { clients: any[], se
             <div className="flex gap-2 mb-4">
                 <input
                     type="text"
-                    placeholder="Filtrar por nome"
+                    placeholder="Buscar por nome"
                     value={nameFilter}
                     onChange={e => setNameFilter(e.target.value)}
                     className="border rounded p-2 text-sm"
                 />
                 <input
                     type="text"
-                    placeholder="Filtrar por CPF"
+                    placeholder="Buscar por CPF"
                     value={cpfFilter}
                     onChange={e => setCpfFilter(e.target.value)}
                     className="border rounded p-2 text-sm"

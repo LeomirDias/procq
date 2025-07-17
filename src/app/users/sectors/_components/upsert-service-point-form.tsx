@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -12,7 +13,6 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { sectorsTable, servicePointsTable } from "@/db/schema";
-import { useState } from "react";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do ponto de atendimento é obrigatório." }),
@@ -63,9 +63,9 @@ const UpsertServicePointForm = ({ servicePoint, onSuccess }: UpsertServicePointF
 
     return (
         <DialogContent>
-            <DialogTitle>{servicePoint ? servicePoint.name : "Adicionar ponto de atendimento"}</DialogTitle>
+            <DialogTitle>{servicePoint?.id ? servicePoint.name : "Adicionar ponto de atendimento"}</DialogTitle>
             <DialogDescription>
-                {servicePoint
+                {servicePoint?.id
                     ? "Edite as informações desse ponto de atendimento."
                     : "Adicione um novo ponto de atendimento à sua empresa!"}
             </DialogDescription>
@@ -76,7 +76,6 @@ const UpsertServicePointForm = ({ servicePoint, onSuccess }: UpsertServicePointF
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Nome do ponto de atendimento</FormLabel>
                                 <FormControl>
                                     <Input
                                         placeholder="Digite o nome do ponto de atendimento"
@@ -94,7 +93,7 @@ const UpsertServicePointForm = ({ servicePoint, onSuccess }: UpsertServicePointF
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                     Salvando...
                                 </>
-                            ) : servicePoint ? (
+                            ) : servicePoint?.id ? (
                                 "Editar ponto de atendimento"
                             ) : (
                                 "Cadastrar ponto de atendimento"

@@ -6,6 +6,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { sectorsTable } from "@/db/schema";
 import { actionClient } from "@/lib/next-safe-action";
+
 import { ErrorMessages, ErrorTypes } from "./schema";
 
 export const getSectors = actionClient

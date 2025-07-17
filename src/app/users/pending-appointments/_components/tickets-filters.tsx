@@ -1,8 +1,10 @@
 "use client";
-import { useState, useMemo } from "react";
-import { DataTable } from "@/components/ui/data-table";
-import { ticketsTableColumns, TicketTableRow } from "./table-columns";
+import { useMemo,useState } from "react";
+
 import { Button } from "@/components/ui/button";
+import { DataTable } from "@/components/ui/data-table";
+
+import { ticketsTableColumns, TicketTableRow } from "./table-columns";
 
 interface TicketsFiltersProps {
     tickets: TicketTableRow[];

@@ -1,17 +1,17 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useAction } from "next-safe-action/hooks";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
-import { useAction } from "next-safe-action/hooks";
 
+import { insertClient, updateUser } from "@/actions/upsert-client";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { clientsTable } from "@/db/schema";
-import { insertClient, updateUser } from "@/actions/upsert-client";
-import { formatCPF, formatPhoneNumber, formatName } from "@/lib/utils";
+import { formatCPF, formatName,formatPhoneNumber } from "@/lib/utils";
 
 const formSchema = z.object({
     name: z.string().trim().min(3, { message: "Nome do consumidor deve ter pelo menos 3 caracteres." }),

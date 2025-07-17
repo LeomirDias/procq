@@ -1,9 +1,10 @@
-import { toast } from "sonner";
 import { useAction } from "next-safe-action/hooks";
+import { toast } from "sonner";
+
+import { endService } from "@/actions/end-service";
+import { updateTicket } from "@/actions/upsert-ticket";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
-import { updateTicket } from "@/actions/upsert-ticket";
-import { endService } from "@/actions/end-service";
 
 interface EndServiceFormProps {
     ticket: { id: string };

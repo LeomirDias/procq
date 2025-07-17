@@ -22,8 +22,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
-import UpdateUserForm from "./update-user-form";
 import { usersTable } from "@/db/schema";
+
+import UpdateUserForm from "./update-user-form";
 
 interface UserCardProps {
     user: typeof usersTable.$inferSelect
@@ -39,7 +40,7 @@ const UserCard = ({ user }: UserCardProps) => {
         .join("");
 
     const deleteUserAction = useAction(deleteUser, {
-            onSuccess: () => {
+        onSuccess: () => {
             toast.success("Usuário deletado com sucesso!");
         },
         onError: () => {
@@ -94,7 +95,7 @@ const UserCard = ({ user }: UserCardProps) => {
                             <Pencil className="mr-2 h-4 w-4" />
                             Editar profissional
                         </Button>
-                     </DialogTrigger>
+                    </DialogTrigger>
                     <UpdateUserForm user={user} onSuccess={() => setIsUpsertProfessionalFormOpen(false)} />
                 </Dialog>
 

@@ -2,13 +2,13 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { AccessDenied } from "@/components/ui/access-denied";
 import { PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
 import { db } from "@/db";
+import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import UserCard from "./_components/user-card";
-import { AccessDenied } from "@/components/ui/access-denied";
-import { usersTable } from "@/db/schema";
 
 const AdminsProfessionals = async () => {
     const session = await auth.api.getSession({

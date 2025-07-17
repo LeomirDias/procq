@@ -1,5 +1,6 @@
 "use server";
 
+import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
@@ -9,7 +10,6 @@ import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
 import { ErrorMessages, ErrorTypes, upsertServicePointSchema } from "./schema";
-import { eq } from "drizzle-orm";
 
 export const upsertServicePoint = actionClient
   .schema(upsertServicePointSchema)

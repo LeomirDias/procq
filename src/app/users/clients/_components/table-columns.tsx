@@ -3,9 +3,9 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { clientsTable } from "@/db/schema"
+import { formatCPF, formatPhoneNumber } from "@/lib/utils"
 
 import TableClientActions from "./table-actions"
-import { formatCPF, formatPhoneNumber } from "@/lib/utils"
 
 type Client = typeof clientsTable.$inferSelect;
 

@@ -1,11 +1,11 @@
 "use client"
 import { SmilePlus } from "lucide-react";
-import { useState } from "react";
 import { useAction } from "next-safe-action/hooks";
-
-import { Button } from "@/components/ui/button";
-import { callNextTicket } from "@/actions/call-next-client";
+import { useState } from "react";
 import { toast } from "sonner";
+
+import { callNextTicket } from "@/actions/call-next-client";
+import { Button } from "@/components/ui/button";
 
 interface CallNextTicketButtonProps {
     disabled?: boolean;

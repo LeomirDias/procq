@@ -5,13 +5,13 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
+import { updateUser } from "@/actions/update-user";
 import { Button } from "@/components/ui/button";
 import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { usersTable } from "@/db/schema";
-import { updateUser } from "@/actions/update-user";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do usuário é obrigatório." }),
@@ -159,7 +159,7 @@ const UpdateUserForm = ({ user, onSuccess }: UpdateUserFormProps) => {
                                     <SelectContent>
                                         <SelectGroup>
                                             <SelectLabel>Cargos</SelectLabel>
-                                            <SelectItem value="admin">Administrador</SelectItem>
+                                            <SelectItem value="administrator">Administrador</SelectItem>
                                             <SelectItem value="professional">Usuário Padrão</SelectItem>
                                         </SelectGroup>
                                     </SelectContent>

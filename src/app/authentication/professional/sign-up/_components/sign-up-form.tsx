@@ -89,91 +89,86 @@ export function SignUpForm() {
                     priority
                 />
             </div>
-            <Card className="overflow-hidden p-0 bg-[#f8f8f8]">
-                <CardContent className="grid p-0 md:grid-cols-2">
-                    <div className="p-6 md:p-8">
-                        <Form {...formRegister}>
-                            <div className="flex flex-col gap-6">
-                                <div className="flex flex-col items-center text-center">
-                                    <h1 className="text-xl font-bold text-secondary">Crie sua conta</h1>
-                                </div>
-                                <form onSubmit={formRegister.handleSubmit(onSubmitRegister)} className="space-y-8">
-                                    <FormField
-                                        control={formRegister.control}
-                                        name="name"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-secondary">Nome</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Digite seu nome" {...field} className="bg-[#f8f8f8] shadow-md" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={formRegister.control}
-                                        name="cpf"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-gray-950">CPF</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Digite seu CPF" {...field} className="bg-[#f8f8f8] shadow-md" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={formRegister.control}
-                                        name="phoneNumber"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-gray-950">Telefone</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Digite seu telefone" {...field} className="bg-[#f8f8f8] shadow-md" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={formRegister.control}
-                                        name="email"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-secondary">Email</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Digite seu email" {...field} className="bg-[#f8f8f8] shadow-md" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <FormField
-                                        control={formRegister.control}
-                                        name="password"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="text-secondary">Senha</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Crie sua senha" type="password" {...field} className="bg-[#f8f8f8] shadow-md" />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                    <Button type="submit"
-                                        disabled={formRegister.formState.isSubmitting}>
-                                        {formRegister.formState.isSubmitting ? "Cadastrando..." : "Cadastrar"}
-                                    </Button>
-                                </form>
+            <Card className="overflow-hidden p-0 bg-[#f8f8f8] max-w-[600px] mx-auto">
+                <CardContent className="p-6 md:p-8">
+                    <Form {...formRegister}>
+                        <div className="flex flex-col gap-6">
+                            <div className="flex flex-col items-center text-center">
+                                <h1 className="text-xl font-bold text-secondary">Cadastro de Profissional</h1>
                             </div>
-                        </Form>
-                    </div>
-                    <div className="bg-[#f8f8f8] w-full flex flex-col items-center justify-center h-full p-6">
-                        <p className="text-secondary font-bold text-4xl text-center">Cadastro de <br /> Profissional</p>
-                    </div>
+                            <form onSubmit={formRegister.handleSubmit(onSubmitRegister)} className="space-y-8">
+                                <FormField
+                                    control={formRegister.control}
+                                    name="name"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-secondary">Nome:</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Digite seu nome" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={formRegister.control}
+                                    name="cpf"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-gray-950">CPF:</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Digite seu CPF" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={formRegister.control}
+                                    name="phoneNumber"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-gray-950">Telefone:</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Digite seu telefone" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={formRegister.control}
+                                    name="email"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-secondary">Email:</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Digite seu email" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={formRegister.control}
+                                    name="password"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel className="text-secondary">Senha:</FormLabel>
+                                            <FormControl>
+                                                <Input placeholder="Crie sua senha" type="password" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <Button type="submit" className="w-full"
+                                    disabled={formRegister.formState.isSubmitting}>
+                                    {formRegister.formState.isSubmitting ? "Cadastrando..." : "Cadastrar"}
+                                </Button>
+                            </form>
+                        </div>
+                    </Form>
                 </CardContent>
             </Card>
         </div>

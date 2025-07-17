@@ -1,15 +1,16 @@
 "use server";
 
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
 import { operationsTable, usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
-import { ErrorTypes, ErrorMessages } from "./schema";
+
+import { ErrorMessages, ErrorTypes } from "./schema";
 import { schema } from "./schema";
-import { revalidatePath } from "next/cache";
 
 export const finishOperation = actionClient
   .schema(schema)

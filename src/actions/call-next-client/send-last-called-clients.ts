@@ -1,14 +1,15 @@
 "use server";
 
-import { eq, desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
+
 import { db } from "@/db";
 import {
-  treatmentsTable,
-  ticketsTable,
   clientsTable,
-  servicePointsTable,
-  sectorsTable,
   operationsTable,
+  sectorsTable,
+  servicePointsTable,
+  ticketsTable,
+  treatmentsTable,
 } from "@/db/schema";
 
 export async function sendLastCalledClients() {

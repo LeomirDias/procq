@@ -1,16 +1,16 @@
 "use server";
 
-import { eq, and } from "drizzle-orm";
+import { and,eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
 import {
-  treatmentsTable,
-  ticketsTable,
-  operationsTable,
-  servicePointsTable,
   clientsTable,
+  operationsTable,
   sectorsTable,
+  servicePointsTable,
+  ticketsTable,
+  treatmentsTable,
 } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";

@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
@@ -11,7 +12,6 @@ import { DialogContent, DialogDescription, DialogFooter, DialogTitle } from "@/c
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { sectorsTable } from "@/db/schema";
-import { useState } from "react";
 
 const formSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome do setor é obrigatório." }),
@@ -70,9 +70,6 @@ const UpsertSectorForm = ({ sector, onSuccess }: UpsertSectorFormProps) => {
                         name="name"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>
-                                    Nome do setor
-                                </FormLabel>
                                 <FormControl>
                                     <Input placeholder="Digite o nome do setor" {...field} />
                                 </FormControl>

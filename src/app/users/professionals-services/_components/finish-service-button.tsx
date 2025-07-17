@@ -1,10 +1,11 @@
 "use client"
-import { Button } from "@/components/ui/button"
 import { BadgeCheck } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
-import { endService } from "@/actions/end-service";
-import { toast } from "sonner";
 import { useState } from "react";
+import { toast } from "sonner";
+
+import { endService } from "@/actions/end-service";
+import { Button } from "@/components/ui/button"
 
 interface FinishServiceButtonProps {
     treatmentId: string;

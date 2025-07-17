@@ -1,15 +1,15 @@
+import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
+import { AccessDenied } from "@/components/ui/access-denied";
 import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
 import { db } from "@/db";
+import { usersTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 
 import AddSectorButton from "./_components/add-sector-button";
 import SectorsGrid from "./_components/sectors-cards";
-import { AccessDenied } from "@/components/ui/access-denied";
-import { eq } from "drizzle-orm";
-import { usersTable } from "@/db/schema";
 
 const AdminsSectors = async () => {
 

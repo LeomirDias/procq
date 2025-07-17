@@ -1,9 +1,11 @@
-import { db } from "@/db";
-import { treatmentsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
-import { servicesPerformedColumns, ServicePerformedTableRow } from "./services-performed-columns";
+import { db } from "@/db";
+import { treatmentsTable } from "@/db/schema";
+
+import { ServicePerformedTableRow,servicesPerformedColumns } from "./services-performed-columns";
 
 interface ServicesPerformedProps {
     userId: string;

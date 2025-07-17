@@ -1,16 +1,16 @@
 "use server";
 
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 
 import { db } from "@/db";
 import { treatmentsTable } from "@/db/schema";
-import { actionClient } from "@/lib/next-safe-action";
-import { EndServiceSchema } from "./schema";
-import { ErrorTypes, ErrorMessages } from "./schema";
-
-import { revalidatePath } from "next/cache";
 import { auth } from "@/lib/auth";
-import { headers } from "next/headers";
+import { actionClient } from "@/lib/next-safe-action";
+
+import { EndServiceSchema } from "./schema";
+import { ErrorMessages,ErrorTypes } from "./schema";
 
 export const endService = actionClient.schema(EndServiceSchema).action(async ({ parsedInput }) => {
     const session = await auth.api.getSession({

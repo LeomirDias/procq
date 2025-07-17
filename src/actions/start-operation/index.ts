@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
@@ -8,7 +9,6 @@ import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
 import { ErrorMessages, ErrorTypes, schema } from "./schema";
-import { revalidatePath } from "next/cache";
 
 export const startOperation = actionClient
   .schema(schema)

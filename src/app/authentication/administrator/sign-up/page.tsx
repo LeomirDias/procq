@@ -1,4 +1,5 @@
 import { ThemeProvider } from "next-themes";
+
 import { SignUpForm } from "./_components/sign-up-form";
 
 const AuthenticationPage = () => {

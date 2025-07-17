@@ -1,6 +1,7 @@
 "use server";
 
 import { eq } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
@@ -8,8 +9,7 @@ import { ticketsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-import { ErrorMessages, ErrorTypes, UpdateTicketSchema, CreateTicketSchema } from "./schema";
-import { revalidatePath } from "next/cache";
+import { CreateTicketSchema,ErrorMessages, ErrorTypes, UpdateTicketSchema } from "./schema";
 
 export const updateTicket = actionClient
     .schema(UpdateTicketSchema)

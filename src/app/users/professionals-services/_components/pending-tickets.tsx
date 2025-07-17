@@ -1,9 +1,11 @@
-import { db } from "@/db";
 import { eq } from "drizzle-orm";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
-import { ticketsTableColumns, TicketTableRow } from "./tickets-table-columns";
+import { db } from "@/db";
+
 import CallNextTicketButton from "./call-next-ticket-button";
+import { ticketsTableColumns, TicketTableRow } from "./tickets-table-columns";
 
 const PendingTickets = async () => {
     // Fetch tickets with client info

@@ -1,11 +1,13 @@
 "use client"
 
 import { ColumnDef } from "@tanstack/react-table"
-import UpdateTicketForm from "./update-ticket-form"
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { Dialog } from "@/components/ui/dialog"
+
+import UpdateTicketForm from "./update-ticket-form"
 
 export type TicketTableRow = {
     id: string

@@ -21,9 +21,9 @@ import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import { sectorsTable, servicePointsTable } from "@/db/schema";
 
+import ServicePointCard from "./service-point-cards";
 import UpsertSectorForm from "./upsert-sector-form";
 import UpsertServicePointForm from "./upsert-service-point-form";
-import ServicePointCard from "./service-point-cards";
 
 interface SectorsGridProps {
     sectors: (typeof sectorsTable.$inferSelect & {

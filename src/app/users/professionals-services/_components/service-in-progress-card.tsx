@@ -1,11 +1,13 @@
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import FinishServiceButton from "./finish-service-button";
-import CallCustomerAgainButton from "./call-customer-again-button";
-import { db } from "@/db";
-import { treatmentsTable, operationsTable, ticketsTable, clientsTable } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
+
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { db } from "@/db";
+import { clientsTable, operationsTable, ticketsTable, treatmentsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
+
+import CallCustomerAgainButton from "./call-customer-again-button";
+import FinishServiceButton from "./finish-service-button";
 
 const ServiceInProgressCard = async () => {
     const session = await auth.api.getSession({
