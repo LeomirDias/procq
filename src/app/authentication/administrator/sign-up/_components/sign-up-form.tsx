@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth.client";
+import { Separator } from "@/components/ui/separator";
 
 const registerSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -80,16 +81,13 @@ export function SignUpForm() {
 
     return (
         <div className="flex flex-col gap-6">
-            <Card className="overflow-hidden p-0">
+            <Card className="overflow-hidden p-0 bg-[#f8f8f8] backdrop-blur-sm rounded-lg shadow-xl">
                 <CardContent className="grid p-0 md:grid-cols-2">
                     <div className="p-6 md:p-8">
                         <Form {...formRegister}>
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-col items-center text-center">
-                                    <h1 className="text-xl font-bold">Cadastre-se</h1>
-                                    <p className="text-muted-foreground text-balance">
-                                        Crie sua conta
-                                    </p>
+                                    <h1 className="text-xl font-bold text-blue-950">Crie sua conta</h1>
                                 </div>
                                 <form onSubmit={formRegister.handleSubmit(onSubmitRegister)} className="space-y-8">
                                     <FormField
@@ -165,14 +163,19 @@ export function SignUpForm() {
                             </div>
                         </Form>
                     </div>
-                    <div className="bg-muted relative hidden md:block">
-                        <Image
-                            src="/horizontal.png"
-                            alt="Image"
-                            className="absolute inset-0 h-full w-full object-cover"
-                            width={500}
-                            height={500}
-                        />
+                    <div className="bg-[#f8f8f8] flex flex-col items-center justify-between h-full p-6">
+                        <div className="flex-1 flex items-center justify-center">
+                            <p className="text-blue-950 font-bold text-4xl text-center">Cadastro de <br /> Administrador</p>
+                        </div>
+                        <div>
+                            <Image
+                                src="/Logo.svg"
+                                alt="Image"
+                                className="h-32 w-32 object-contain"
+                                width={128}
+                                height={128}
+                            />
+                        </div>
                     </div>
                 </CardContent>
             </Card>
