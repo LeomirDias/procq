@@ -156,15 +156,6 @@ export function AppSidebar() {
 
             <SidebarFooter className="py-4 border-t bg-background">
                 <SidebarMenu>
-                    <SidebarMenuItem className="w-full flex justify-end group-data-[state=collapsed]:justify-center">
-                        <button
-                            onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
-                            className="flex items-center gap-2 px-3 py-2 text-muted-foreground rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
-                            aria-label="Alternar tema"
-                        >
-                            {resolvedTheme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-                        </button>
-                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -184,8 +175,12 @@ export function AppSidebar() {
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
+                                <DropdownMenuItem onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}>
+                                    {resolvedTheme === "dark" ? <Sun className="w-4 h-4 mr-2" /> : <Moon className="w-4 h-4 mr-2" />}
+                                    {resolvedTheme === "dark" ? "Tema claro" : "Tema escuro"}
+                                </DropdownMenuItem>
                                 <DropdownMenuItem onClick={handleSignOut}>
-                                    <LogOutIcon />Sair
+                                    <LogOutIcon className="mr-2" />Sair
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
