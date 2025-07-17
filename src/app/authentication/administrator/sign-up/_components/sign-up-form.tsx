@@ -21,6 +21,8 @@ import {
 import { Input } from "@/components/ui/input"
 
 import { authClient } from "@/lib/auth.client";
+import { Eye, EyeOff } from "lucide-react";
+import { useState } from "react";
 
 const registerSchema = z.object({
     name: z.string().trim().min(1, { message: "Nome é obrigatório" }),
@@ -32,6 +34,7 @@ const registerSchema = z.object({
 
 export function SignUpForm() {
     const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
 
     const formRegister = useForm<z.infer<typeof registerSchema>>({
         resolver: zodResolver(registerSchema),
@@ -90,12 +93,12 @@ export function SignUpForm() {
                     priority
                 />
             </div>
-            <Card className="overflow-hidden p-0 bg-[#f8f8f8] max-w-[600px] mx-auto">
+            <Card className="overflow-hidden p-0 bg-background max-w-[600px] mx-auto">
                 <CardContent className="p-6 md:p-8 text-center">
                     <Form {...formRegister}>
                         <div className="flex flex-col gap-6">
                             <div className="flex flex-col items-center">
-                                <h1 className="text-xl font-bold text-secondary">Cadastro de Administrador</h1>
+                                <h1 className="text-xl font-bold text-foreground">Cadastro de Administrador</h1>
                             </div>
                             <form onSubmit={formRegister.handleSubmit(onSubmitRegister)} className="space-y-8">
                                 <FormField
@@ -103,9 +106,9 @@ export function SignUpForm() {
                                     name="name"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-secondary">Nome:</FormLabel>
+                                            <FormLabel className="text-foreground">Nome:</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Digite seu nome"{...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                                <Input placeholder="Digite seu nome" {...field} className="bg-background shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -116,9 +119,9 @@ export function SignUpForm() {
                                     name="cpf"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-gray-950">CPF:</FormLabel>
+                                            <FormLabel className="text-foreground">CPF:</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Digite seu CPF"  {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                                <Input placeholder="Digite seu CPF"  {...field} className="bg-background shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -129,9 +132,9 @@ export function SignUpForm() {
                                     name="phoneNumber"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-gray-950">Telefone:</FormLabel>
+                                            <FormLabel className="text-foreground">Telefone:</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Digite seu telefone" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                                <Input placeholder="Digite seu telefone" {...field} className="bg-background shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -142,9 +145,9 @@ export function SignUpForm() {
                                     name="email"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-gray-950">Email:</FormLabel>
+                                            <FormLabel className="text-foreground">Email:</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Digite seu email" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                                <Input placeholder="Digite seu email" {...field} className="bg-background shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground" />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
@@ -155,9 +158,24 @@ export function SignUpForm() {
                                     name="password"
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel className="text-secondary">Senha:</FormLabel>
+                                            <FormLabel className="text-foreground">Senha:</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Crie sua senha" type="password" {...field} className="bg-[#f8f8f8] shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-950" />
+                                                <div className="relative">
+                                                    <Input
+                                                        placeholder="Crie sua senha"
+                                                        type={showPassword ? "text" : "password"}
+                                                        {...field}
+                                                        className="bg-background shadow-md focus-visible:ring-0 focus-visible:ring-offset-0 text-foreground pr-10"
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                                                        onClick={() => setShowPassword((v) => !v)}
+                                                        tabIndex={-1}
+                                                    >
+                                                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                                                    </button>
+                                                </div>
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
