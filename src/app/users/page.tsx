@@ -5,14 +5,14 @@ import Image from "next/image";
 
 const Home = () => {
     return (
-        <PageContainer>
-            <PageContent>
-                <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-                    <Image src="/Logo.svg" alt="Procon Logo" width={200} height={80} />
+        <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+            <Image src="/Logo.svg" alt="Procon Logo" width={600} height={0} />
+            <div className="flex flex-col w-full h-full gap-4">
+                <div className="flex flex-col items-center justify-center gap-2">
                     <h1 className="text-2xl font-bold text-secondary-foreground">Seja bem vindo ao sistema de atendimento do Procon Itumbiara</h1>
                     <p className="text-md text-secondary-foreground">Escolha uma das opções abaixo para continuar</p>
                 </div>
-                <div className="grid grid-cols-3 w-full h-full gap-4">
+                <div className="grid grid-cols-3 w-full h-full gap-4 px-4">
                     <a href="/users/dashboard">
                         <Button className="w-full h-[100px] flex items-center justify-center gap-2 text-lg" variant="outline">
                             <UserRoundCog />
@@ -32,8 +32,8 @@ const Home = () => {
                         </Button>
                     </a>
                 </div>
-            </PageContent>
-        </PageContainer>
+            </div>
+        </div>
     );
 }
 
