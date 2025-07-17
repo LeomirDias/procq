@@ -27,7 +27,7 @@ const loginSchema = z.object({
 })
 
 
-const AdministratorLoginForm = () => {
+const LoginForm = () => {
   const router = useRouter();
   const formLogin = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -45,13 +45,14 @@ const AdministratorLoginForm = () => {
     }, {
       onSuccess: () => {
         toast.success("Login realizado com sucesso")
-        router.push("/users/dashboard")
+        router.push("/users")
       },
       onError: () => {
         toast.error("Email ou senha inválidos")
       }
     })
   }
+
 
 
   return (
@@ -105,4 +106,4 @@ const AdministratorLoginForm = () => {
   )
 }
 
-export default AdministratorLoginForm;
+export default LoginForm;
