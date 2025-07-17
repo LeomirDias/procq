@@ -156,7 +156,7 @@ export function AppSidebar() {
 
             <SidebarFooter className="py-4 border-t bg-background">
                 <SidebarMenu>
-                    <SidebarMenuItem className="w-full flex justify-end">
+                    <SidebarMenuItem className="w-full flex justify-end group-data-[state=collapsed]:justify-center">
                         <button
                             onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
                             className="flex items-center gap-2 px-3 py-2 text-muted-foreground rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
@@ -184,11 +184,6 @@ export function AppSidebar() {
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent>
-                                <DropdownMenuItem asChild>
-                                    <Link href="/settings">
-                                        <SettingsIcon />Configurações
-                                    </Link>
-                                </DropdownMenuItem>
                                 <DropdownMenuItem onClick={handleSignOut}>
                                     <LogOutIcon />Sair
                                 </DropdownMenuItem>
