@@ -80,13 +80,13 @@ export function SignUpForm() {
 
     return (
         <div className="flex flex-col gap-6">
-            <Card className="overflow-hidden p-0 bg-[#f8f8f8] backdrop-blur-sm rounded-lg shadow-xl">
+            <Card className="overflow-hidden p-0 bg-[#f8f8f8]">
                 <CardContent className="grid p-0 md:grid-cols-2">
                     <div className="p-6 md:p-8">
                         <Form {...formRegister}>
                             <div className="flex flex-col gap-6">
                                 <div className="flex flex-col items-center text-center">
-                                    <h1 className="text-xl font-bold text-blue-950">Crie sua conta</h1>
+                                    <h1 className="text-xl font-bold text-gray-950">Crie sua conta</h1>
                                 </div>
                                 <form onSubmit={formRegister.handleSubmit(onSubmitRegister)} className="space-y-8">
                                     <FormField
@@ -94,9 +94,9 @@ export function SignUpForm() {
                                         name="name"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Nome</FormLabel>
+                                                <FormLabel className="text-gray-950">Nome</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Digite seu nome" {...field} />
+                                                    <Input placeholder="Digite seu nome" {...field} className="bg-[#f8f8f8] shadow-md" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -107,9 +107,9 @@ export function SignUpForm() {
                                         name="cpf"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>CPF</FormLabel>
+                                                <FormLabel className="text-gray-950">CPF</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Digite seu CPF" {...field} />
+                                                    <Input placeholder="Digite seu CPF" {...field} className="bg-[#f8f8f8] shadow-md" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -120,9 +120,9 @@ export function SignUpForm() {
                                         name="phoneNumber"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Telefone</FormLabel>
+                                                <FormLabel className="text-gray-950">Telefone</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Digite seu telefone" {...field} />
+                                                    <Input placeholder="Digite seu telefone" {...field} className="bg-[#f8f8f8] shadow-md" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -133,9 +133,9 @@ export function SignUpForm() {
                                         name="email"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Email</FormLabel>
+                                                <FormLabel className="text-gray-950">Email</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Digite seu email" {...field} />
+                                                    <Input placeholder="Digite seu email" {...field} className="bg-[#f8f8f8] shadow-md" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>
@@ -146,9 +146,9 @@ export function SignUpForm() {
                                         name="password"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Senha</FormLabel>
+                                                <FormLabel className="text-gray-950">Senha</FormLabel>
                                                 <FormControl>
-                                                    <Input placeholder="Crie sua senha" type="password" {...field} />
+                                                    <Input placeholder="Crie sua senha" type="password" {...field} className="bg-[#f8f8f8] shadow-md" />
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>

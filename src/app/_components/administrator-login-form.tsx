@@ -55,7 +55,7 @@ const AdministratorLoginForm = () => {
 
 
   return (
-    <Card className="overflow-hidden p-0 bg-[#f8f8f8] backdrop-blur-sm rounded-lg shadow-xl">
+    <Card className="overflow-hidden p-0 bg-[#f8f8f8]">
       <CardContent className="grid p-0">
         <div className="mx-auto w-full max-w-md p-6 md:p-8">
           <Form {...formLogin}>
@@ -66,9 +66,9 @@ const AdministratorLoginForm = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-muted-foreground">Email</FormLabel>
+                      <FormLabel className="text-gray-950">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Digite seu email" {...field} className="bg-white shadow-sm " />
+                        <Input placeholder="Digite seu email" {...field} className="bg-[#f8f8f8] shadow-md" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -79,9 +79,9 @@ const AdministratorLoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-muted-foreground">Senha</FormLabel>
+                      <FormLabel className="text-gray-950">Senha</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Digite sua senha" {...field} className="bg-white shadow-sm" />
+                        <Input type="password" placeholder="Digite sua senha" {...field} className="bg-[#f8f8f8] shadow-md" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

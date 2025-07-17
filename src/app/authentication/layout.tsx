@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import { ThemeProvider } from "next-themes"
 
 export const metadata: Metadata = {
     title: "ProcQ - Cadastro",
@@ -7,8 +8,10 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <main className="w-full">
-            {children}
-        </main>
+        <ThemeProvider attribute="class" forcedTheme="light" enableSystem={false}>
+            <main className="w-full">
+                {children}
+            </main>
+        </ThemeProvider>
     )
 }
