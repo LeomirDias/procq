@@ -11,7 +11,7 @@ const AuthenticationPage = async () => {
   })
 
   if (session?.user) {
-    redirect("/users/dashboard")
+    redirect("/users")
   }
 
   return (

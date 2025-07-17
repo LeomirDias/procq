@@ -1,12 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { PageContainer, PageHeader, PageHeaderContent, PageTitle, PageDescription, PageContent } from "@/components/ui/page-container";
 import { Headset, Smile, UserRoundCog } from "lucide-react";
 import Image from "next/image";
 
 const Home = () => {
     return (
-        <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-            <Image src="/LogoProcon.svg" alt="Procon Logo" width={600} height={0} />
+        <div className="w-full h-full flex flex-col items-center justify-center gap-4 mt-10">
+            <Image src="/LogoProcon.svg" alt="Procon Logo" width={500} height={0} />
             <div className="flex flex-col w-full h-full gap-4">
                 <div className="flex flex-col items-center justify-center gap-2">
                     <h1 className="text-2xl font-bold text-secondary-foreground">Seja bem vindo ao sistema de atendimento do Procon Itumbiara</h1>
