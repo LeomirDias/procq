@@ -81,13 +81,13 @@ const ServicePointCard = ({ servicePoint, sectors }: ServicePointCardProps) => {
                 </div>
             </CardHeader>
             <Separator />
-            <CardFooter className="flex gap-2">
+            <CardFooter className="flex items-center justify-end gap-2">
                 <Dialog
                     open={isUpsertSectorFormOpen}
                     onOpenChange={setIsUpsertSectorFormOpen}>
                     <DialogTrigger asChild>
                         <Button variant="default" className="w-auto">
-                            <Pencil />
+                            <Pencil className="h-4 w-4 cursor-pointer" />
                             Editar
                         </Button>
                     </DialogTrigger>
@@ -98,8 +98,8 @@ const ServicePointCard = ({ servicePoint, sectors }: ServicePointCardProps) => {
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
                             <Button variant="outline" className="w-auto">
-                                <Trash2 />
-                                Excluir
+                                <Trash2 className="h-4 w-4 cursor-pointer" />
+                                Deletar
                             </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>

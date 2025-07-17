@@ -66,8 +66,7 @@ const SectorsGrid = ({ sectors }: SectorsGridProps) => {
                                     onOpenChange={(open) => setOpenSectorForm(open ? sector.id : null)}>
                                     <DialogTrigger asChild>
                                         <Button variant="default" className="w-auto">
-                                            <Pencil className="mr-2 h-4 w-4" />
-                                            Editar setor
+                                            <Pencil className="h-4 w-4 cursor-pointer" />
                                         </Button>
                                     </DialogTrigger>
                                     <UpsertSectorForm sector={{ ...sector }} onSuccess={() => setOpenSectorForm(null)} />
@@ -77,8 +76,7 @@ const SectorsGrid = ({ sectors }: SectorsGridProps) => {
                                     onOpenChange={(open) => setOpenServicePointForm(open ? sector.id : null)}>
                                     <DialogTrigger asChild>
                                         <Button variant="outline" className="w-auto">
-                                            <Plus className="h-4 w-4" />
-                                            Adicionar ponto de atendimento
+                                            <Plus className="h-4 w-4 cursor-pointer" />
                                         </Button>
                                     </DialogTrigger>
                                     <UpsertServicePointForm servicePoint={{ sectorId: sector.id }} onSuccess={() => setOpenServicePointForm(null)} />
@@ -86,8 +84,7 @@ const SectorsGrid = ({ sectors }: SectorsGridProps) => {
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <Button variant="outline" className="w-auto">
-                                            <Trash2 />
-                                            Deletar setor
+                                            <Trash2 className="h-4 w-4 cursor-pointer" />
                                         </Button>
                                     </AlertDialogTrigger>
                                     <AlertDialogContent>
@@ -116,7 +113,7 @@ const SectorsGrid = ({ sectors }: SectorsGridProps) => {
                                         sectors={sectors}
                                     />
                                 ))}
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 ))}
