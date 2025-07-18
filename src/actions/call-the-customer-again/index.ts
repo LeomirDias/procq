@@ -1,6 +1,6 @@
 "use server";
 
-import { and,eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
@@ -85,7 +85,7 @@ export const callTheCustomerAgain = actionClient.action(async () => {
   }
 
   // Enviar para o painel Tizen via HTTP POST
-  await fetch("http://localhost:3001/call", {
+  await fetch("http://192.168.1.13:3001/call", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
