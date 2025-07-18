@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { Card } from "./card";
+import { ShieldClose } from "lucide-react";
 
 export const AccessDenied = () => {
     const router = useRouter();
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            router.push("/users");
+            router.push("/users/professionals-services");
         }, 3000);
 
         return () => clearTimeout(timeout);
@@ -20,12 +21,12 @@ export const AccessDenied = () => {
         <div className="min-h-screen w-full flex items-center justify-center bg-background">
             <Card className="w-full max-w-md p-6 space-y-4">
                 <div className="space-y-2 text-center">
-                    <h2 className="text-2xl font-bold tracking-tight text-primary">
-                        Acesso Negado
+                    <h2 className="text-2xl font-bold tracking-tight text-primary flex items-center justify-center gap-2">
+                        <ShieldClose size={24} />
+                        Acesso negado!
                     </h2>
                     <p className="text-muted-foreground">
                         Você não tem permissão para acessar esta página.
-                        Redirecionando...
                     </p>
                 </div>
                 <div className="relative h-2 bg-muted rounded-full overflow-hidden">
