@@ -1,41 +1,78 @@
-import { eq } from "drizzle-orm";
+"use client";
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
-import { db } from "@/db";
 
 import CallNextTicketButton from "./call-next-ticket-button";
 import { ticketsTableColumns, TicketTableRow } from "./tickets-table-columns";
 
-const PendingTickets = async () => {
-    // Fetch tickets with client info
-    const tickets = await db.query.ticketsTable.findMany({
-        where: (ticket) => eq(ticket.status, "pending"),
-        with: {
-            client: true,
-        },
-    });
+const fetchTickets = async () => {
+    const res = await fetch("/api/tickets", { credentials: "same-origin" });
+    if (!res.ok) {
+        if (res.status === 401) throw new Error("unauthorized");
+        throw new Error("Erro ao buscar tickets");
+    }
+    return res.json();
+};
 
-    if (!tickets.length) {
-        return <Card className="w-full h-full text-sm text-muted-foreground text-center">Nenhum atendimento pendente.</Card>;
+const fetchClientsAndSectors = async () => {
+    const res = await fetch("/api/clients", { credentials: "same-origin" });
+    if (!res.ok) {
+        if (res.status === 401) throw new Error("unauthorized");
+        throw new Error("Erro ao buscar clientes/setores");
+    }
+    return res.json();
+};
+
+export default function PendingTickets() {
+    const [tableData, setTableData] = useState<TicketTableRow[]>([]);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
+
+    const loadData = useCallback(async () => {
+        try {
+            setLoading(true);
+            const [ticketsData, clientsSectorsData] = await Promise.all([
+                fetchTickets(),
+                fetchClientsAndSectors(),
+            ]);
+            const clientsMap = Object.fromEntries((clientsSectorsData.clients || []).map((c: any) => [c.id, c.name]));
+            const sectorsMap = Object.fromEntries((clientsSectorsData.sectors || []).map((s: any) => [s.id, s.name]));
+            const tickets = (ticketsData.tickets || []);
+            const mapped: TicketTableRow[] = tickets.map((ticket: any) => ({
+                id: ticket.id,
+                status: ticket.status,
+                clientName: clientsMap[ticket.clientId] || ticket.clientId,
+                clientId: ticket.clientId,
+                sectorName: sectorsMap[ticket.sectorId] || ticket.sectorId,
+                sectorId: ticket.sectorId,
+                createdAt: new Date(ticket.createdAT ?? ticket.createdAt),
+            })).sort((a: TicketTableRow, b: TicketTableRow) => a.createdAt.getTime() - b.createdAt.getTime());
+            setTableData(mapped);
+            setLoading(false);
+        } catch (err: any) {
+            if (err.message === "unauthorized") {
+                router.replace("/");
+            }
+            setLoading(false);
+        }
+    }, [router]);
+
+    useEffect(() => {
+        loadData();
+        const interval = setInterval(loadData, 30000);
+        return () => clearInterval(interval);
+    }, [loadData]);
+
+    if (loading) {
+        return <Card className="w-full h-full text-sm text-muted-foreground text-center">Carregando...</Card>;
     }
 
-    // Fetch all sectors and create a map for quick lookup
-    const sectors = await db.query.sectorsTable.findMany();
-    const sectorMap = Object.fromEntries(sectors.map(s => [s.id, s.name]));
-
-    // Map tickets to TicketTableRow
-    const tableData: TicketTableRow[] = tickets
-        .map(ticket => ({
-            id: ticket.id,
-            status: ticket.status,
-            clientName: ticket.client?.name || ticket.clientId,
-            clientId: ticket.clientId,
-            sectorName: sectorMap[ticket.sectorId] || ticket.sectorId,
-            sectorId: ticket.sectorId,
-            createdAt: ticket.createdAT,
-        }))
-        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    if (!tableData.length) {
+        return <Card className="w-full h-full text-sm text-muted-foreground text-center">Nenhum atendimento pendente.</Card>;
+    }
 
     return (
         <div className="flex flex-col gap-4 w-full h-full max-h-[80vh]">
@@ -52,6 +89,4 @@ const PendingTickets = async () => {
             </Card>
         </div>
     );
-};
-
-export default PendingTickets;
+}

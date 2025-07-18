@@ -1,25 +1,47 @@
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+"use client";
+import { useEffect, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 
 import { PageActions, PageContainer, PageContent, PageDescription, PageHeader, PageHeaderContent, PageTitle } from "@/components/ui/page-container";
-import { db } from "@/db";
-import { auth } from "@/lib/auth";
 
 import AddClientButton from "./_components/add-client-button";
 import ClientFilters from "./_components/client-filters";
 
-const ProfessionalServices = async () => {
-
-    const session = await auth.api.getSession({
-        headers: await headers(),
-    });
-
-    if (!session?.user) {
-        redirect("/");
+const fetchClientsAndSectors = async () => {
+    const res = await fetch("/api/clients", { credentials: "same-origin" });
+    if (!res.ok) {
+        if (res.status === 401) throw new Error("unauthorized");
+        throw new Error("Erro ao buscar clientes");
     }
+    return res.json();
+};
 
-    const clients = await db.query.clientsTable.findMany();
-    const sectors = await db.query.sectorsTable.findMany();
+export default function ProfessionalServices() {
+    const [clients, setClients] = useState<any[]>([]);
+    const [sectors, setSectors] = useState<any[]>([]);
+    const [loading, setLoading] = useState(true);
+    const router = useRouter();
+
+    const loadData = useCallback(async () => {
+        try {
+            setLoading(true);
+            const data = await fetchClientsAndSectors();
+            setClients(data.clients);
+            setSectors(data.sectors);
+            setLoading(false);
+        } catch (err: any) {
+            if (err.message === "unauthorized") {
+                router.replace("/");
+            }
+            setLoading(false);
+        }
+    }, [router]);
+
+    useEffect(() => {
+        loadData();
+        const interval = setInterval(loadData, 30000);
+        return () => clearInterval(interval);
+    }, [loadData]);
 
     return (
         <PageContainer>
@@ -33,10 +55,12 @@ const ProfessionalServices = async () => {
                 </PageActions>
             </PageHeader>
             <PageContent>
-                <ClientFilters clients={clients} sectors={sectors} />
+                {loading ? (
+                    <div>Carregando...</div>
+                ) : (
+                    <ClientFilters clients={clients} sectors={sectors} />
+                )}
             </PageContent>
         </PageContainer>
     );
 }
-
-export default ProfessionalServices;
