@@ -13,6 +13,7 @@ export const auth = betterAuth({
     usePlural: true,
     schema,
   }),
+  trustedOrigins: ["http://localhost:3000", "http://192.168.1.12:3000"],
   plugins: [
     customSession(async ({ user, session }) => {
       return {
