@@ -1,5 +1,7 @@
 import { eq } from "drizzle-orm";
 import React from "react";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -21,8 +23,13 @@ interface OngoingOperationCardProps {
 }
 
 const OngoingOperationCard = async ({ operations, sectors }: OngoingOperationCardProps) => {
-    // Filtra a operação com status 'operating'
-    const operatingOperation = operations.find(op => op.status === "operating");
+    const session = await auth.api.getSession({
+        headers: await headers(),
+    });
+    const userId = session?.user?.id;
+
+    // Filtra a operação do usuário logado com status 'operating'
+    const operatingOperation = operations.find(op => op.status === "operating" && op.userId === userId);
 
     let userName = "";
     let servicePointName = "";

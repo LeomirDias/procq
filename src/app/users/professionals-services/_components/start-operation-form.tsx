@@ -21,7 +21,7 @@ interface StartOperationFormProps {
     sectors: {
         id: string;
         name: string;
-        servicePoints: { id: string; name: string }[];
+        servicePoints: { id: string; name: string; availability?: string }[];
     }[];
 }
 
@@ -83,9 +83,21 @@ const StartOperationForm = ({ onSuccess, sectors }: StartOperationFormProps) => 
                                             {sectors.map(sector => (
                                                 <SelectGroup key={sector.id}>
                                                     <SelectLabel>{sector.name}</SelectLabel>
-                                                    {sector.servicePoints.map(sp => (
-                                                        <SelectItem key={sp.id} value={sp.id}>{sp.name}</SelectItem>
-                                                    ))}
+                                                    {sector.servicePoints
+                                                        .slice()
+                                                        .sort((a, b) => {
+                                                            // Extrai o número do nome, ex: 'Guichê 1' => 1
+                                                            const getNum = (name: string) => {
+                                                                const match = name.match(/(\d+)/);
+                                                                return match ? parseInt(match[1], 10) : Number.MAX_SAFE_INTEGER;
+                                                            };
+                                                            return getNum(a.name) - getNum(b.name);
+                                                        })
+                                                        .map(sp => (
+                                                            <SelectItem key={sp.id} value={sp.id} disabled={sp.availability === "busy"}>
+                                                                {sp.name} {sp.availability === "busy" ? "(Ocupado)" : ""}
+                                                            </SelectItem>
+                                                        ))}
                                                 </SelectGroup>
                                             ))}
                                         </SelectContent>

@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { operationsTable, usersTable } from "@/db/schema";
+import { operationsTable, usersTable, servicePointsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
@@ -35,6 +35,17 @@ export const finishOperation = actionClient
         updatedAt: new Date(),
       })
       .where(eq(operationsTable.id, parsedInput.operationId));
+
+    // Buscar a operação para obter o servicePointId
+    const operation = await db.query.operationsTable.findFirst({
+      where: eq(operationsTable.id, parsedInput.operationId),
+    });
+    if (operation) {
+      await db
+        .update(servicePointsTable)
+        .set({ availability: "free" })
+        .where(eq(servicePointsTable.id, operation.servicePointId));
+    }
 
     revalidatePath("/professional/dashboard");
   });

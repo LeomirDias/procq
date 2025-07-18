@@ -4,9 +4,10 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { operationsTable } from "@/db/schema";
+import { operationsTable, servicePointsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
+import { eq } from "drizzle-orm";
 
 import { ErrorMessages, ErrorTypes, schema } from "./schema";
 
@@ -31,6 +32,12 @@ export const startOperation = actionClient
       userId: session.user.id,
       servicePointId: parsedInput.servicePointId,
     });
+
+    // Atualiza o status do ponto de serviço para 'busy'
+    await db
+      .update(servicePointsTable)
+      .set({ availability: "busy" })
+      .where(eq(servicePointsTable.id, parsedInput.servicePointId));
 
     revalidatePath("/professional/dashboard");
   });
