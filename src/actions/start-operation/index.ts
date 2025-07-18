@@ -39,5 +39,5 @@ export const startOperation = actionClient
       .set({ availability: "busy" })
       .where(eq(servicePointsTable.id, parsedInput.servicePointId));
 
-    revalidatePath("/professional/dashboard");
+    revalidatePath("/users/professionals-services");
   });

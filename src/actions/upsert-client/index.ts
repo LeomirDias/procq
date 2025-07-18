@@ -68,5 +68,5 @@ export const insertClient = actionClient
       phoneNumber: parsedInput.phoneNumber,
     });
 
-    revalidatePath("/users/consumer-research");
+    revalidatePath("/users/clients");
   });

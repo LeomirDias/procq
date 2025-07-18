@@ -38,5 +38,5 @@ export const deleteServicePoint = actionClient
     await db
       .delete(servicePointsTable)
       .where(eq(servicePointsTable.id, parsedInput.id));
-    revalidatePath("/administrator/service-points");
+    revalidatePath("/users/sectors");
   });

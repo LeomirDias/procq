@@ -47,5 +47,5 @@ export const upsertServicePoint = actionClient
           ...parsedInput,
         },
       });
-    revalidatePath("/administrator/sectors");
+    revalidatePath("/users/sectors");
   });

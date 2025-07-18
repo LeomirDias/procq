@@ -10,7 +10,7 @@ import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
 import { EndServiceSchema } from "./schema";
-import { ErrorMessages,ErrorTypes } from "./schema";
+import { ErrorMessages, ErrorTypes } from "./schema";
 
 export const endService = actionClient.schema(EndServiceSchema).action(async ({ parsedInput }) => {
     const session = await auth.api.getSession({
@@ -35,5 +35,5 @@ export const endService = actionClient.schema(EndServiceSchema).action(async ({ 
         .set({ status: "finished" })
         .where(eq(treatmentsTable.id, treatment.id));
 
-    revalidatePath("/professional/professionals-services");
+    revalidatePath("/users/professionals-services");
 });

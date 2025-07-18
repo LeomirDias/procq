@@ -47,5 +47,5 @@ export const finishOperation = actionClient
         .where(eq(servicePointsTable.id, operation.servicePointId));
     }
 
-    revalidatePath("/professional/dashboard");
+    revalidatePath("/users/professionals-services");
   });

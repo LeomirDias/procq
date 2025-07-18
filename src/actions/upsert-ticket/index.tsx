@@ -9,7 +9,7 @@ import { ticketsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
-import { CreateTicketSchema,ErrorMessages, ErrorTypes, UpdateTicketSchema } from "./schema";
+import { CreateTicketSchema, ErrorMessages, ErrorTypes, UpdateTicketSchema } from "./schema";
 
 export const updateTicket = actionClient
     .schema(UpdateTicketSchema)
@@ -64,5 +64,6 @@ export const createTicket = actionClient
             clientId: parsedInput.clientId,
         });
 
+        revalidatePath("/users/professionals-services");
         revalidatePath("/users/pending-appointments");
     });
