@@ -79,12 +79,16 @@ const getDashboard = async ({ from, to }: Params) => {
     .from(treatmentsTable);
 
   let averageTreatmentDuration = 0;
-  if (durations.length > 0) {
-    const totalDuration = durations.reduce(
-      (acc, curr) => acc + (curr.duration ?? 0),
-      0,
+
+  const validDurations = durations
+    .map((d) => d.duration)
+    .filter((d): d is number => d !== null && d !== undefined);
+
+  if (validDurations.length > 0) {
+    const totalDuration = validDurations.reduce((acc, curr) => acc + curr, 0);
+    averageTreatmentDuration = Math.round(
+      totalDuration / validDurations.length,
     );
-    averageTreatmentDuration = Math.round(totalDuration / durations.length);
   }
 
   return {
