@@ -59,7 +59,7 @@ export const endService = actionClient
 
     await db
       .update(treatmentsTable)
-      .set({ status: "finished", duration: durationMinutes.toString() })
+      .set({ status: "finished", duration: durationMinutes })
       .where(eq(treatmentsTable.id, treatment.id));
 
     revalidatePath("/users/professionals-services");

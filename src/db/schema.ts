@@ -1,5 +1,4 @@
 import { relations } from "drizzle-orm";
-import { duration } from "drizzle-orm/gel-core";
 import {
   boolean,
   integer,
@@ -136,7 +135,7 @@ export const ticketsTable = pgTable("tickets", {
 export const treatmentsTable = pgTable("treatments", {
   id: uuid("id").primaryKey().defaultRandom(),
   status: text("status").notNull().default("in_service"),
-  duration: text("duration"),
+  duration: integer("duration"),
   createdAT: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()

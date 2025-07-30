@@ -73,11 +73,26 @@ const getDashboard = async ({ from, to }: Params) => {
     )
     .then((res) => res[0]?.total || 0);
 
+  // Média de tempo de atendimento
+  const durations = await db
+    .select({ duration: treatmentsTable.duration })
+    .from(treatmentsTable);
+
+  let averageTreatmentDuration = 0;
+  if (durations.length > 0) {
+    const totalDuration = durations.reduce(
+      (acc, curr) => acc + (curr.duration ?? 0),
+      0,
+    );
+    averageTreatmentDuration = Math.round(totalDuration / durations.length);
+  }
+
   return {
     topProfessionals,
     totalTreatments,
     totalNewClients,
     totalCanceledTickets,
+    averageTreatmentDuration,
   };
 };
 

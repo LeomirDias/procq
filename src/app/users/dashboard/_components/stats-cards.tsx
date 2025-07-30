@@ -6,12 +6,14 @@ interface StatsCardsProps {
   totalAppointments: number;
   totalClients: number;
   totalCanceledTickets: number;
+  averageTreatmentDuration: number; // novo campo
 }
 
 const StatsCards = ({
   totalAppointments,
   totalClients,
   totalCanceledTickets,
+  averageTreatmentDuration,
 }: StatsCardsProps) => {
   const stats = [
     {
@@ -28,6 +30,11 @@ const StatsCards = ({
       title: "Novos consumidores",
       value: totalClients.toString(),
       icon: UserPlus2,
+    },
+    {
+      title: "Média de tempo de atendimento",
+      value: `${averageTreatmentDuration} min`,
+      icon: UsersIcon,
     },
   ];
 
