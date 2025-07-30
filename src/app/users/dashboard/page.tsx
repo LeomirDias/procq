@@ -91,7 +91,7 @@ const Home = async ({ searchParams }: DashboardPageProps) => {
         <StatsCards
           totalAppointments={dashboard.totalTreatments}
           totalClients={dashboard.totalNewClients}
-          totalCanceledAppointments={dashboard.totalCanceledAppointments}
+          totalCanceledTickets={dashboard.totalCanceledTickets}
         />
         <TopProfessionals professionals={professionals} />
       </PageContent>

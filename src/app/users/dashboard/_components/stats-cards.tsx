@@ -5,13 +5,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 interface StatsCardsProps {
   totalAppointments: number;
   totalClients: number;
-  totalCanceledAppointments: number;
+  totalCanceledTickets: number;
 }
 
 const StatsCards = ({
   totalAppointments,
   totalClients,
-  totalCanceledAppointments,
+  totalCanceledTickets,
 }: StatsCardsProps) => {
   const stats = [
     {
@@ -21,7 +21,7 @@ const StatsCards = ({
     },
     {
       title: "Tickets cancelados",
-      value: totalCanceledAppointments.toString(),
+      value: totalCanceledTickets.toString(),
       icon: TicketX,
     },
     {

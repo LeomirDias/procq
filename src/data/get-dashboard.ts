@@ -16,7 +16,7 @@ interface Params {
 }
 
 const getDashboard = async ({ from, to }: Params) => {
-  // Top profissionais no período
+  // Top profissionais
   const topProfessionals = await db
     .select({
       professionalId: operationsTable.userId,
@@ -29,15 +29,9 @@ const getDashboard = async ({ from, to }: Params) => {
       eq(treatmentsTable.operationId, operationsTable.id),
     )
     .leftJoin(usersTable, eq(operationsTable.userId, usersTable.id))
-    .where(
-      and(
-        gte(treatmentsTable.createdAT, from),
-        lte(treatmentsTable.createdAT, to),
-      ),
-    )
+    // Removido o filtro de data
     .groupBy(operationsTable.userId, usersTable.name)
-    .orderBy(desc(sql<number>`count(*)`))
-    .limit(10);
+    .orderBy(desc(sql<number>`count(*)`));
 
   // Total de atendimentos realizados no período
   const totalTreatments = await db
@@ -65,7 +59,7 @@ const getDashboard = async ({ from, to }: Params) => {
     .then((res) => res[0]?.total || 0);
 
   // Total de atendimentos cancelados no período (tickets com status canceled)
-  const totalCanceledAppointments = await db
+  const totalCanceledTickets = await db
     .select({
       total: count(ticketsTable.id),
     })
@@ -83,7 +77,7 @@ const getDashboard = async ({ from, to }: Params) => {
     topProfessionals,
     totalTreatments,
     totalNewClients,
-    totalCanceledAppointments,
+    totalCanceledTickets,
   };
 };
 

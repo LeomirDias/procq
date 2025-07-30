@@ -1,4 +1,4 @@
-import { Users } from "lucide-react";
+import { Trophy, Users } from "lucide-react";
 import Image from "next/image";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -27,14 +27,16 @@ export default function TopProfessionals({
       <CardContent className="flex flex-1 flex-col">
         <div className="mb-6 flex flex-col gap-2 sm:mb-8 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
-            <Users className="text-muted-foreground" />
+            <Trophy className="text-muted-foreground" />
             <CardTitle className="text-base sm:text-lg">
-              Profissionais com mais atendimentos
+              Ranking de atendimentos
             </CardTitle>
           </div>
-          <CardDescription className="text-sm sm:text-base">
-            Ranking dos profissionais que mais realizaram atendimentos no
-            período selecionado
+          <CardDescription className="flex flex-col items-end text-sm sm:text-base">
+            Profissionais com mais atendimentos{" "}
+            <span className="text-xs">
+              (Considerando o total geral de atendimentos.)
+            </span>
           </CardDescription>
         </div>
         <div className="flex-1 space-y-4 overflow-y-auto sm:space-y-6">
