@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 
 import { db } from "@/db";
-import { treatmentsTable } from "@/db/schema";
+import { ticketsTable, treatmentsTable } from "@/db/schema";
 import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
@@ -56,6 +56,14 @@ export const endService = actionClient
     const end = new Date();
     const durationMs = end.getTime() - start.getTime();
     const durationMinutes = Math.floor(durationMs / 60000); // duração em minutos
+
+    // Atualizar status do ticket relacionado para "finished"
+    if (treatment.ticketId) {
+      await db
+        .update(ticketsTable)
+        .set({ status: "finished" })
+        .where(eq(ticketsTable.id, treatment.ticketId));
+    }
 
     await db
       .update(treatmentsTable)
