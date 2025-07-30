@@ -1,10 +1,8 @@
 "use client";
-import { Pencil, Trash2, X } from "lucide-react";
 import { useAction } from "next-safe-action/hooks";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { deleteSector } from "@/actions/delete-sector";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +15,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Separator } from "@/components/ui/separator";
 import {
   operationsTable,
@@ -26,12 +23,7 @@ import {
   usersTable,
 } from "@/db/schema";
 import { finishOperation } from "@/actions/finish-operation";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 interface OperationCardProps {
