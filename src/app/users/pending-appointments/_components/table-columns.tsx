@@ -16,6 +16,7 @@ export type TicketTableRow = {
   clientId: string;
   sectorName: string;
   sectorId: string;
+  createdAt: Date;
 };
 
 export const ticketsTableColumns: ColumnDef<TicketTableRow>[] = [
@@ -51,6 +52,15 @@ export const ticketsTableColumns: ColumnDef<TicketTableRow>[] = [
         color = "bg-green-100 text-green-800 border-green-300";
       }
       return <Badge className={color}>{label}</Badge>;
+    },
+  },
+  {
+    id: "createdAt",
+    accessorKey: "createdAt",
+    header: "Data",
+    cell: ({ row }) => {
+      const date = row.original.createdAt;
+      return date ? new Date(date).toLocaleString("pt-BR") : "-";
     },
   },
   {
