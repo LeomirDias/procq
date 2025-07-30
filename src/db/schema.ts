@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { duration } from "drizzle-orm/gel-core";
 import {
   boolean,
   integer,
@@ -7,6 +8,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import { number } from "zod";
 
 //Usuários
 export const usersTable = pgTable("users", {
@@ -134,6 +136,7 @@ export const ticketsTable = pgTable("tickets", {
 export const treatmentsTable = pgTable("treatments", {
   id: uuid("id").primaryKey().defaultRandom(),
   status: text("status").notNull().default("in_service"),
+  duration: text("duration"),
   createdAT: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()

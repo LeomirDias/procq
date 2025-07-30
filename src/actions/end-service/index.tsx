@@ -12,28 +12,55 @@ import { actionClient } from "@/lib/next-safe-action";
 import { EndServiceSchema } from "./schema";
 import { ErrorMessages, ErrorTypes } from "./schema";
 
-export const endService = actionClient.schema(EndServiceSchema).action(async ({ parsedInput }) => {
+export const endService = actionClient
+  .schema(EndServiceSchema)
+  .action(async ({ parsedInput }) => {
     const session = await auth.api.getSession({
-        headers: await headers(),
+      headers: await headers(),
     });
     if (!session?.user) {
-        return { error: { type: ErrorTypes.UNAUTHENTICATED, message: ErrorMessages[ErrorTypes.UNAUTHENTICATED] } };
+      return {
+        error: {
+          type: ErrorTypes.UNAUTHENTICATED,
+          message: ErrorMessages[ErrorTypes.UNAUTHENTICATED],
+        },
+      };
     }
 
     const treatment = await db.query.treatmentsTable.findFirst({
-        where: eq(treatmentsTable.id, parsedInput.treatmentId),
+      where: eq(treatmentsTable.id, parsedInput.treatmentId),
     });
     if (!treatment) {
-        return { error: { type: ErrorTypes.TREATMENT_NOT_FOUND, message: ErrorMessages[ErrorTypes.TREATMENT_NOT_FOUND] } };
+      return {
+        error: {
+          type: ErrorTypes.TREATMENT_NOT_FOUND,
+          message: ErrorMessages[ErrorTypes.TREATMENT_NOT_FOUND],
+        },
+      };
     }
 
     if (treatment.status !== "in_service") {
-        return { error: { type: ErrorTypes.TREATMENT_NOT_IN_SERVICE, message: ErrorMessages[ErrorTypes.TREATMENT_NOT_IN_SERVICE] } };
+      return {
+        error: {
+          type: ErrorTypes.TREATMENT_NOT_IN_SERVICE,
+          message: ErrorMessages[ErrorTypes.TREATMENT_NOT_IN_SERVICE],
+        },
+      };
     }
 
-    await db.update(treatmentsTable)
-        .set({ status: "finished" })
-        .where(eq(treatmentsTable.id, treatment.id));
+    // Calcular duração do atendimento
+    const start =
+      treatment.createdAT instanceof Date
+        ? treatment.createdAT
+        : new Date(treatment.createdAT);
+    const end = new Date();
+    const durationMs = end.getTime() - start.getTime();
+    const durationMinutes = Math.floor(durationMs / 60000); // duração em minutos
+
+    await db
+      .update(treatmentsTable)
+      .set({ status: "finished", duration: durationMinutes.toString() })
+      .where(eq(treatmentsTable.id, treatment.id));
 
     revalidatePath("/users/professionals-services");
-});
+  });
